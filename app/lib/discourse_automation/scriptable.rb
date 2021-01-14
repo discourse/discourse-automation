@@ -1,0 +1,116 @@
+module DiscourseAutomation
+  class Scriptable
+    attr_reader :fields, :automation
+
+    def initialize(automation)
+      @automation = automation
+      @placeholders = [:site_title]
+      @version = 0
+      @fields = []
+      @triggerables = []
+      @script = Proc.new {}
+
+      eval!
+    end
+
+    def eval!
+      public_send("__scriptable_#{automation.script.underscore}")
+      self
+    end
+
+    def name
+      @automation.script
+    end
+
+    def placeholders
+      @placeholders.uniq.compact
+    end
+
+    def placeholder(placeholder)
+      @placeholders << placeholder
+    end
+
+    def version(*args)
+      if args.present?
+        @version, = args
+      else
+        @version
+      end
+    end
+
+    def triggerables(*args)
+      if args.present?
+        @triggerables, = args
+      else
+        @triggerables
+      end
+    end
+
+    def script(&block)
+      if block_given?
+        @script = block
+      else
+        @script
+      end
+    end
+
+    def field(name, component:, accepts_placeholders: false)
+      @fields << {
+        name: name,
+        component: component,
+        accepts_placeholders: accepts_placeholders
+      }
+    end
+
+    def utils
+      Utils
+    end
+
+    module Utils
+      def self.apply_placeholders(input, map)
+        map[:site_title] = SiteSetting.title
+
+        map.each do |key, value|
+          input = input.gsub("%%#{key.upcase}%%", value)
+        end
+
+        input
+      end
+
+      def self.send_pm(options, sender = Discourse.system_user)
+        options = options.symbolize_keys
+
+        if options[:delay] && options[:automation_id]
+          options[:execute_at] = options[:delay].to_i.minutes.from_now
+          options[:sender] = sender.username
+          options.delete(:delay)
+
+          DiscourseAutomation::PendingPm.create!(options)
+        else
+          options = options.merge(archetype: Archetype.private_message)
+
+          post_created = false
+
+          if defined?(EncryptedPostCreator)
+            post_created = EncryptedPostCreator.new(sender, options).create
+          end
+
+          if !post_created
+            PostCreator.new(sender, options).create
+          end
+        end
+      end
+    end
+
+    def self.add(identifier, &block)
+      @@all_scriptables = nil
+      define_method("__scriptable_#{identifier}", &block)
+    end
+
+    def self.all
+      @@all_scriptables ||= DiscourseAutomation::Scriptable
+        .instance_methods(false)
+        .grep(/^__scriptable_/)
+    end
+  end
+end
