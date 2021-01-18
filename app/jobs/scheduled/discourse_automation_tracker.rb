@@ -21,21 +21,10 @@ module Jobs
     end
 
     def send_pending_pm(pending_pm)
-      options = pending_pm.attributes.slice('target_usernames', 'sender', 'title', 'raw')
-      options = options.merge('archetype' => Archetype.private_message)
-      sender = User.find_by(username: options['sender'])
-
-      options.delete('sender')
-
-      post_created = false
-
-      if defined?(EncryptedPostCreator)
-        post_created = EncryptedPostCreator.new(sender, options.symbolize_keys).create
-      end
-
-      if !post_created
-        PostCreator.new(sender, options.symbolize_keys).create
-      end
+      DiscourseAutomation::Scriptable::Utils.send_pm(
+        pending_pm.attributes.slice('target_usernames', 'title', 'raw'),
+        sender: pending_pm.sender
+      )
 
       pending_pm.destroy!
     end

@@ -44,11 +44,11 @@ describe Jobs::DiscourseAutomationTracker do
       end
 
       it 'consumes the pending automation' do
-        expect(automation.pending_automations.count).to eq(1)
-
-        Jobs::DiscourseAutomationTracker.new.execute
-
-        expect(automation.pending_automations.count).to eq(0)
+        expect {
+          Jobs::DiscourseAutomationTracker.new.execute
+        }.to change {
+          automation.pending_automations.count
+        }.by(-1)
       end
     end
 
@@ -58,16 +58,20 @@ describe Jobs::DiscourseAutomationTracker do
       end
 
       it 'doesn’t consume the pending automation' do
-        expect(automation.pending_automations.count).to eq(1)
-
-        Jobs::DiscourseAutomationTracker.new.execute
-
-        expect(automation.pending_automations.count).to eq(1)
+        expect {
+          Jobs::DiscourseAutomationTracker.new.execute
+        }.to change {
+          automation.pending_automations.count
+        }.by(0)
       end
     end
   end
 
   describe 'pending pms' do
+    before do
+      Jobs.run_later!
+    end
+
     let!(:automation) {
       Automation.create!(
         name: 'On boarding',
@@ -75,41 +79,40 @@ describe Jobs::DiscourseAutomationTracker do
       )
     }
 
+    let!(:pending_pm) {
+      automation.pending_pms.create!(
+        title: 'Il pleure dans mon cœur Comme il pleut sur la ville;',
+        raw: 'Quelle est cette langueur Qui pénètre mon cœur ?',
+        sender: 'system',
+        execute_at: Time.now
+      )
+    }
+
     context 'pending pm is in past' do
       before do
-        automation.pending_pms.create!(
-          title: 'Il pleure dans mon cœur Comme il pleut sur la ville;',
-          raw: 'Quelle est cette langueur Qui pénètre mon cœur ?',
-          execute_at: 2.hours.ago,
-          sender: 'system'
-        )
+        pending_pm.update!(execute_at: 2.hours.ago)
       end
 
       it 'consumes the pending pm' do
-        expect(automation.pending_pms.count).to eq(1)
-
-        Jobs::DiscourseAutomationTracker.new.execute
-
-        expect(automation.pending_pms.count).to eq(0)
+        expect {
+          Jobs::DiscourseAutomationTracker.new.execute
+        }.to change {
+          automation.pending_pms.count
+        }.by(-1)
       end
     end
 
     context 'pending pm is in future' do
       before do
-        automation.pending_pms.create!(
-          title: 'Il pleure dans mon cœur Comme il pleut sur la ville;',
-          raw: 'Quelle est cette langueur Qui pénètre mon cœur ?',
-          execute_at: 2.hours.from_now,
-          sender: 'system'
-        )
+        pending_pm.update!(execute_at: 2.hours.from_now)
       end
 
       it 'doesn’t consume the pending pm' do
-        expect(automation.pending_pms.count).to eq(1)
-
-        Jobs::DiscourseAutomationTracker.new.execute
-
-        expect(automation.pending_pms.count).to eq(1)
+        expect {
+          Jobs::DiscourseAutomationTracker.new.execute
+        }.to change {
+          automation.pending_pms.count
+        }.by(0)
       end
     end
   end

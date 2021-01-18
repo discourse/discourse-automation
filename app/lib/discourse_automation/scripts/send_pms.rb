@@ -17,12 +17,18 @@ DiscourseAutomation::Scriptable.add('send_pms') do
       sender_username: fields['sender']['username']
     }
 
-    fields['sendable_pms']['pms'].each do |pm|
-      pm['title'] = utils.apply_placeholders(pm['title'], placeholders)
-      pm['raw'] = utils.apply_placeholders(pm['raw'], placeholders)
-      pm['automation_id'] = automation.id
+    fields['sendable_pms']['pms'].each do |sendable|
+      pm = {}
+      pm['title'] = utils.apply_placeholders(sendable['title'], placeholders)
+      pm['raw'] = utils.apply_placeholders(sendable['raw'], placeholders)
       pm['target_usernames'] = Array(trigger['user'].username)
-      utils.send_pm(pm, User.find_by(username: fields['sender']['username']))
+
+      utils.send_pm(
+        pm,
+        sender: fields['sender']['username'],
+        automation_id: automation.id,
+        delay: sendable['delay']
+      )
     end
   end
 end

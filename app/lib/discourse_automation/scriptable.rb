@@ -77,26 +77,26 @@ module DiscourseAutomation
         input
       end
 
-      def self.send_pm(options, sender = Discourse.system_user)
-        options = options.symbolize_keys
+      def self.send_pm(pm, sender: Discourse.system_user.username, delay: nil, automation_id: nil)
+        pm = pm.symbolize_keys
 
-        if options[:delay] && options[:automation_id]
-          options[:execute_at] = options[:delay].to_i.minutes.from_now
-          options[:sender] = sender.username
-          options.delete(:delay)
-
-          DiscourseAutomation::PendingPm.create!(options)
+        if delay && automation_id
+          pm[:execute_at] = delay.to_i.minutes.from_now
+          pm[:sender] = sender
+          pm[:automation_id] = automation_id
+          DiscourseAutomation::PendingPm.create!(pm)
         else
-          options = options.merge(archetype: Archetype.private_message)
+          pm = pm.merge(archetype: Archetype.private_message)
+          sender = User.find_by(username: sender)
 
           post_created = false
 
           if defined?(EncryptedPostCreator)
-            post_created = EncryptedPostCreator.new(sender, options).create
+            post_created = EncryptedPostCreator.new(sender, pm).create
           end
 
           if !post_created
-            PostCreator.new(sender, options).create
+            PostCreator.new(sender, pm).create
           end
         end
       end

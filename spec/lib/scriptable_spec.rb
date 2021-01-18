@@ -19,7 +19,7 @@ describe DiscourseAutomation::Scriptable do
     end
   end
 
-  let(:automation) { DiscourseAutomation::Automation.new(script: 'cats_everywhere') }
+  let!(:automation) { DiscourseAutomation::Automation.create(name: 'welcoming cats', script: 'cats_everywhere') }
   let(:scriptable) { DiscourseAutomation::Scriptable.new(automation) }
 
   describe '#fields' do
@@ -76,6 +76,42 @@ describe DiscourseAutomation::Scriptable do
         map = { cool_cat: 'siberian cat' }
         output = scriptable.utils.apply_placeholders(input, map)
         expect(output).to eq('hello siberian cat')
+      end
+    end
+
+    describe '.send_pm' do
+      before { Jobs.run_immediately! }
+
+      let(:user) { Fabricate(:user) }
+
+      context 'pms is delayed' do
+        it 'creates a pending pm' do
+          expect {
+            DiscourseAutomation::Scriptable::Utils.send_pm(
+              {
+                title: 'Tell me and I forget.',
+                raw: 'Teach me and I remember. Involve me and I learn.',
+                target_usernames: Array(user.username)
+              },
+              delay: 2,
+              automation_id: automation.id
+            )
+          }.to change { DiscourseAutomation::PendingPm.count }.by(1)
+        end
+      end
+
+      context 'pms is not delayed' do
+        it 'creates a pm' do
+          expect {
+            DiscourseAutomation::Scriptable::Utils.send_pm(
+              {
+                title: 'Tell me and I forget.',
+                raw: 'Teach me and I remember. Involve me and I learn.',
+                target_usernames: Array(user.username)
+              }
+            )
+          }.to change { Post.count }.by(1)
+        end
       end
     end
   end
