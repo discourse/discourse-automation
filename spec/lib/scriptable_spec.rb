@@ -12,10 +12,6 @@ describe DiscourseAutomation::Scriptable do
 
       field :cat, component: :string
       field :dog, component: :integer, accepts_placeholders: true
-
-      script do
-        p 'baz'
-      end
     end
   end
 
