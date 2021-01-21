@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DiscourseAutomation
   class Scriptable
     attr_reader :fields, :automation
@@ -71,7 +73,6 @@ module DiscourseAutomation
         map[:site_title] = SiteSetting.title
 
         map.each do |key, value|
-          input.gsub!("%%#{key.upcase}%%", value)
         end
 
         input

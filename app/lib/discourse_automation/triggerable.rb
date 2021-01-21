@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DiscourseAutomation
   class Triggerable
     def initialize(automation)
