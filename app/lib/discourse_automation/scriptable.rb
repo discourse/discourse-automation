@@ -73,6 +73,7 @@ module DiscourseAutomation
         map[:site_title] = SiteSetting.title
 
         map.each do |key, value|
+          input = input.gsub("%%#{key.upcase}%%", value)
         end
 
         input
