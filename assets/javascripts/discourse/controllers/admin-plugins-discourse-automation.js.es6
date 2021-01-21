@@ -13,10 +13,5 @@ export default Ember.Controller.extend({
     return (
       this.router.currentRouteName === "adminPlugins.discourse-automation.index"
     );
-  }),
-
-  @action
-  applyAutoUpdateable() {
-    console.log("applyAutoUpdateable action");
-  }
+  })
 });
