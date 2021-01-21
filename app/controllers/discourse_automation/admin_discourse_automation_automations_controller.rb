@@ -28,9 +28,7 @@ module DiscourseAutomation
       automation.update!(request.parameters[:automation].slice(:name, :id, :script))
 
       trigger_params = request.parameters[:automation][:trigger].slice(:metadata, :name)
-      unless automation.trigger
-        automation.create_trigger!(trigger_params)
-      end
+      automation.create_trigger!(trigger_params) unless automation.trigger
 
       automation.trigger.update_with_params(trigger_params)
 
