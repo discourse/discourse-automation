@@ -90,17 +90,19 @@ module DiscourseAutomation
           pm[:automation_id] = automation_id
           DiscourseAutomation::PendingPm.create!(pm)
         else
-          pm = pm.merge(archetype: Archetype.private_message)
-          sender = User.find_by(username: sender)
+          if sender = User.find_by(username: sender)
+            post_created = false
+            pm = pm.merge(archetype: Archetype.private_message)
 
-          post_created = false
+            if defined?(EncryptedPostCreator)
+              post_created = EncryptedPostCreator.new(sender, pm).create
+            end
 
-          if defined?(EncryptedPostCreator)
-            post_created = EncryptedPostCreator.new(sender, pm).create
-          end
-
-          if !post_created
-            PostCreator.new(sender, pm).create
+            if !post_created
+              PostCreator.new(sender, pm).create
+            end
+          else
+            Rails.logger.warn "[discourse-automation] Couldn’t send PM to user with username: `#{sender}`."
           end
         end
       end
