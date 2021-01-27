@@ -106,7 +106,6 @@ after_initialize do
       )
     end
   end
-    script do
 end
 
 Rake::Task.define_task run_automation: :environment do
