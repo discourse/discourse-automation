@@ -27,20 +27,31 @@ describe 'TopicRequiredWords' do
       automation.trigger.update_with_params(metadata: { topic_id: topic.id })
     end
 
-    context 'has a topic_required_words automation associated' do
-      context 'has at least a required word' do
-        it 'creates the post' do
+    context 'topic has a topic_required_words automation associated' do
+      context 'post has at least a required word' do
+        it 'validates the post' do
           post_creator = PostCreator.new(user, topic_id: topic.id, raw: 'this is quite cool #foo')
           post = post_creator.create
           expect(post.valid?).to be(true)
         end
       end
 
-      context 'has no required word' do
-        it 'doesn’t create the post' do
+      context 'post has no required word' do
+        it 'doesn’t validate the post' do
           post_creator = PostCreator.new(user, topic_id: topic.id, raw: 'this is quite cool')
           post = post_creator.create
           expect(post.valid?).to be(false)
+        end
+      end
+    end
+
+    context 'topic has no topic_required_words automation associated' do
+      context 'post has no required word' do
+        it 'validates the post' do
+          no_automation_topic = create_topic
+          post_creator = PostCreator.new(user, topic_id: no_automation_topic.id, raw: 'this is quite cool')
+          post = post_creator.create
+          expect(post.valid?).to be(true)
         end
       end
     end
