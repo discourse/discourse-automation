@@ -17,7 +17,7 @@ DiscourseAutomation::Triggerable.add(DiscourseAutomation::Triggerable::TOPIC) do
       end
 
       if topic_id
-        topic = Topic.find(topic_id)
+        topic = Topic.find_by(id: topic_id)
         topic && topic.upsert_custom_fields({ discourse_automation_id: automation.id })
       end
     end
