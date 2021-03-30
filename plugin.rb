@@ -142,7 +142,7 @@ after_initialize do
 
             words = words.metadata['list']
 
-            if !words.blank?
+            if words.present?
               includes_at_least_one_word = false
 
               words.each do |word|
