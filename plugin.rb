@@ -135,7 +135,7 @@ after_initialize do
       def discourse_automation_topic_required_words
         if topic.custom_fields['discourse_automation_id'].present?
           automation = DiscourseAutomation::Automation.find(topic.custom_fields['discourse_automation_id'])
-          if automation && automation.script == 'topic_required_words'
+          if automation&.script == 'topic_required_words'
             words = automation.fields.find { |field| field.name == 'words' }
 
             return if !words
