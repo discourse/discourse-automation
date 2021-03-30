@@ -143,15 +143,7 @@ after_initialize do
             words = words.metadata['list']
 
             if words.present?
-              includes_at_least_one_word = false
-
-              words.each do |word|
-                if raw.include?(word)
-                  includes_at_least_one_word = true
-                end
-              end
-
-              if !includes_at_least_one_word
+              if words.none? { |word| raw.include?(word) }
                 errors.add(:base, I18n.t('discourse_automation.scriptables.topic_required_words.errors.must_include_word', words: words.join(', ')))
               end
             end
