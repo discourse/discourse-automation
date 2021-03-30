@@ -32,8 +32,10 @@ after_initialize do
     '../app/lib/discourse_automation/triggers/user_added_to_group',
     '../app/lib/discourse_automation/triggers/point_in_time',
     '../app/lib/discourse_automation/triggers/post_created_edited',
+    '../app/lib/discourse_automation/triggers/topic',
     '../app/lib/discourse_automation/scripts/gift_exchange',
-    '../app/lib/discourse_automation/scripts/send_pms'
+    '../app/lib/discourse_automation/scripts/send_pms',
+    '../app/lib/discourse_automation/scripts/topic_required_words'
   ].each { |path| require File.expand_path(path, __FILE__) }
 
   module ::DiscourseAutomation
@@ -120,6 +122,43 @@ after_initialize do
           'post' => post
         )
       end
+  end
+
+  register_topic_custom_field_type('discourse_automation_id', :integer)
+
+  reloadable_patch do
+    require 'post'
+
+    class ::Post
+      validate :discourse_automation_topic_required_words
+
+      def discourse_automation_topic_required_words
+        if topic.custom_fields['discourse_automation_id'].present?
+          automation = DiscourseAutomation::Automation.find(topic.custom_fields['discourse_automation_id'])
+          if automation && automation.script == 'topic_required_words'
+            words = automation.fields.find { |field| field.name == 'words' }
+
+            return if !words
+
+            words = words.metadata['list']
+
+            if !words.blank?
+              includes_at_least_one_word = false
+
+              words.each do |word|
+                if raw.include?(word)
+                  includes_at_least_one_word = true
+                end
+              end
+
+              if !includes_at_least_one_word
+                errors.add(:base, I18n.t('discourse_automation.scriptables.topic_required_words.errors.must_include_word', words: words.join(', ')))
+              end
+            end
+          end
+        end
+      end
+    end
   end
 end
 
