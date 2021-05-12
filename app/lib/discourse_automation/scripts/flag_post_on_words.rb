@@ -16,11 +16,14 @@ DiscourseAutomation::Scriptable.add('flag_post_on_words') do
       next if count >= words.length
 
       has_trust_level = post.user.has_trust_level?(TrustLevel[2])
+      p post.user.trust_level
+      p has_trust_level
       trusted_user = has_trust_level ||
         ReviewableFlaggedPost
           .where(status: Reviewable.statuses[:rejected], target_created_by: post.user)
           .exists?
-      next if !trusted_user
+      p trusted_user
+      next if trusted_user
 
       message = I18n.t('discourse_automation.scriptables.flag_post_on_words.flag_message', words: list)
       PostActionCreator.new(
