@@ -15,9 +15,11 @@ DiscourseAutomation::Scriptable.add('flag_post_on_words') do
       count = words.inject(0) { |acc, word| post.raw.match?(/#{word}/i) ? acc + 1 : acc }
       next if count >= words.length
 
-      trusted_user = ReviewableFlaggedPost
-        .where(status: Reviewable.statuses[:rejected], target_created_by: post.user)
-        .exists?
+      has_trust_level = post.user.has_trust_level?(TrustLevel[2])
+      trusted_user = has_trust_level ||
+        ReviewableFlaggedPost
+          .where(status: Reviewable.statuses[:rejected], target_created_by: post.user)
+          .exists?
       next if !trusted_user
 
       message = I18n.t('discourse_automation.scriptables.flag_post_on_words.flag_message', words: list)
