@@ -39,13 +39,13 @@
             value=automation.trigger.name
             content=model.triggerables
             class="scripts-list"
-            onChange=(action (mut automation.trigger.name))
+            onChange=(action "onChangeTrigger")
           }}
         </div>
       </div>
 
       {{#if automation.trigger.name}}
-        {{component (concat automation.trigger.name "-trigger")
+        {{component triggerComponentName
           metadata=automation.trigger.metadata
         }}
       {{/if}}

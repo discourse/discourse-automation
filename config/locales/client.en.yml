@@ -33,6 +33,13 @@ en:
         text:
           label: Text
       triggerables:
+        stalled_wiki:
+          stalled_after:
+            label: Trigger delay
+            description: Defines delay between last wiki edit and automation’s trigger
+          retriggered_after:
+            label: Re-trigger delay
+            description: Defines delay between first trigger and next trigger, if wiki has still not been edited after first trigger
         user_added_to_group:
           metadata:
             tracked_groups:

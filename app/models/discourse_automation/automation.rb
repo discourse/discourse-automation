@@ -16,8 +16,8 @@ module DiscourseAutomation
     validates :name, length: { in: MIN_NAME_LENGTH..MAX_NAME_LENGTH }
 
     def reset!
-      pending_automations.destroy_all
-      pending_pms.destroy_all
+      pending_automations.delete_all
+      pending_pms.delete_all
     end
   end
 end

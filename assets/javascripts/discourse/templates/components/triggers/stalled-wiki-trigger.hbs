@@ -1,0 +1,37 @@
+<div class="control-group">
+  <label class="control-label">
+    {{i18n "discourse_automation.triggerables.stalled_wiki.stalled_after.label"}}
+  </label>
+
+  <div class="controls">
+    {{combo-box
+      value=metadata.stalled_after
+      content=metadata.stalled_after_choices
+      onChange=(action (mut metadata.stalled_after))
+      options=(hash allowAny=false)
+    }}
+
+    <p class="control-description">
+      {{i18n "discourse_automation.triggerables.stalled_wiki.stalled_after.description"}}
+    </p>
+  </div>
+</div>
+
+<div class="control-group">
+  <label class="control-label">
+    {{i18n "discourse_automation.triggerables.stalled_wiki.retriggered_after.label"}}
+  </label>
+
+  <div class="controls">
+    {{combo-box
+      value=metadata.retriggered_after
+      content=metadata.retriggered_after_choices
+      onChange=(action (mut metadata.retriggered_after))
+      options=(hash allowAny=false)
+    }}
+
+    <p class="control-description">
+      {{i18n "discourse_automation.triggerables.stalled_wiki.retriggered_after.description"}}
+    </p>
+  </div>
+</div>

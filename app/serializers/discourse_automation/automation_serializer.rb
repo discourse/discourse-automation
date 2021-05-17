@@ -41,9 +41,16 @@ module DiscourseAutomation
 
     def trigger
       trigger = object.trigger || DiscourseAutomation::Trigger.new
+
+      trigger_metadata = {}
+      if object.trigger
+        trigger_metadata = DiscourseAutomation::Triggerable.new(object).eval!.metadata
+      end
+
       DiscourseAutomation::TriggerSerializer.new(
         trigger,
-        root: false
+        root: false,
+        trigger_metadata: trigger_metadata
       ).as_json
     end
 

@@ -6,7 +6,7 @@ module DiscourseAutomation
 
     def initialize(automation)
       @automation = automation
-      @placeholders = [:site_title]
+      @placeholders = [:site_title].concat(DiscourseAutomation::Triggerable.new(automation).eval!.placeholders)
       @version = 0
       @fields = []
       @triggerables = []

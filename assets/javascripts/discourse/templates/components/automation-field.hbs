@@ -6,7 +6,7 @@
   </div>
 {{/if}}
 
-{{component (concat "da-" field.component "-field")
+{{component (concat "fields/da-" field.component "-field")
   field=field
   onChangeField=onChangeField
   label=(i18n (concat "discourse_automation.scriptables." automation.script.id ".fields." field.name ".label"))

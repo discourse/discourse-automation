@@ -1,6 +1,6 @@
 import { set } from "@ember/object";
 import { extractError } from "discourse/lib/ajax-error";
-import { action } from "@ember/object";
+import { action, computed } from "@ember/object";
 import { reads } from "@ember/object/computed";
 
 export default Ember.Controller.extend({
@@ -9,6 +9,12 @@ export default Ember.Controller.extend({
   automation: reads("model.automation"),
 
   isUpdatingAutomation: false,
+
+  triggerComponentName: computed("automation.trigger.name", function() {
+    return (
+      "triggers/" + this.automation.trigger.name.replace(/_/, "-") + "-trigger"
+    );
+  }),
 
   @action
   saveAutomation(automation) {
@@ -28,5 +34,6 @@ export default Ember.Controller.extend({
   @action
   onChangeTrigger(name) {
     set(this.model.automation.trigger, "name", name);
+    return this.saveAutomation(this.automation);
   }
 });
