@@ -2,7 +2,7 @@
 
 module Jobs
   class StalledWikiTracker < ::Jobs::Scheduled
-    every 1.minute
+    every 10.minutes
 
     def execute(_args = nil)
       name = DiscourseAutomation::Triggerable::STALLED_WIKI
@@ -18,15 +18,7 @@ module Jobs
             if last_trigger_date
               retrigger_duration = ISO8601::Duration.new(trigger.metadata['retriggered_after']).to_seconds
 
-              if post.id == 1748435
-                p last_trigger_date
-                p retrigger_duration
-                p Time.parse(last_trigger_date) + retrigger_duration
-                p Time.zone.now
-              end
-
               if Time.parse(last_trigger_date) + retrigger_duration < Time.zone.now
-                p "should trigger?"
                 post.upsert_custom_fields(stalled_wiki_triggered_at: Time.zone.now)
                 run_trigger(trigger, post)
               else
@@ -47,8 +39,6 @@ module Jobs
         .limit(20)
         .pluck(:user_id)
         .uniq
-
-      p user_ids
 
       trigger.run!(
         'kind' => DiscourseAutomation::Triggerable::STALLED_WIKI,
