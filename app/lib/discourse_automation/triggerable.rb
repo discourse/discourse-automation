@@ -31,6 +31,10 @@ module DiscourseAutomation
       }
     end
 
+    def components
+      fields.map { |f| f[:component] }.uniq
+    end
+
     def eval!
       begin
         public_send("__triggerable_#{name.underscore}")

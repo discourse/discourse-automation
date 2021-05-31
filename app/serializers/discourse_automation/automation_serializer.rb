@@ -51,9 +51,8 @@ module DiscourseAutomation
     private
 
     def process_fields(target, target_name)
-      fields = Array(target.fields).map do |script_field|
-        field = object.fields.find_by(name: script_field[:name], component: script_field[:component])
-        field || DiscourseAutomation::Field.new(name: script_field[:name], component: script_field[:component])
+      fields = Array(target.fields).map do |tf|
+        object.fields.find_or_initialize_by(name: tf[:name], component: tf[:component])
       end
 
       ActiveModel::ArraySerializer.new(

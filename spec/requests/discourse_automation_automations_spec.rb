@@ -18,4 +18,36 @@ describe DiscourseAutomation::AdminDiscourseAutomationAutomationsController do
       expect(DiscourseAutomation::Automation.find_by(id: automation.id)).to eq(nil)
     end
   end
+
+  describe '#update' do
+    let!(:automation) { Fabricate(:automation) }
+
+    context 'invalid field’s component' do
+      it 'errors' do
+        put "/admin/plugins/discourse-automation/automations/#{automation.id}.json", params: {
+          automation: {
+            fields: [
+              { name: 'foo', component: 'bar' }
+            ]
+          }
+        }
+
+        expect(response.status).to eq(422)
+      end
+    end
+
+    context 'invalid field’s metadata' do
+      it 'errors' do
+        put "/admin/plugins/discourse-automation/automations/#{automation.id}.json", params: {
+          automation: {
+            fields: [
+              { name: 'sender', component: 'users', metadata: { baz: 1 } }
+            ]
+          }
+        }
+
+        expect(response.status).to eq(422)
+      end
+    end
+  end
 end

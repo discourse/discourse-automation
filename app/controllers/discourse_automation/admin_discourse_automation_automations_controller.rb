@@ -42,15 +42,6 @@ module DiscourseAutomation
       automation.fields.destroy_all
 
       Array(request.parameters[:automation][:fields]).each do |field|
-        schema = DiscourseAutomation::Field::SCHEMAS[field[:component]]
-        if !schema || !JSONSchemer.schema(
-            'type' => 'object',
-            'properties' => schema
-          ).valid?(field[:metadata])
-          render_json_error I18n.t('discourse_automation.models.fields.invalid_metadata', component: field[:component], field: field[:name]), status: :unprocessable_entity
-          return
-        end
-
         automation.upsert_field!(field[:name], field[:component], field[:metadata], target: field[:target])
       end
 

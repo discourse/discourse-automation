@@ -66,6 +66,10 @@ module DiscourseAutomation
       }
     end
 
+    def components
+      fields.map { |f| f[:component] }.uniq
+    end
+
     def utils
       Utils
     end

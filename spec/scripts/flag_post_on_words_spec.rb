@@ -19,10 +19,6 @@ describe 'FlagPostsOnWords' do
   end
 
   context 'editing/creating a post' do
-    before do
-      automation.upsert_field!('restricted_topic', 'text', { text: topic.id }, target: 'trigger')
-    end
-
     context 'editing a post' do
       fab!(:post) { Fabricate(:post) }
 

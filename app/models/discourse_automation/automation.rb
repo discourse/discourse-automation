@@ -34,6 +34,14 @@ module DiscourseAutomation
       scriptable.script.call(trigger, serialized_fields, self)
     end
 
+    def triggerable
+      trigger && DiscourseAutomation::Triggerable.new(trigger)
+    end
+
+    def scriptable
+      script && DiscourseAutomation::Scriptable.new(script)
+    end
+
     def serialized_fields
       fields
         &.pluck(:name, :metadata)

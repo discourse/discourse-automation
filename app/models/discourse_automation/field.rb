@@ -15,17 +15,43 @@ module DiscourseAutomation
 
       yield
 
-      DiscourseAutomation::Triggerable.new(automation.trigger).on_update.call(
+      automation.triggerable.on_update.call(
         automation,
         automation.serialized_fields,
         previous_fields
       )
     end
 
+    validate :metadata_schema
+    def metadata_schema
+      targetable = (target == 'trigger' ? automation.triggerable : automation.scriptable)
+      if !(targetable.components.include?(component.to_sym))
+        errors.add(
+          :base,
+          I18n.t(
+            'discourse_automation.models.fields.invalid_field',
+            component: component,
+            target: target,
+            target_name: targetable.name
+          )
+        )
+      else
+        schema = SCHEMAS[component]
+        if !schema || !JSONSchemer.schema('type' => 'object', 'properties' => schema).valid?(metadata)
+          errors.add(:base, I18n.t('discourse_automation.models.fields.invalid_metadata', component: component, field: name))
+        end
+      end
+    end
+
     SCHEMAS = {
+      'choices' => {
+        'value' => {
+          'type' => ['string', 'integer']
+        }
+      },
       'category' => {
         'category_id' => {
-          'type' => 'integer'
+          'type' => ['string', 'integer']
         }
       },
       'user' => {
@@ -35,7 +61,7 @@ module DiscourseAutomation
       },
       'text' => {
         'text' => {
-          'type' => 'string'
+          'type' => ['string', 'integer']
         }
       },
       'text_list' => {

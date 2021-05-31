@@ -161,9 +161,9 @@ Rake::Task.define_task run_automation: :environment do
 
       next if type != automation.script
 
-      script = DiscourseAutomation::Scriptable.new(automation.script)
-      script.public_send(name)
-      scripts << script.script.call
+      scriptable = automation.scriptable
+      scriptable.public_send(name)
+      scripts << scriptable.script.call
     end
   end
 end

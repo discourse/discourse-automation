@@ -16,7 +16,7 @@ describe DiscourseAutomation::Scriptable do
   end
 
   let!(:automation) { DiscourseAutomation::Automation.create(name: 'welcoming cats', script: 'cats_everywhere', last_updated_by_id: Discourse.system_user.id, trigger: 'topic') }
-  let(:scriptable) { DiscourseAutomation::Scriptable.new(automation.script) }
+  let(:scriptable) { automation.scriptable }
 
   describe '#fields' do
     it 'returns the fields' do
