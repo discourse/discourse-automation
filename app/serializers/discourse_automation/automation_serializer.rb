@@ -29,9 +29,9 @@ module DiscourseAutomation
     def trigger
       {
         id: object.trigger,
-        name: I18n.t("discourse_automation.scriptables.#{object.trigger}.title"),
-        description: I18n.t("discourse_automation.scriptables.#{object.trigger}.description"),
-        doc: I18n.t("discourse_automation.scriptables.#{object.trigger}.doc"),
+        name: I18n.t("discourse_automation.triggerables.#{object.trigger}.title"),
+        description: I18n.t("discourse_automation.triggerables.#{object.trigger}.description"),
+        doc: I18n.t("discourse_automation.triggerables.#{object.trigger}.doc"),
         not_found: triggerable.not_found
       }
     end

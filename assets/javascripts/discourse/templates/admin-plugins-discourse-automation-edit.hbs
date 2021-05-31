@@ -64,6 +64,12 @@
             class="scripts-list"
             onChange=(action "onChangeTrigger")
           }}
+
+          {{#i18n-lookup (concat "discourse_automation.triggerables." automationForm.trigger ".description") as |description|}}
+            <p class="control-description">
+              {{description}}
+            </p>
+          {{/i18n-lookup}}
         </div>
       </div>
 
