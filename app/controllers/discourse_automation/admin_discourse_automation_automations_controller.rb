@@ -3,7 +3,7 @@
 module DiscourseAutomation
   class AdminDiscourseAutomationAutomationsController < ::ApplicationController
     def index
-      automations = DiscourseAutomation::Automation.all
+      automations = DiscourseAutomation::Automation.order(updated_at: :desc).all
       serializer = ActiveModel::ArraySerializer.new(
         automations,
         each_serializer: DiscourseAutomation::AutomationSerializer,
