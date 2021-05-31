@@ -25,7 +25,7 @@ en:
           confirm_remove_pm: "Are you sure you want to remove this PM?"
           placeholder_title: PM title
           add_pm: Add PM
-          no_pm_created: You haven’t created any PM yet.
+          no_pm_created: You haven’t created any PM yet. PMs will be sent once your automation is triggered.
           title:
             label: Title
           raw:
