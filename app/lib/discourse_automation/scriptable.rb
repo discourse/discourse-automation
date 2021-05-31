@@ -58,11 +58,12 @@ module DiscourseAutomation
       end
     end
 
-    def field(name, component:, accepts_placeholders: false)
+    def field(name, component:, extra: {}, accepts_placeholders: false)
       @fields << {
         name: name,
         component: component,
-        accepts_placeholders: accepts_placeholders
+        accepts_placeholders: accepts_placeholders,
+        extra: extra
       }
     end
 

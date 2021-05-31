@@ -41,14 +41,24 @@ en:
       triggerables:
         not_found: Couldn’t find trigger `%{trigger}` for automation `%{automation}`, ensure the associated plugin is installed
         stalled_wiki:
-          category:
-            label: Retricted to category
-          stalled_after:
-            label: Trigger delay
-            description: Defines delay between last wiki edit and automation’s trigger
-          retriggered_after:
-            label: Re-trigger delay
-            description: Defines delay between first trigger and next trigger, if wiki has still not been edited after first trigger
+          durations:
+            PT1H: "One hour"
+            P1D: "One day"
+            P1W: "One week"
+            P2W: "Two weeks"
+            P1M: "One month"
+            P3M: "Three months"
+            P6M: "Six months"
+            P1Y: "One year"
+          fields:
+            restricted_category:
+              label: Retricted to category
+            stalled_after:
+              label: Trigger delay
+              description: Defines delay between last wiki edit and automation’s trigger
+            retriggered_after:
+              label: Re-trigger delay
+              description: Defines delay between first trigger and next trigger, if wiki has still not been edited after first trigger
         user_added_to_group:
           fields:
             joined_group:

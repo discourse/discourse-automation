@@ -3,20 +3,20 @@
 DiscourseAutomation::Triggerable::STALLED_WIKI = 'stalled_wiki'
 
 DURATION_CHOICES = [
-  { id: 'PT1H', name: 'One hour'},
-  { id: 'P1D', name: 'One day'},
-  { id: 'P1W', name: 'One week'},
-  { id: 'P2W', name: 'Two weeks'},
-  { id: 'P1M', name: 'One month'},
-  { id: 'P3M', name: 'Three months'},
-  { id: 'P6M', name: 'Six months'},
-  { id: 'P1Y', name: 'One year'},
+  { id: 'PT1H', name: 'discourse_automation.triggerables.stalled_wiki.durations.PT1H' },
+  { id: 'P1D', name: 'discourse_automation.triggerables.stalled_wiki.durations.P1D' },
+  { id: 'P1W', name: 'discourse_automation.triggerables.stalled_wiki.durations.P1W' },
+  { id: 'P2W', name: 'discourse_automation.triggerables.stalled_wiki.durations.P2W' },
+  { id: 'P1M', name: 'discourse_automation.triggerables.stalled_wiki.durations.P1M' },
+  { id: 'P3M', name: 'discourse_automation.triggerables.stalled_wiki.durations.P3M' },
+  { id: 'P6M', name: 'discourse_automation.triggerables.stalled_wiki.durations.P6M' },
+  { id: 'P1Y', name: 'discourse_automation.triggerables.stalled_wiki.durations.P1Y' },
 ]
 
 DiscourseAutomation::Triggerable.add(DiscourseAutomation::Triggerable::STALLED_WIKI) do
   field :restricted_category, component: :category
-  field :stalled_after, component: :choices
-  field :retriggered_after, component: :choices
+  field :stalled_after, component: :choices, extra: { content: DURATION_CHOICES }
+  field :retriggered_after, component: :choices, extra: { content: DURATION_CHOICES }
 
   placeholder :post_url
 end

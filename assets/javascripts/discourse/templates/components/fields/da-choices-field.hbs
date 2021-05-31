@@ -4,8 +4,8 @@
   <div class="controls">
     {{combo-box
       value=field.metadata.value
-      content=field.metadata.content
-      onChange=(action onChangeField)
+      content=replacedContent
+      onChange=(action (mut field.metadata.value))
       options=(hash allowAny=false)
     }}
 

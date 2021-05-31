@@ -1,6 +1,7 @@
 import { Promise } from "rsvp";
 import Component from "@ember/component";
 import { action, computed } from "@ember/object";
+import I18n from "I18n";
 
 // http://github.com/feross/clipboard-copy
 function clipboardCopy(text) {
@@ -66,6 +67,13 @@ export default Component.extend({
     return this.field.target === "script"
       ? `.scriptables.${this.automation.script.id.replace(/-/g, "_")}.`
       : `.triggerables.${this.automation.trigger.id.replace(/-/g, "_")}.`;
+  }),
+
+  description: computed("field.target", function() {
+    return I18n.lookup(
+      `discourse_automation${this.target}fields.${this.field.name}.description`,
+      { locale: I18n.locale }
+    );
   }),
 
   @action
