@@ -22,8 +22,8 @@ describe DiscourseAutomation::Scriptable do
     it 'returns the fields' do
       expect(scriptable.fields).to match_array(
         [
-          { name: :cat, component: :string, accepts_placeholders: false },
-          { name: :dog, component: :integer, accepts_placeholders: true }
+          { extra: {}, name: :cat, component: :string, accepts_placeholders: false },
+          { extra: {}, name: :dog, component: :integer, accepts_placeholders: true }
         ]
       )
     end
