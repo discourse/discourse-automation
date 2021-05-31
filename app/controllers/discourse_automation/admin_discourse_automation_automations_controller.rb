@@ -51,7 +51,7 @@ module DiscourseAutomation
           return
         end
 
-        automation.upsert_field(field[:name], field[:component], field[:metadata], target: field[:target])
+        automation.upsert_field!(field[:name], field[:component], field[:metadata], target: field[:target])
       end
 
       render_serialized_automation(automation)

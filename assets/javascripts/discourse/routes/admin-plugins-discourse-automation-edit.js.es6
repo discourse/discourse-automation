@@ -19,6 +19,7 @@ export default DiscourseRoute.extend({
     controller.setProperties({
       model,
       automationForm: {
+        name: model.automation.name,
         trigger: model.automation?.trigger?.id,
         script: model.automation?.script?.id,
         fields: model.automation?.fields || []
