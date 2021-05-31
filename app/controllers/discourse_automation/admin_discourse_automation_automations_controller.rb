@@ -39,7 +39,7 @@ module DiscourseAutomation
           .merge(last_updated_by_id: current_user.id)
       )
 
-      previous_fields = automation.serialized_fields
+      automation.fields.destroy_all
 
       Array(request.parameters[:automation][:fields]).each do |field|
         schema = DiscourseAutomation::Field::SCHEMAS[field[:component]]
