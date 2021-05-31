@@ -50,7 +50,7 @@ module Jobs
         'post' => post,
         'users' => User.where(id: user_ids),
         'placeholders' => {
-          'post_url' => Discourse.base_url + post.url
+          'wiki_url' => Discourse.base_url + post.url
         }
       )
     end
