@@ -9,21 +9,18 @@ describe 'TopicRequiredWords' do
     DiscourseAutomation::Automation.create!(
       name: 'Ensure word is present',
       script: 'topic_required_words',
+      trigger: 'topic',
       last_updated_by_id: Discourse.system_user.id
     )
   end
 
-  before do
-    automation.create_trigger!(name: 'topic', metadata: {})
-  end
-
   context 'updating trigger' do
     it 'updates the custom field' do
-      automation.trigger.update_with_params(metadata: { topic_id: topic.id })
+      automation.upsert_field!('restricted_topic', 'text', { text: topic.id }, target: 'trigger')
       expect(topic.custom_fields['discourse_automation_id']).to eq(automation.id)
 
       new_topic = create_topic
-      automation.trigger.update_with_params(metadata: { topic_id: new_topic.id })
+      automation.upsert_field!('restricted_topic', 'text', { text: new_topic.id }, target: 'trigger')
       expect(new_topic.custom_fields['discourse_automation_id']).to eq(automation.id)
     end
   end

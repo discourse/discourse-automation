@@ -27,24 +27,31 @@ module DiscourseAutomation
 
     def update
       automation = DiscourseAutomation::Automation.find(params[:id])
+
+      if automation.trigger != params[:automation][:trigger]
+        automation.fields.where(target: 'trigger').destroy_all
+      end
+
       automation.update!(
         request
           .parameters[:automation]
-          .slice(:name, :id, :script)
+          .slice(:name, :id, :script, :trigger)
           .merge(last_updated_by_id: current_user.id)
       )
 
-      trigger_params = request.parameters[:automation][:trigger].slice(:metadata, :name)
-      automation.create_trigger!(trigger_params) unless automation.trigger
-
-      automation.trigger.update_with_params(trigger_params)
+      previous_fields = automation.serialized_fields
 
       Array(request.parameters[:automation][:fields]).each do |field|
-        f = automation.fields.find_or_initialize_by(
-          name: field[:name],
-          component: field[:component]
-        )
-        f.update!(metadata: field[:metadata])
+        schema = DiscourseAutomation::Field::SCHEMAS[field[:component]]
+        if !schema || !JSONSchemer.schema(
+            'type' => 'object',
+            'properties' => schema
+          ).valid?(field[:metadata])
+          render_json_error I18n.t('discourse_automation.models.fields.invalid_metadata', component: field[:component], field: field[:name]), status: :unprocessable_entity
+          return
+        end
+
+        automation.upsert_field(field[:name], field[:component], field[:metadata], target: field[:target])
       end
 
       render_serialized_automation(automation)

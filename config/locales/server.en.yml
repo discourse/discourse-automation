@@ -2,11 +2,16 @@ en:
   site_settings:
     discourse_automation_enabled: "Enable discourse-automation plugin"
   discourse_automation:
+    models:
+      fields:
+        invalid_metadata: Data for `%{field}` is invalid or component `%{component}` is unknown.
     triggerables:
       point_in_time:
         title: Point in time
       user_added_to_group:
         title: User added to group
+      stalled_wiki:
+        title: Stalled wiki
       post_created_edited:
         title: Post created/edited
       topic:

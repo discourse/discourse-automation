@@ -5,7 +5,7 @@ module DiscourseAutomation
     def index
       if params[:automation_id].present?
         automation = DiscourseAutomation::Automation.find(params[:automation_id])
-        scriptable = DiscourseAutomation::Scriptable.new(automation)
+        scriptable = DiscourseAutomation::Scriptable.new(automation.script)
         triggerables = scriptable.triggerables
       else
         triggerables = DiscourseAutomation::Triggerable.all

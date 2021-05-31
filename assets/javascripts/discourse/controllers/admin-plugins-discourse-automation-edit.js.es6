@@ -1,7 +1,8 @@
 import { set } from "@ember/object";
 import { extractError } from "discourse/lib/ajax-error";
-import { action } from "@ember/object";
-import { reads } from "@ember/object/computed";
+import { action, computed } from "@ember/object";
+import { reads, filterBy } from "@ember/object/computed";
+import { ajax } from "discourse/lib/ajax";
 
 export default Ember.Controller.extend({
   error: null,
@@ -10,14 +11,28 @@ export default Ember.Controller.extend({
 
   isUpdatingAutomation: false,
 
+  scriptFields: filterBy("automationForm.fields", "target", "script"),
+
+  triggerFields: filterBy("automationForm.fields", "target", "trigger"),
+
   @action
-  saveAutomation(automation) {
+  saveAutomation() {
     this.setProperties({ error: null, isUpdatingAutomation: true });
 
-    return automation
-      .update()
+    return ajax(
+      `/admin/plugins/discourse-automation/automations/${this.model.automation.id}.json`,
+      {
+        type: "PUT",
+        data: JSON.stringify({ automation: this.automationForm }),
+        dataType: "json",
+        contentType: "application/json"
+      }
+    )
       .catch(e => this.set("error", extractError(e)))
-      .finally(() => this.set("isUpdatingAutomation", false));
+      .finally(() => {
+        this.send("refreshRoute");
+        this.set("isUpdatingAutomation", false);
+      });
   },
 
   @action
@@ -26,7 +41,10 @@ export default Ember.Controller.extend({
   },
 
   @action
-  onChangeTrigger(name) {
-    set(this.model.automation.trigger, "name", name);
+  onChangeTrigger(id) {
+    if (this.automationForm.trigger !== id) {
+      set(this.automationForm, "trigger", id);
+      this.saveAutomation();
+    }
   }
 });
