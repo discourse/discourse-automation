@@ -123,6 +123,8 @@ en:
             label: Version
           enabled:
             label: Enabled
+          disabled:
+            label: Disabled
           placeholders:
             label: Placeholders
           last_updated_at:
