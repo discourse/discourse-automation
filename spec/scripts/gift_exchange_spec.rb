@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
-require_relative '../fabricators/automation_fabricator'
+require_relative '../discourse_automation_helper'
 
 describe 'GiftExchange' do
   fab!(:automation) { Fabricate(:automation, script: DiscourseAutomation::Scriptable::GIFT_EXCHANGE, trigger: DiscourseAutomation::Triggerable::POINT_IN_TIME) }
@@ -15,36 +14,13 @@ describe 'GiftExchange' do
     gift_group.add(user_2)
     gift_group.add(user_3)
 
-    automation.fields.create!(
-      component: 'group',
-      name: 'gift_exchangers_group',
-      metadata: { group_id: gift_group.id },
-      target: 'script'
-    )
-
-    automation.fields.create!(
-      component: 'pms',
-      name: 'giftee_assignment_messages',
-      metadata: {
-        pms: [
-          {
-            title: 'Gift %%YEAR%%',
-            raw: '@%%GIFTER_USERNAME%% you should send a gift to %%GIFTEE_USERNAME%%'
-          }
-        ]
-      },
-      target: 'script'
-    )
+    automation.upsert_field!('gift_exchangers_group', 'group', { group_id: gift_group.id }, target: 'script')
+    automation.upsert_field!('giftee_assignment_messages', 'pms', { pms: [{ title: 'Gift %%YEAR%%', raw: '@%%GIFTER_USERNAME%% you should send a gift to %%GIFTEE_USERNAME%%'}] }, target: 'script')
   end
 
   context 'ran from point_in_time trigger' do
     before do
-      automation.fields.create!(
-        component: 'date',
-        name: 'execute_at',
-        metadata: { date: 3.hours.from_now },
-        target: 'trigger'
-      )
+      automation.upsert_field!('execute_at', 'date', { date: 3.hours.from_now }, target: 'trigger')
     end
 
     it 'creates expected PM' do

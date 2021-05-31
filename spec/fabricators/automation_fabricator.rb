@@ -2,7 +2,7 @@
 
 Fabricator(:automation, from: DiscourseAutomation::Automation) do
   name 'My Automation'
-  script DiscourseAutomation::Scriptable::SEND_PMS
+  script 'something_about_us'
   trigger DiscourseAutomation::Triggerable::TOPIC
   last_updated_by_id Discourse.system_user.id
   enabled true

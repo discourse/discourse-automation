@@ -1,17 +1,16 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
-require_relative '../fabricators/automation_fabricator'
+require_relative '../discourse_automation_helper'
 
 describe DiscourseAutomation::AdminDiscourseAutomationAutomationsController do
-  let(:admin) { Fabricate(:admin) }
+  fab!(:admin) { Fabricate(:admin) }
 
   before do
     sign_in(admin)
   end
 
   describe '#destroy' do
-    let!(:automation) { Fabricate(:automation) }
+    fab!(:automation) { Fabricate(:automation) }
 
     it 'destroys the bookmark' do
       delete "/admin/plugins/discourse-automation/automations/#{automation.id}.json"
@@ -20,7 +19,7 @@ describe DiscourseAutomation::AdminDiscourseAutomationAutomationsController do
   end
 
   describe '#update' do
-    let!(:automation) { Fabricate(:automation) }
+    fab!(:automation) { Fabricate(:automation) }
 
     context 'invalid field’s component' do
       it 'errors' do

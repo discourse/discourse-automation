@@ -24,7 +24,7 @@ module DiscourseAutomation
       field ? field.metadata : {}
     end
 
-    def upsert_field!(name, component, metadata = {}, target: 'script')
+    def upsert_field!(name, component, metadata, target: 'script')
       field = fields.find_or_initialize_by(name: name, component: component, target: target)
       field.update!(metadata: metadata)
     end

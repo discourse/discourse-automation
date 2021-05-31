@@ -1,32 +1,13 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
-require_relative '../fabricators/automation_fabricator'
+require_relative '../discourse_automation_helper'
 
 describe 'SendPms' do
   fab!(:automation) { Fabricate(:automation, script: DiscourseAutomation::Scriptable::SEND_PMS, trigger: 'stalled_wiki') }
 
   before do
-    automation.fields.create!(
-      component: 'user',
-      name: 'sender',
-      metadata: { username: Discourse.system_user.username },
-      target: 'script'
-    )
-
-    automation.fields.create!(
-      component: 'pms',
-      name: 'sendable_pms',
-      metadata: {
-        pms: [
-          {
-            title: 'A message from %%SENDER_USERNAME%%',
-            raw: 'This is a message sent to @%%RECEIVER_USERNAME%%'
-          }
-        ]
-      },
-      target: 'script'
-    )
+    automation.upsert_field!('sender', 'user', { username: Discourse.system_user.username })
+    automation.upsert_field!('sendable_pms', 'pms', { pms: [{ title: 'A message from %%SENDER_USERNAME%%', raw: 'This is a message sent to @%%RECEIVER_USERNAME%%' }] })
   end
 
   context 'ran from stalled_wiki trigger' do
@@ -59,13 +40,7 @@ describe 'SendPms' do
 
     before do
       automation.update!(trigger: 'user_added_to_group')
-
-      automation.fields.create!(
-        component: 'group',
-        name: 'joined_group',
-        metadata: { group_id: tracked_group_1.id },
-        target: 'trigger'
-      )
+      automation.upsert_field!('joined_group', 'group', { group_id: tracked_group_1.id }, target: 'trigger')
     end
 
     it 'creates expected PM' do

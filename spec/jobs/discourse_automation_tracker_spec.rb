@@ -1,37 +1,21 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
-
-Automation ||= DiscourseAutomation::Automation
+require_relative '../discourse_automation_helper'
 
 describe Jobs::DiscourseAutomationTracker do
   describe 'pending automation' do
-    let!(:automation) {
-      automation = Automation.create!(
-        name: 'Secret Santa',
+    fab!(:automation) {
+      Fabricate(
+        :automation,
         script: 'gift_exchange',
-        trigger: DiscourseAutomation::Triggerable::POINT_IN_TIME,
-        last_updated_by_id: Discourse.system_user.id
+        trigger: DiscourseAutomation::Triggerable::POINT_IN_TIME
       )
-
-      automation.fields.create!(
-        component: 'pms',
-        name: 'giftee_assignment_messages',
-        metadata: {
-          raw: 'foo',
-          title: 'bar'
-        },
-        target: 'script'
-      )
-      automation.fields.create!(
-        component: 'group',
-        name: 'gift_exchangers_group',
-        metadata: { group_id: 1 },
-        target: 'script'
-      )
-
-      automation
     }
+
+    before do
+      automation.upsert_field!('giftee_assignment_messages', 'pms', { raw: 'foo', title: 'bar' }, target: 'script')
+      automation.upsert_field!('gift_exchangers_group', 'group', { group_id: 1 }, target: 'script')
+    end
 
     context 'pending automation is in past' do
       before do
@@ -69,12 +53,11 @@ describe Jobs::DiscourseAutomationTracker do
       Jobs.run_later!
     end
 
-    let!(:automation) {
-      Automation.create!(
-        name: 'On boarding',
+    fab!(:automation) {
+      Fabricate(
+        :automation,
         script: DiscourseAutomation::Scriptable::SEND_PMS,
-        last_updated_by_id: Discourse.system_user.id,
-        trigger: 'topic'
+        trigger: DiscourseAutomation::Triggerable::TOPIC
       )
     }
 

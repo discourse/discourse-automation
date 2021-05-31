@@ -1,21 +1,11 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require_relative '../discourse_automation_helper'
 
-describe 'POST_CREATED_EDITED' do
-  before do
-    DiscourseAutomation::Scriptable.add('tag_created_post') do
-      version 1
-
-      script do
-        p 'Howdy!'
-      end
-    end
-  end
-
+describe 'PostCreatedEdited' do
   let(:basic_topic_params) { { title: 'hello world topic', raw: 'my name is fred', archetype_id: 1 } }
-  let(:user) { Fabricate(:user) }
-  let!(:automation) { DiscourseAutomation::Automation.create!(name: 'Tagging post with content', script: 'tag_created_post', last_updated_by_id: Discourse.system_user.id, trigger: 'post_created_edited') }
+  fab!(:user) { Fabricate(:user) }
+  fab!(:automation) { Fabricate(:automation, trigger: DiscourseAutomation::Triggerable::POST_CREATED_EDITED) }
 
   context 'editing/creating a post' do
     it 'fires the trigger' do

@@ -1,22 +1,21 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require_relative '../discourse_automation_helper'
 
 describe 'TopicRequiredWords' do
   fab!(:user) { Fabricate(:user) }
   fab!(:category) { Fabricate(:category, user: user) }
   fab!(:topic) { Fabricate(:topic, category: category) }
-  let!(:automation) do
-    DiscourseAutomation::Automation.create!(
-      name: 'Ensure word is present',
-      script: 'topic_required_words',
-      trigger: 'topic',
-      last_updated_by_id: Discourse.system_user.id
+  fab!(:automation) do
+    Fabricate(
+      :automation,
+      script: DiscourseAutomation::Scriptable::TOPIC_REQUIRED_WORDS,
+      trigger: DiscourseAutomation::Triggerable::TOPIC
     )
   end
 
   before do
-    automation.upsert_field!('words', 'text_list', { 'list' => ['#foo', '#bar'] })
+    automation.upsert_field!('words', 'text_list', { list: ['#foo', '#bar'] })
   end
 
   context 'editing/creating a post' do

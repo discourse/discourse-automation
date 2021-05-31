@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
-require_relative '../fabricators/automation_fabricator'
+require_relative '../discourse_automation_helper'
 
 describe 'FlagPostsOnWords' do
   fab!(:user) { Fabricate(:user) }
   fab!(:category) { Fabricate(:category, user: user) }
   fab!(:topic) { Fabricate(:topic, category_id: category.id) }
-  fab!(:automation) { Fabricate(:automation, script: 'flag_post_on_words', trigger: 'post_created_edited') }
+  fab!(:automation) { Fabricate(:automation, script: DiscourseAutomation::Scriptable::FLAG_POST_ON_WORDS, trigger: DiscourseAutomation::Triggerable::POST_CREATED_EDITED) }
 
   before do
     automation.fields.create!(

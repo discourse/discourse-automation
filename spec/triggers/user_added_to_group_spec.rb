@@ -1,31 +1,20 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require_relative '../discourse_automation_helper'
 
 describe 'UserAddedToGroup' do
-  before do
-    DiscourseAutomation::Scriptable.add('welcome_to_group') do
-      version 1
-
-      script do
-        p 'Howdy!'
-      end
-    end
-  end
-
-  let(:user) { Fabricate(:user) }
-  let(:tracked_group) { Fabricate(:group) }
-  let!(:automation) {
-    DiscourseAutomation::Automation.create!(
-      name: 'Welcoming new users',
-      script: 'welcome_to_group',
-      trigger: 'user_added_to_group',
-      last_updated_by_id: Discourse.system_user.id
+  fab!(:user) { Fabricate(:user) }
+  fab!(:tracked_group) { Fabricate(:group) }
+  fab!(:automation) {
+    Fabricate(
+      :automation,
+      trigger: DiscourseAutomation::Triggerable::USER_ADDED_TO_GROUP
     )
   }
-  let!(:trigger) {
+
+  before do
     automation.upsert_field!('joined_group', 'group', { group_id: tracked_group.id }, target: 'trigger')
-  }
+  end
 
   context 'group is tracked' do
     it 'fires the trigger' do

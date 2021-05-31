@@ -1,15 +1,10 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
-require_relative '../fabricators/automation_fabricator'
+require_relative '../discourse_automation_helper'
 
 describe 'StalledWiki' do
-  before do
-    DiscourseAutomation::Scriptable.add('output_script') { script { p 'Howdy!' } }
-  end
-
   fab!(:topic_1) { Fabricate(:topic) }
-  fab!(:automation) { Fabricate(:automation, script: 'output_script', trigger: 'stalled_wiki') }
+  fab!(:automation) { Fabricate(:automation, trigger: DiscourseAutomation::Triggerable::STALLED_WIKI) }
   fab!(:post_creator_1) { Fabricate(:user, admin: true) }
   let!(:post) {
     post_creator = PostCreator.new(
@@ -22,18 +17,8 @@ describe 'StalledWiki' do
 
   context 'default' do
     before do
-      automation.fields.create!(
-        component: 'choices',
-        name: 'stalled_after',
-        metadata: { value: 'PT10H' },
-        target: 'trigger'
-      )
-      automation.fields.create!(
-        component: 'choices',
-        name: 'retriggered_after',
-        metadata: { value: 'PT1H' },
-        target: 'trigger'
-      )
+      automation.upsert_field!('stalled_after', 'choices', { value: 'PT10H' }, target: 'trigger')
+      automation.upsert_field!('retriggered_after', 'choices', { value: 'PT1H' }, target: 'trigger')
     end
 
     context 'post has been revised recently' do
