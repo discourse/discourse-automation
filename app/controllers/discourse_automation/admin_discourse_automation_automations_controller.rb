@@ -29,8 +29,10 @@ module DiscourseAutomation
       automation = DiscourseAutomation::Automation.find(params[:id])
 
       if automation.trigger != params[:automation][:trigger]
-        automation.fields.where(target: 'trigger').destroy_all
+        request.parameters[:automation][:fields] = []
       end
+
+      automation.fields.destroy_all
 
       automation.update!(
         request
@@ -38,8 +40,6 @@ module DiscourseAutomation
           .slice(:name, :id, :script, :trigger)
           .merge(last_updated_by_id: current_user.id)
       )
-
-      automation.fields.destroy_all
 
       Array(request.parameters[:automation][:fields]).each do |field|
         automation.upsert_field!(field[:name], field[:component], field[:metadata], target: field[:target])
