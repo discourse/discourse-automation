@@ -37,7 +37,7 @@ module DiscourseAutomation
       automation.update!(
         request
           .parameters[:automation]
-          .slice(:name, :id, :script, :trigger)
+          .slice(:name, :id, :script, :trigger, :enabled)
           .merge(last_updated_by_id: current_user.id)
       )
 

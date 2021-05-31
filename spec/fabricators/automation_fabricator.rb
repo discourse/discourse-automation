@@ -5,4 +5,5 @@ Fabricator(:automation, from: DiscourseAutomation::Automation) do
   script DiscourseAutomation::Scriptable::SEND_PMS
   trigger DiscourseAutomation::Triggerable::TOPIC
   last_updated_by_id Discourse.system_user.id
+  enabled true
 end

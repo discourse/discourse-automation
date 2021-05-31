@@ -20,6 +20,7 @@ export default DiscourseRoute.extend({
       model,
       automationForm: {
         name: model.automation.name,
+        enabled: model.automation.enabled,
         trigger: model.automation?.trigger?.id,
         script: model.automation?.script?.id,
         fields: model.automation?.fields || []

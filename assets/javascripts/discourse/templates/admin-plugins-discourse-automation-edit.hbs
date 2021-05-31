@@ -20,6 +20,20 @@
 
       <div class="control-group">
         <label class="control-label">
+          {{i18n "discourse_automation.models.automation.enabled.label"}}
+        </label>
+
+        <div class="controls">
+          {{input
+            type="checkbox"
+            checked=automationForm.enabled
+            click=(action (mut automationForm.enabled) value="target.checked")
+          }}
+        </div>
+      </div>
+
+      <div class="control-group">
+        <label class="control-label">
           {{i18n "discourse_automation.models.script.name.label"}}
         </label>
 

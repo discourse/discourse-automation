@@ -29,9 +29,11 @@ module DiscourseAutomation
       field.update!(metadata: metadata)
     end
 
-    def trigger!(trigger)
-      scriptable = DiscourseAutomation::Scriptable.new(script)
-      scriptable.script.call(trigger, serialized_fields, self)
+    def trigger!(context = {})
+      if enabled
+        scriptable = DiscourseAutomation::Scriptable.new(script)
+        scriptable.script.call(context, serialized_fields, self)
+      end
     end
 
     def triggerable
