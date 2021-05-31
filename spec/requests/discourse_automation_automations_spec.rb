@@ -26,6 +26,7 @@ describe DiscourseAutomation::AdminDiscourseAutomationAutomationsController do
       it 'errors' do
         put "/admin/plugins/discourse-automation/automations/#{automation.id}.json", params: {
           automation: {
+            trigger: automation.trigger,
             fields: [
               { name: 'foo', component: 'bar' }
             ]
@@ -40,6 +41,7 @@ describe DiscourseAutomation::AdminDiscourseAutomationAutomationsController do
       it 'errors' do
         put "/admin/plugins/discourse-automation/automations/#{automation.id}.json", params: {
           automation: {
+            trigger: automation.trigger,
             fields: [
               { name: 'sender', component: 'users', metadata: { baz: 1 } }
             ]
