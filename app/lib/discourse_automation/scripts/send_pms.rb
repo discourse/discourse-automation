@@ -13,12 +13,12 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::SEND_PMS) d
 
   triggerables %i[user_added_to_group stalled_wiki]
 
-  script do |trigger, fields, automation|
+  script do |context, fields, automation|
     placeholders = {
       sender_username: fields['sender']['username']
-    }.merge(trigger['placeholders'] || {})
+    }.merge(context['placeholders'] || {})
 
-    trigger['users'].each do |user|
+    context['users'].each do |user|
       placeholders[:receiver_username] = user.username
 
       fields['sendable_pms']['pms'].each do |sendable|

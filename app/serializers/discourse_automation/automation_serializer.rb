@@ -16,7 +16,7 @@ module DiscourseAutomation
     end
 
     def script
-      data = {
+      {
         id: object.script,
         version: scriptable.version,
         name: I18n.t("discourse_automation.scriptables.#{object.script}.title"),
@@ -24,24 +24,16 @@ module DiscourseAutomation
         doc: I18n.t("discourse_automation.scriptables.#{object.script}.doc"),
         not_found: scriptable.not_found
       }
-
-      data[:placeholders] = scriptable.placeholders if scriptable.placeholders
-
-      data
     end
 
     def trigger
-      data = {
+      {
         id: object.trigger,
         name: I18n.t("discourse_automation.scriptables.#{object.trigger}.title"),
         description: I18n.t("discourse_automation.scriptables.#{object.trigger}.description"),
         doc: I18n.t("discourse_automation.scriptables.#{object.trigger}.doc"),
         not_found: triggerable.not_found
       }
-
-      data[:placeholders] = triggerable.placeholders if triggerable.placeholders
-
-      data
     end
 
     def fields
@@ -58,7 +50,7 @@ module DiscourseAutomation
       ActiveModel::ArraySerializer.new(
         fields,
         each_serializer: DiscourseAutomation::FieldSerializer,
-        scope: { target: target, target_name: target_name }
+        scope: { target: target, target_name: target_name, placeholders: (scriptable.placeholders || []) + (triggerable.placeholders || []) }
       ).as_json || []
     end
 

@@ -16,7 +16,7 @@ module DiscourseAutomation
       if !field || field[:accepts_placeholders].blank?
         nil
       else
-        scope[:target].placeholders.map { |placeholder| "%%#{placeholder.upcase}%%" }
+        scope[:placeholders].map { |placeholder| "%%#{placeholder.upcase}%%" }
       end
     end
   end
