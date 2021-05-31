@@ -1,4 +1,4 @@
-<table>
+<table class="automations">
   <thead>
     <tr>
       <th>{{i18n "discourse_automation.models.automation.name.label"}}</th>
@@ -15,13 +15,13 @@
     {{#each model as |automation|}}
       {{#if automation.script.not_found}}
         <tr>
-          <td colspan="7" class="alert alert-danger">
+          <td colspan="8" class="alert alert-danger">
             {{i18n "discourse_automation.scriptables.not_found" script=automation.script.id automation=automation.name}}
           </td>
         </tr>
       {{else if automation.trigger.not_found}}
         <tr>
-          <td colspan="7" class="alert alert-danger">
+          <td colspan="8" class="alert alert-danger">
             {{i18n "discourse_automation.triggerables.not_found" trigger=automation.trigger.id automation=automation.name}}
           </td>
         </tr>
