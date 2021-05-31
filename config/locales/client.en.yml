@@ -66,7 +66,7 @@ en:
         point_in_time:
           fields:
             execute_at:
-              label: Datetime
+              label: Execute at
         topic:
           fields:
             restricted_topic:
