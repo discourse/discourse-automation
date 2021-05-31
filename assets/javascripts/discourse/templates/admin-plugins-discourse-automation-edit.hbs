@@ -38,7 +38,11 @@
         </label>
 
         <div class="controls">
-          {{automation.script.name}}
+          {{combo-box
+            value=automationForm.script
+            content=model.scriptables
+            onChange=(action "onChangeScript")
+          }}
 
           <p class="control-description">
             {{automation.script.doc}}
@@ -61,7 +65,6 @@
           {{combo-box
             value=automationForm.trigger
             content=model.triggerables
-            class="scripts-list"
             onChange=(action "onChangeTrigger")
           }}
 

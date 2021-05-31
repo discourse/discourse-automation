@@ -32,6 +32,11 @@ module DiscourseAutomation
         request.parameters[:automation][:fields] = []
       end
 
+      if automation.script != params[:automation][:script]
+        request.parameters[:automation][:trigger] = nil
+        request.parameters[:automation][:fields] = []
+      end
+
       automation.fields.destroy_all
 
       automation.update!(

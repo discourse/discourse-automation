@@ -1,6 +1,6 @@
 import { set } from "@ember/object";
 import { extractError } from "discourse/lib/ajax-error";
-import { action, computed } from "@ember/object";
+import { action } from "@ember/object";
 import { reads, filterBy } from "@ember/object/computed";
 import { ajax } from "discourse/lib/ajax";
 
@@ -44,6 +44,14 @@ export default Ember.Controller.extend({
   onChangeTrigger(id) {
     if (this.automationForm.trigger !== id) {
       set(this.automationForm, "trigger", id);
+      this.saveAutomation();
+    }
+  },
+
+  @action
+  onChangeScript(id) {
+    if (this.automationForm.script !== id) {
+      set(this.automationForm, "script", id);
       this.saveAutomation();
     }
   }

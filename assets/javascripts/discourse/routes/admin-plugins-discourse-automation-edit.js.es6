@@ -7,7 +7,9 @@ export default DiscourseRoute.extend({
 
   model(params) {
     return Ember.RSVP.hash({
-      scriptables: this.store.findAll("discourse-automation-scriptable"),
+      scriptables: this.store
+        .findAll("discourse-automation-scriptable")
+        .then(result => result.content),
       triggerables: ajax(
         `/admin/plugins/discourse-automation/triggerables.json?automation_id=${params.id}`
       ).then(result => (result ? result.triggerables : [])),
