@@ -23,5 +23,31 @@ describe 'PostCreatedEdited' do
 
       expect(output).to include('Howdy!')
     end
+
+    context 'category is restricted' do
+      before do
+        automation.upsert_field!('restricted_category', 'category', { category_id: Category.last.id }, target: 'trigger' )
+      end
+
+      context 'category is allowed' do
+        it 'fires the trigger' do
+          output = capture_stdout do
+            PostCreator.create(user, basic_topic_params.merge({ category: Category.last.id }))
+          end
+
+          expect(output).to include('Howdy!')
+        end
+      end
+
+      context 'category is not allowed' do
+        it 'doesn’t fire the trigger' do
+          output = capture_stdout do
+            PostCreator.create(user, basic_topic_params)
+          end
+
+          expect(output).to_not include('Howdy!')
+        end
+      end
+    end
   end
 end

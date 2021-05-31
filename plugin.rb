@@ -22,7 +22,7 @@ def handle_post_created_edited(post, action)
       restricted_category = automation.trigger_field('restricted_category')
       if restricted_category['category_id']
         category_id = post.topic&.category&.parent_category&.id || post.topic&.category&.id
-        next if restricted_category != category_id
+        next if restricted_category['category_id'] != category_id
       end
 
       automation.trigger!('kind' => name, 'action' => action, 'post' => post)
