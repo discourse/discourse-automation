@@ -2,6 +2,7 @@
   <thead>
     <tr>
       <th>{{i18n "discourse_automation.models.automation.name.label"}}</th>
+      <th>{{i18n "discourse_automation.models.automation.trigger.label"}}</th>
       <th>{{i18n "discourse_automation.models.automation.script.label"}}</th>
       <th>{{i18n "discourse_automation.models.automation.last_updated_at.label"}}</th>
       <th>{{i18n "discourse_automation.models.automation.last_updated_by.label"}}</th>
@@ -27,6 +28,9 @@
       {{else}}
         <tr>
           <td>{{automation.name}}</td>
+          {{#if automation.trigger}}
+            <td>{{automation.trigger.name}}</td>
+          {{/if}}
           <td>{{automation.script.name}} (v{{automation.script.version}})</td>
           <td>{{format-date automation.updated_at}}</td>
           <td>

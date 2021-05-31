@@ -115,6 +115,8 @@ en:
         automation:
           name:
             label: Name
+          trigger:
+            label: Trigger
           script:
             label: Script
           version:
