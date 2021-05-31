@@ -12,7 +12,7 @@ module DiscourseAutomation
       @on_call_block = proc {}
       @not_found = false
 
-      eval!
+      eval! if @name
     end
 
     def placeholders

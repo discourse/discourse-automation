@@ -13,7 +13,7 @@ module DiscourseAutomation
       @script = proc {}
       @not_found = false
 
-      eval!
+      eval! if @name
     end
 
     def eval!

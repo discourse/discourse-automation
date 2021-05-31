@@ -28,9 +28,7 @@
       {{else}}
         <tr>
           <td>{{automation.name}}</td>
-          {{#if automation.trigger}}
-            <td>{{automation.trigger.name}}</td>
-          {{/if}}
+          <td>{{if automation.trigger.id automation.trigger.name "-"}}</td>
           <td>{{automation.script.name}} (v{{automation.script.version}})</td>
           <td>{{format-date automation.updated_at}}</td>
           <td>

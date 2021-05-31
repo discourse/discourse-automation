@@ -15,6 +15,10 @@ module DiscourseAutomation
       BasicUserSerializer.new(User.find(object.last_updated_by_id), root: false).as_json
     end
 
+    def enabled
+      object.enabled && object.trigger
+    end
+
     def script
       {
         id: object.script,
