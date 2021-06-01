@@ -14,6 +14,12 @@ enabled_site_setting :discourse_automation_enabled
 PLUGIN_NAME ||= 'discourse-automation'
 
 def handle_post_created_edited(post, action)
+  if post.post_type != Post.types[:regular] ||
+     post.user_id == Discourse.system_user.id ||
+     post.user_id == DiscourseNarrativeBot::BOT_USER_ID
+    return
+  end
+
   name = DiscourseAutomation::Triggerable::POST_CREATED_EDITED
 
   DiscourseAutomation::Automation
@@ -108,15 +114,11 @@ after_initialize do
   end
 
   on(:post_created) do |post|
-    if post.user_id != Discourse.system_user.id
-      handle_post_created_edited(post, :create)
-    end
+    handle_post_created_edited(post, :create)
   end
 
   on(:post_edited) do |post|
-    if post.user_id != Discourse.system_user.id
-      handle_post_created_edited(post, :edit)
-    end
+    handle_post_created_edited(post, :create)
   end
 
   register_topic_custom_field_type('discourse_automation_id', :integer)

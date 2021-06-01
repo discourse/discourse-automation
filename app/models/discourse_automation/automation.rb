@@ -51,7 +51,7 @@ module DiscourseAutomation
           name, field = hash
           acc[name] = field
           acc
-        end || []
+        end || {}
     end
 
     def reset!
