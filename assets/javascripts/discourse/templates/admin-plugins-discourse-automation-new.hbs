@@ -33,6 +33,21 @@
     </div>
 
     <div class="control-group">
+      <label class="control-label">
+        {{i18n "discourse_automation.models.automation.trigger.label"}}
+      </label>
+
+      <div class="controls">
+        {{combo-box
+          value=form.trigger
+          content=model.triggerables.content
+          class="scripts-list"
+          onChange=(action (mut form.trigger))
+        }}
+      </div>
+    </div>
+
+    <div class="control-group">
 
       <div class="controls">
         {{d-button

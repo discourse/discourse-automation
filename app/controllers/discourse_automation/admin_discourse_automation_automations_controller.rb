@@ -18,7 +18,7 @@ module DiscourseAutomation
     end
 
     def create
-      automation_params = params.require(:automation).permit(:name, :script)
+      automation_params = params.require(:automation).permit(:name, :script, :trigger)
       automation = DiscourseAutomation::Automation.create!(
         automation_params.merge(last_updated_by_id: current_user.id)
       )
