@@ -40,10 +40,6 @@ class MoveExistingTriggersToFields < ActiveRecord::Migration[6.1]
     end
 
     execute <<~SQL
-      ALTER TABLE discourse_automation_automations ALTER COLUMN trigger SET NOT NULL;
-    SQL
-
-    execute <<~SQL
       DROP TABLE IF EXISTS discourse_automation_triggers;
     SQL
   end
