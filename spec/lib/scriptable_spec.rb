@@ -81,8 +81,6 @@ describe DiscourseAutomation::Scriptable do
     end
 
     describe '.send_pm' do
-      before { Jobs.run_immediately! }
-
       let(:user) { Fabricate(:user) }
 
       context 'pms is delayed' do
