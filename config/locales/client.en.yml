@@ -4,6 +4,7 @@ en:
       title: Automation
       create: Create
       update: Update
+      confirm_automation_reset: This action will reset your automation, do you want to proceed?
       edit_automation:
         trigger_section:
           title: When/What...

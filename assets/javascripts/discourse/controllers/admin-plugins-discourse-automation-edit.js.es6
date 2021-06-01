@@ -3,6 +3,7 @@ import { extractError } from "discourse/lib/ajax-error";
 import { action } from "@ember/object";
 import { reads, filterBy } from "@ember/object/computed";
 import { ajax } from "discourse/lib/ajax";
+import I18n from "I18n";
 
 export default Ember.Controller.extend({
   error: null,
@@ -43,16 +44,33 @@ export default Ember.Controller.extend({
   @action
   onChangeTrigger(id) {
     if (this.automationForm.trigger !== id) {
-      set(this.automationForm, "trigger", id);
-      this.saveAutomation();
+      this._confirmReset(() => {
+        set(this.automationForm, "trigger", id);
+        this.saveAutomation();
+      });
     }
   },
 
   @action
   onChangeScript(id) {
     if (this.automationForm.script !== id) {
-      set(this.automationForm, "script", id);
-      this.saveAutomation();
+      this._confirmReset(() => {
+        set(this.automationForm, "script", id);
+        this.saveAutomation();
+      });
     }
+  },
+
+  _confirmReset(callback) {
+    bootbox.confirm(
+      I18n.t("discourse_automation.confirm_automation_reset"),
+      I18n.t("no_value"),
+      I18n.t("yes_value"),
+      result => {
+        if (result) {
+          callback && callback();
+        }
+      }
+    );
   }
 });
