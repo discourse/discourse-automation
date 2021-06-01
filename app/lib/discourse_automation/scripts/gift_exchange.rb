@@ -64,11 +64,14 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::GIFT_EXCHAN
         title = utils.apply_placeholders(giftee_assignment_message['title'], placeholders)
 
         utils.send_pm(
-          target_usernames: Array(gifter),
-          title: title,
-          raw: raw,
+          {
+            target_usernames: Array(gifter),
+            title: title,
+            raw: raw,
+          },
           delay: giftee_assignment_message['delay'],
-          encrypt: giftee_assignment_message['encrypt']
+          encrypt: giftee_assignment_message['encrypt'],
+          automation_id: automation.id
         )
       end
     end
