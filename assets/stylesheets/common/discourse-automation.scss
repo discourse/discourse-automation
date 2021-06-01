@@ -3,6 +3,10 @@
     .relative-date {
       font-size: $font-down-1;
     }
+
+    td[role="button"] {
+      cursor: pointer;
+    }
   }
 }
 

@@ -7,7 +7,6 @@
       <th>{{i18n "discourse_automation.models.automation.script.label"}}</th>
       <th>{{i18n "discourse_automation.models.automation.last_updated_by.label"}}</th>
       <th></th>
-      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -26,21 +25,15 @@
         </tr>
       {{else}}
         <tr>
-          <td>{{format-enabled-automation automation.enabled automation.trigger}}</td>
-          <td>{{automation.name}}</td>
-          <td>{{if automation.trigger.id automation.trigger.name "-"}}</td>
-          <td>{{automation.script.name}} (v{{automation.script.version}})</td>
-          <td>
+          <td role="button" {{on "click" (fn this.editAutomation automation)}}>{{format-enabled-automation automation.enabled automation.trigger}}</td>
+          <td tabindex="0" role="button" {{on "keypress" (fn this.editAutomation automation)}} {{on "click" (fn this.editAutomation automation)}}>{{automation.name}}</td>
+          <td role="button" {{on "click" (fn this.editAutomation automation)}}>{{if automation.trigger.id automation.trigger.name "-"}}</td>
+          <td role="button" {{on "click" (fn this.editAutomation automation)}}>{{automation.script.name}} (v{{automation.script.version}})</td>
+          <td role="button" {{on "click" (fn this.editAutomation automation)}}>
             <a href={{automation.last_updated_by.userPath}} data-user-card={{automation.last_updated_by.username}}>
               {{avatar automation.last_updated_by imageSize="small"}}
             </a>
             {{format-date automation.updated_at leaveAgo="true"}}
-          </td>
-          <td>
-            {{d-button
-              icon="pencil-alt"
-              action=(action "editAutomation" automation)
-            }}
           </td>
           <td>
             {{d-button
