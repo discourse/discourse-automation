@@ -14,14 +14,17 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::SEND_PMS) d
   triggerables %i[user_added_to_group stalled_wiki]
 
   script do |context, fields, automation|
+    sender_username = fields['sender']['username'] || Discourse.system_user.username
+
     placeholders = {
-      sender_username: fields['sender']['username']
+      sender_username: sender_username
     }.merge(context['placeholders'] || {})
 
     context['users'].each do |user|
       placeholders[:receiver_username] = user.username
+      Array(fields['sendable_pms']['pms']).each do |sendable|
+        next if !sendable['title'] || !sendable['raw']
 
-      fields['sendable_pms']['pms'].each do |sendable|
         pm = {}
         pm['title'] = utils.apply_placeholders(sendable['title'], placeholders)
         pm['raw'] = utils.apply_placeholders(sendable['raw'], placeholders)
@@ -29,7 +32,7 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::SEND_PMS) d
 
         utils.send_pm(
           pm,
-          sender: fields['sender']['username'],
+          sender: sender_username,
           automation_id: automation.id,
           delay: sendable['delay'],
           encrypt: sendable['encrypt']
