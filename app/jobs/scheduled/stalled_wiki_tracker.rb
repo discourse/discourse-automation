@@ -38,12 +38,12 @@ module Jobs
     end
 
     def run_trigger(automation, post)
-      user_ids = post
+      user_ids = (post
         .post_revisions
         .order('post_revisions.created_at DESC')
-        .limit(20)
-        .pluck(:user_id)
-        .uniq
+        .limit(5)
+        .pluck(:user_id) + [post.user_id]
+      ).compact.uniq
 
       automation.trigger!(
         'kind' => DiscourseAutomation::Triggerable::STALLED_WIKI,
