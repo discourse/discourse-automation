@@ -14,11 +14,7 @@ enabled_site_setting :discourse_automation_enabled
 PLUGIN_NAME ||= 'discourse-automation'
 
 def handle_post_created_edited(post, action)
-  if post.post_type != Post.types[:regular] ||
-     post.user_id == Discourse.system_user.id ||
-     post.user_id == DiscourseNarrativeBot::BOT_USER_ID
-    return
-  end
+  return if post.post_type != Post.types[:regular] || post.user_id < 0
 
   name = DiscourseAutomation::Triggerable::POST_CREATED_EDITED
 
