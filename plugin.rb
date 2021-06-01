@@ -114,7 +114,7 @@ after_initialize do
   end
 
   on(:post_edited) do |post|
-    handle_post_created_edited(post, :create)
+    handle_post_created_edited(post, :edit)
   end
 
   register_topic_custom_field_type('discourse_automation_id', :integer)

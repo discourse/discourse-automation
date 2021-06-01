@@ -29,7 +29,7 @@ describe 'StalledWiki' do
           Jobs::StalledWikiTracker.new.execute(nil)
         end
 
-        expect(output).to_not include('Howdy!')
+        expect(output).to_not include('"kind":"stalled_wiki"')
       end
     end
 
@@ -41,7 +41,7 @@ describe 'StalledWiki' do
           Jobs::StalledWikiTracker.new.execute(nil)
         end
 
-        expect(output).to include('Howdy!')
+        expect(output).to include('"kind":"stalled_wiki"')
       end
 
       context 'trigger has a category' do
@@ -63,7 +63,7 @@ describe 'StalledWiki' do
               Jobs::StalledWikiTracker.new.execute(nil)
             end
 
-            expect(output).to include('Howdy!')
+            expect(output).to include('"kind":"stalled_wiki"')
           end
         end
 
@@ -75,7 +75,7 @@ describe 'StalledWiki' do
               Jobs::StalledWikiTracker.new.execute(nil)
             end
 
-            expect(output).to_not include('Howdy!')
+            expect(output).to_not include('"kind":"stalled_wiki"')
           end
         end
       end
@@ -104,7 +104,7 @@ describe 'StalledWiki' do
             Jobs::StalledWikiTracker.new.execute(nil)
           end
 
-          expect(output).to include('Howdy!')
+          expect(output).to include('"kind":"stalled_wiki"')
           expect(post.reload.custom_fields['stalled_wiki_triggered_at']).to eq(Time.zone.now.to_s)
         end
       end
@@ -122,7 +122,7 @@ describe 'StalledWiki' do
             Jobs::StalledWikiTracker.new.execute(nil)
           end
 
-          expect(output).to_not include('Howdy!')
+          expect(output).to_not include('"kind":"stalled_wiki"')
           expect(post.reload.custom_fields['stalled_wiki_triggered_at']).to eq(10.minutes.ago.to_s)
         end
       end

@@ -15,13 +15,15 @@ describe 'PostCreatedEdited' do
         post = PostCreator.create(user, basic_topic_params)
       end
 
-      expect(output).to include('Howdy!')
+      expect(output).to include('"kind":"post_created_edited"')
+      expect(output).to include('"action":"create"')
 
       output = capture_stdout do
         post.revise(post.user, raw: 'this is another cool topic')
       end
 
-      expect(output).to include('Howdy!')
+      expect(output).to include('"kind":"post_created_edited"')
+      expect(output).to include('"action":"edit"')
     end
 
     context 'category is restricted' do
@@ -35,7 +37,7 @@ describe 'PostCreatedEdited' do
             PostCreator.create(user, basic_topic_params.merge({ category: Category.last.id }))
           end
 
-          expect(output).to include('Howdy!')
+          expect(output).to include('"kind":"post_created_edited"')
         end
       end
 
@@ -45,7 +47,7 @@ describe 'PostCreatedEdited' do
             PostCreator.create(user, basic_topic_params)
           end
 
-          expect(output).to_not include('Howdy!')
+          expect(output).to_not include('"kind":"post_created_edited"')
         end
       end
     end

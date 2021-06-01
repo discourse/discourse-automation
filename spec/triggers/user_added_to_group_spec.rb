@@ -22,7 +22,7 @@ describe 'UserAddedToGroup' do
         tracked_group.add(user)
       end
 
-      expect(output).to include('Howdy!')
+      expect(output).to include('"kind":"user_added_to_group"')
     end
   end
 
@@ -34,7 +34,7 @@ describe 'UserAddedToGroup' do
         untracked_group.add(user)
       end
 
-      expect(output).to_not include('Howdy!')
+      expect(output).to_not include('"kind":"user_added_to_group"')
     end
   end
 end

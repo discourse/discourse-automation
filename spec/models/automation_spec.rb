@@ -9,7 +9,7 @@ describe DiscourseAutomation::Automation do
 
       it 'doesn’t do anything' do
         output = capture_stdout do
-          automation.trigger!
+          automation.trigger!('Howdy!')
         end
 
         expect(output).to_not include('Howdy!')
@@ -21,7 +21,7 @@ describe DiscourseAutomation::Automation do
 
       it 'runs the script' do
         output = capture_stdout do
-          automation.trigger!
+          automation.trigger!('Howdy!')
         end
 
         expect(output).to include('Howdy!')
