@@ -4,6 +4,8 @@ en:
       title: Automation
       create: Create
       update: Update
+      select_script: Select a script
+      select_trigger: Select a trigger
       confirm_automation_reset: This action will reset your automation, do you want to proceed?
       edit_automation:
         trigger_section:
@@ -42,7 +44,6 @@ en:
       triggerables:
         not_found: Couldn’t find trigger `%{trigger}` for automation `%{automation}`, ensure the associated plugin is installed
         stalled_wiki:
-          description: When a wiki has not been edited for a period longer than the one defined, the automation will be triggered
           durations:
             PT1H: "One hour"
             P1D: "One day"
@@ -62,22 +63,18 @@ en:
               label: Re-trigger delay
               description: Defines delay between first trigger and next trigger, if wiki has still not been edited after first trigger
         user_added_to_group:
-          description: When a user is added to the specified group the automation will be triggered
           fields:
             joined_group:
               label: Tracked group
         point_in_time:
-          description: When the date is reached the automation will be triggered
           fields:
             execute_at:
               label: Execute at
         topic:
-          description: The associated script will only be used on the specified topic, this is usefull for scripts doing validation for example
           fields:
             restricted_topic:
               label: Topic ID
         post_created_edited:
-          description: When a valid post is edited or created the automation will be triggered
           fields:
             restricted_category:
               label: Category

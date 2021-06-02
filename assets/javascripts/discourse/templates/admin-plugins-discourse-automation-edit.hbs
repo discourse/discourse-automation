@@ -38,15 +38,14 @@
         </label>
 
         <div class="controls">
-          {{combo-box
+          {{dropdown-select-box
             value=automationForm.script
             content=model.scriptables
             onChange=(action "onChangeScript")
+            options=(hash
+              none="discourse_automation.select_script"
+            )
           }}
-
-          <p class="control-description">
-            {{automation.script.doc}}
-          </p>
         </div>
       </div>
     </section>
@@ -62,17 +61,14 @@
         </label>
 
         <div class="controls">
-          {{combo-box
+          {{dropdown-select-box
             value=automationForm.trigger
             content=model.triggerables
             onChange=(action "onChangeTrigger")
+            options=(hash
+              none="discourse_automation.select_trigger"
+            )
           }}
-
-          {{#i18n-lookup (concat "discourse_automation.triggerables." automationForm.trigger ".description") as |description|}}
-            <p class="control-description">
-              {{description}}
-            </p>
-          {{/i18n-lookup}}
         </div>
       </div>
 

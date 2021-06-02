@@ -17,7 +17,7 @@ export default Ember.Controller.extend({
     this.set("error", null);
 
     automation
-      .save(this.form.getProperties("name", "script", "trigger"))
+      .save(this.form.getProperties("name", "script"))
       .then(() => {
         this._resetForm();
         this.transitionToRoute(
@@ -31,9 +31,6 @@ export default Ember.Controller.extend({
   },
 
   _resetForm() {
-    this.set(
-      "form",
-      EmberObject.create({ name: null, script: null, trigger: null })
-    );
+    this.set("form", EmberObject.create({ name: null, script: null }));
   }
 });

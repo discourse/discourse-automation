@@ -16,8 +16,8 @@ module DiscourseAutomation
         {
           id: id,
           name: I18n.t("discourse_automation.triggerables.#{id}.title"),
-          description: I18n.t("discourse_automation.triggerables.#{id}.description"),
-          doc: I18n.t("discourse_automation.triggerables.#{id}.doc"),
+          description: I18n.t("discourse_automation.triggerables.#{id}.description", default: ''),
+          doc: I18n.t("discourse_automation.triggerables.#{id}.doc", default: ''),
         }
       end
 
