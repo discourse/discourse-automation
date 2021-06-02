@@ -51,7 +51,7 @@ module DiscourseAutomation
       },
       'category' => {
         'category_id' => {
-          'type' => ['string', 'integer']
+          'type' => ['string', 'integer', 'null']
         }
       },
       'user' => {
