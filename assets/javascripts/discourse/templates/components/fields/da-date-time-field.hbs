@@ -10,7 +10,10 @@
           input=(action "convertToUniversalTime" value="target.value")
         }}
 
-        {{d-button icon="trash-alt" action=(action (mut field.metadata.value) value=null)}}
+
+        {{#if field.metadata.value}}
+          {{d-button icon="trash-alt" action=(action (mut field.metadata.value) value=null)}}
+        {{/if}}
       </div>
 
       {{fields/da-field-description description=description}}
