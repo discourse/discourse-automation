@@ -32,6 +32,10 @@ def handle_post_created_edited(post, action)
     end
 end
 
+require File.expand_path('../app/lib/discourse_automation/triggerable', __FILE__)
+require File.expand_path('../app/lib/discourse_automation/scriptable', __FILE__)
+require File.expand_path('../app/core_ext/plugin_instance', __FILE__)
+
 after_initialize do
   [
     '../app/controllers/discourse_automation/admin_discourse_automation_controller',
@@ -41,15 +45,12 @@ after_initialize do
     '../app/serializers/discourse_automation/automation_serializer',
     '../app/serializers/discourse_automation/automation_field_serializer',
     '../app/serializers/discourse_automation/trigger_serializer',
-    '../app/lib/discourse_automation/triggerable',
-    '../app/lib/discourse_automation/scriptable',
     '../app/models/discourse_automation/automation',
     '../app/models/discourse_automation/pending_automation',
     '../app/models/discourse_automation/pending_pm',
     '../app/models/discourse_automation/field',
     '../app/jobs/scheduled/discourse_automation_tracker',
     '../app/jobs/scheduled/stalled_wiki_tracker',
-    '../app/core_ext/plugin_instance',
     '../app/lib/discourse_automation/triggers/recurring',
     '../app/lib/discourse_automation/triggers/stalled_wiki',
     '../app/lib/discourse_automation/triggers/user_added_to_group',
