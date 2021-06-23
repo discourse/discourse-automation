@@ -52,9 +52,12 @@ en:
             every_week: Every week
             every_other_week: Every other week
             every_month: Every month
+            every_year: Every year
           fields:
             recurrence:
               label: Recurrence
+            start_date:
+              label: Start date
         stalled_wiki:
           durations:
             PT1H: "One hour"
