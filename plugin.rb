@@ -7,6 +7,7 @@
 # url: https://github.com/jjaffeux/discourse-automation
 gem 'iso8601', '0.13.0'
 gem 'json_schemer', '0.2.18'
+gem 'rrule', '0.4.2'
 
 register_asset 'stylesheets/common/discourse-automation.scss'
 enabled_site_setting :discourse_automation_enabled
@@ -49,6 +50,7 @@ after_initialize do
     '../app/jobs/scheduled/discourse_automation_tracker',
     '../app/jobs/scheduled/stalled_wiki_tracker',
     '../app/core_ext/plugin_instance',
+    '../app/lib/discourse_automation/triggers/recurring',
     '../app/lib/discourse_automation/triggers/stalled_wiki',
     '../app/lib/discourse_automation/triggers/user_added_to_group',
     '../app/lib/discourse_automation/triggers/point_in_time',
