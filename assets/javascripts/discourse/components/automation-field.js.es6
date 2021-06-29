@@ -67,7 +67,7 @@ export default Component.extend({
     return triggerId && (!triggerable || triggerable === triggerId);
   },
 
-  fieldName: computed("field.value", function() {
+  fieldName: computed("field.name", function() {
     return this.field.name;
   }),
 
