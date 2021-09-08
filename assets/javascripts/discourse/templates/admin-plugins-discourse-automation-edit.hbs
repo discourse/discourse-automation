@@ -19,7 +19,7 @@
       </div>
 
       <div class="control-group automation-enabled">
-        <label class="control-label {{if (not automationForm.enabled) "disabled"}}">
+        <label class="control-label {{unless automationForm.enabled "disabled"}}">
           {{i18n "discourse_automation.models.automation.enabled.label"}}
         </label>
 
