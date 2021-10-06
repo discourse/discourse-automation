@@ -17,7 +17,7 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::SUSPEND_USE
 
     next if target.suspended?
 
-    next unless actor = User.find_by(username: fields.dig('actor') || Discourse.system_user.username)
+    next unless actor = User.find_by(username: fields.dig('actor', 'value') || Discourse.system_user.username)
     guardian = Guardian.new(actor)
     guardian.ensure_can_suspend!(target)
 
