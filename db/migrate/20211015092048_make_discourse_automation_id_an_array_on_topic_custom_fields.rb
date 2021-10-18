@@ -6,16 +6,14 @@ class MakeDiscourseAutomationIdAnArrayOnTopicCustomFields < ActiveRecord::Migrat
     # so it's safer to remove possible duplicates first
     DB.exec(
       <<~SQL
-        DELETE FROM topic_custom_fields a USING (
-          SELECT MIN(ctid) as ctid, value
-          FROM topic_custom_fields
-          WHERE name = 'discourse_automation_id'
-          GROUP BY value HAVING COUNT(*) > 1
-        ) b
-        WHERE a.value = b.value
+        DELETE FROM topic_custom_fields a
+        USING topic_custom_fields b
+        WHERE a.ctid != b.ctid
+        AND a.value = b.value
+        AND a.name = 'discourse_automation_id'
+        AND b.name = 'discourse_automation_id'
         AND a.topic_id = b.topic_id
-        AND a.ctid <> b.ctid
-        AND name = 'discourse_automation_id' -- probably overkill extra safety
+        AND a.id > b.id
       SQL
     )
 
