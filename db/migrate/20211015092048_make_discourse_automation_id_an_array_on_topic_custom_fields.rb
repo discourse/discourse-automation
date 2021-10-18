@@ -13,6 +13,7 @@ class MakeDiscourseAutomationIdAnArrayOnTopicCustomFields < ActiveRecord::Migrat
           GROUP BY value HAVING COUNT(*) > 1
         ) b
         WHERE a.value = b.value
+        AND a.topic_id = b.topic_id
         AND a.ctid <> b.ctid
         AND name = 'discourse_automation_id' -- probably overkill extra safety
       SQL
