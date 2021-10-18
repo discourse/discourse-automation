@@ -30,17 +30,21 @@ describe DiscourseAutomation::Automation do
   end
 
   describe '#detach_custom_field' do
+    fab!(:automation) { Fabricate(:automation) }
+
     it 'expects a User/Topic/Post instance' do
       expect {
-        automation_1.detach_custom_field(Invite.new)
+        automation.detach_custom_field(Invite.new)
       }.to raise_error(RuntimeError)
     end
   end
 
   describe '#attach_custom_field' do
+    fab!(:automation) { Fabricate(:automation) }
+
     it 'expects a User/Topic/Post instance' do
       expect {
-        automation_1.attach_custom_field(Invite.new)
+        automation.attach_custom_field(Invite.new)
       }.to raise_error(RuntimeError)
     end
   end
