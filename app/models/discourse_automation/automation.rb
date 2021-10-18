@@ -15,6 +15,10 @@ module DiscourseAutomation
     validates :name, length: { in: MIN_NAME_LENGTH..MAX_NAME_LENGTH }
 
     def attach_custom_field(target)
+      if ![Topic, Post, User].any? { |m| target.is_a?(m) }
+        raise "Expected an instance of Topic/Post/User."
+      end
+
       now = Time.now
       fk = target.custom_fields_fk
       row = {
@@ -30,6 +34,10 @@ module DiscourseAutomation
     end
 
     def detach_custom_field(target)
+      if ![Topic, Post, User].any? { |m| target.is_a?(m) }
+        raise "Expected an instance of Topic/Post/User."
+      end
+
       fk = target.custom_fields_fk
       relation = "#{target.class.name}CustomField".constantize
       relation.where(fk => target.id, name: DiscourseAutomation::CUSTOM_FIELD, value: id).delete_all
