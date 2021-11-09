@@ -6,6 +6,18 @@ describe 'Core extensions' do
   fab!(:automation_1) { Fabricate(:automation) }
   fab!(:automation_2) { Fabricate(:automation) }
 
+  context 'plugin_api' do
+    describe '#add_triggerable_to_scriptable' do
+      it 'adds the triggerable as a possibility for a scriptable' do
+        DiscourseAutomation::Triggerable.add(:foo) {}
+        DiscourseAutomation::Scriptable.add(:bar) {}
+        DiscourseAutomation::Scriptable.add_plugin_triggerable(:foo, :bar)
+
+        expect(DiscourseAutomation::Scriptable.plugin_triggerables[:bar]).to contain_exactly(:foo)
+      end
+    end
+  end
+
   describe 'post custom fields' do
     it 'supports discourse_automation_ids' do
       post = create_post
