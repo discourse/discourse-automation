@@ -9,8 +9,7 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::CLOSE_TOPIC
 
   version 1
 
-  # FIXME: copied over from pin_topic; needs some thought
-  triggerables [:point_in_time]
+  triggerables [:point_in_time, :stalled_wiki]
 
   script do |_context, fields|
     message = fields.dig('message', 'value')
