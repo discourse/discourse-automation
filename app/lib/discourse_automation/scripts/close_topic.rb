@@ -3,7 +3,7 @@
 DiscourseAutomation::Scriptable::CLOSE_TOPIC = 'close_topic'
 
 DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::CLOSE_TOPIC) do
-  field :topic, component: :text, required: true
+  field :topic, component: :text, required: true, triggerable: :point_in_time
   field :message, component: :text
   field :user, component: :user
 
