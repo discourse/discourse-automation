@@ -13,12 +13,24 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::CLOSE_TOPIC
   triggerables [:point_in_time]
 
   script do |_context, fields|
-    next unless topic_id = fields.dig('topic', 'value')
-    next unless topic = Topic.find_by(id: topic_id)
-
     message = fields.dig('message', 'value')
     username = fields.dig('user', 'value') || Discourse.system_user.username
 
-    utils.close_topic(topic, username: username, message: message)
+    next unless topic_id = fields.dig('topic', 'value')
+    next unless topic = Topic.find_by(id: topic_id)
+
+    user = User.find_by_username(username)
+    next unless user
+    next unless Guardian.new(user).can_moderate?(topic)
+
+    topic.update_status('closed', true, user)
+
+    if message.present?
+      topic_closed_post = topic.posts.where(action_code: 'closed.enabled').last
+
+      # FIXME: check minimum message length
+      topic_closed_post.raw = message
+      topic_closed_post.save!
+    end
   end
 end

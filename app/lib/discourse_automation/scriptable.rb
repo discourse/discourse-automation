@@ -208,22 +208,6 @@ module DiscourseAutomation
           end
         end
       end
-
-      def self.close_topic(topic, username: Discourse.system_user.username, message: nil)
-        user = User.find_by_username(username)
-
-        # FIXME: these validations should likely raise instead of silently returning
-        return unless user
-        return unless Guardian.new(user).can_moderate?(topic)
-
-        topic.update_status('closed', true, user)
-
-        unless message.blank?
-          topic_closed_post = topic.posts.where(action_code: 'closed.enabled').last
-          topic_closed_post.raw = message
-          topic_closed_post.save!
-        end
-      end
     end
 
     def self.add(identifier, &block)
