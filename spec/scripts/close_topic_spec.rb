@@ -50,6 +50,27 @@ describe 'CloseTopic' do
     end
   end
 
+  # NOTE: this is only possible because we skip validations for now.
+  # As soon as discourse-automation supports proper error handling and validations take place again,
+  # this test should be removed.
+  context 'with very short message' do
+    before do
+      automation.upsert_field!('message', 'text', { value: 'bye' })
+    end
+
+    it 'works' do
+      expect(topic.closed).to be_falsey
+
+      automation.trigger!
+      topic.reload
+
+      expect(topic.closed).to be_truthy
+
+      closing_post = topic.posts.where(action_code: 'closed.enabled').last
+      expect(closing_post.raw).to eq('bye')
+    end
+  end
+
   context 'with a specific user' do
     fab!(:specific_user) { Fabricate(:user, admin: true) }
 

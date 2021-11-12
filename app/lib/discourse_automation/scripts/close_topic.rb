@@ -26,9 +26,12 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::CLOSE_TOPIC
 
     if message.present?
       topic_closed_post = topic.posts.where(action_code: 'closed.enabled').last
-
-      # FIXME: check minimum message length
       topic_closed_post.raw = message
+
+      # FIXME: when there is proper error handling and logging in automation,
+      # remove this and allow validations to take place
+      topic_closed_post.skip_validation = true
+
       topic_closed_post.save!
     end
   end
