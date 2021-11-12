@@ -3,7 +3,7 @@
 DiscourseAutomation::Scriptable::CLOSE_TOPIC = 'close_topic'
 
 DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::CLOSE_TOPIC) do
-  field :topic_to_be_closed, component: :text, required: true
+  field :topic, component: :text, required: true
   field :message, component: :text
   field :user, component: :user
 
@@ -13,7 +13,7 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::CLOSE_TOPIC
   triggerables [:point_in_time]
 
   script do |_context, fields|
-    next unless topic_id = fields.dig('topic_to_be_closed', 'value')
+    next unless topic_id = fields.dig('topic', 'value')
     next unless topic = Topic.find_by(id: topic_id)
 
     message = fields.dig('message', 'value')

@@ -14,7 +14,7 @@ describe 'CloseTopic' do
   end
 
   before do
-    automation.upsert_field!('topic_to_be_closed', 'text', { value: topic.id }, target: 'script')
+    automation.upsert_field!('topic', 'text', { value: topic.id }, target: 'script')
   end
 
   context 'with default params' do
