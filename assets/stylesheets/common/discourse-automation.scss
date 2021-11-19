@@ -35,6 +35,25 @@
 }
 
 .discourse-automation-form {
+  .alert {
+    padding: 1em;
+    background: var(--primary-very-low);
+    border-left-style: solid;
+    border-left-width: 5px;
+
+    &.alert-info {
+      border-left-color: var(--tertiary-low);
+    }
+
+    &.alert-warning {
+      border-left-color: var(--highlight-low);
+    }
+
+    p {
+      margin: 0;
+    }
+  }
+
   .form-horizontal {
     .control-label {
       margin: 0.25em 0.25em 0.25em 0;
@@ -132,6 +151,13 @@
   .text-field {
     .ember-text-field {
       width: 300px;
+    }
+  }
+
+  .message-field {
+    textarea {
+      width: 300px;
+      height: 200px;
     }
   }
 

@@ -1,0 +1,15 @@
+<section class="field message-field">
+  <div class="control-group">
+    {{fields/da-field-label label=label field=field}}
+
+    <div class="controls">
+      {{textarea
+        value=field.metadata.value
+        input=(action (mut field.metadata.value) value="target.value")
+        disabled=field.isDisabled
+      }}
+
+      {{fields/da-field-description description=description}}
+    </div>
+  </div>
+</section>
