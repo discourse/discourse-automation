@@ -148,6 +148,11 @@
     }
   }
 
+  .field-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+
   .text-field {
     .ember-text-field {
       width: 300px;
@@ -256,15 +261,9 @@
   align-items: center;
   flex-wrap: wrap;
 
-  .placeholder-description {
-    font-size: $font-0;
-    font-weight: 500;
-    margin: 0.5em 0;
-  }
-
   .placeholder-item {
     border-radius: 3px;
     font-size: $font-down-2;
-    margin: 0.5em 0.5em 0.5em 0;
+    margin: 0.5em 0.5em 0 0;
   }
 }
