@@ -4,7 +4,8 @@
 # about:
 # version: 0.1
 # authors: jjaffeux
-# url: https://github.com/jjaffeux/discourse-automation
+# url: https://github.com/discourse/discourse-automation
+
 gem 'iso8601', '0.13.0'
 gem 'json_schemer', '0.2.18'
 gem 'rrule', '0.4.2'
