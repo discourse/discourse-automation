@@ -1,6 +1,5 @@
 import { extractError } from "discourse/lib/ajax-error";
-import { action } from "@ember/object";
-import EmberObject from "@ember/object";
+import EmberObject, { action } from "@ember/object";
 
 export default Ember.Controller.extend({
   form: null,

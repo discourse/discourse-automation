@@ -1,8 +1,7 @@
-import { set } from "@ember/object";
+import { action, set } from "@ember/object";
 import { extractError } from "discourse/lib/ajax-error";
-import { action } from "@ember/object";
 import { schedule } from "@ember/runloop";
-import { reads, filterBy } from "@ember/object/computed";
+import { filterBy, reads } from "@ember/object/computed";
 import { ajax } from "discourse/lib/ajax";
 import I18n from "I18n";
 import discourseComputed from "discourse-common/utils/decorators";

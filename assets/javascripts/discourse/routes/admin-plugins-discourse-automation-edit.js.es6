@@ -1,8 +1,7 @@
 import DiscourseRoute from "discourse/routes/discourse";
 import { isPresent } from "@ember/utils";
-import EmberObject from "@ember/object";
+import EmberObject, { action } from "@ember/object";
 import { ajax } from "discourse/lib/ajax";
-import { action } from "@ember/object";
 import { hash } from "rsvp";
 
 export default DiscourseRoute.extend({

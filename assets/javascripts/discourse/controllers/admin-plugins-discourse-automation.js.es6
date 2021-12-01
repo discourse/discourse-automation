@@ -1,5 +1,5 @@
 import { inject as service } from "@ember/service";
-import { computed, action } from "@ember/object";
+import { action, computed } from "@ember/object";
 
 export default Ember.Controller.extend({
   @action
