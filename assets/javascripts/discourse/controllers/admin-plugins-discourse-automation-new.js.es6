@@ -24,12 +24,12 @@ export default Ember.Controller.extend({
           automation.id
         );
       })
-      .catch(e => {
+      .catch((e) => {
         this.set("error", extractError(e));
       });
   },
 
   _resetForm() {
     this.set("form", EmberObject.create({ name: null, script: null }));
-  }
+  },
 });
