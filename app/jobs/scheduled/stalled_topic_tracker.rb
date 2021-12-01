@@ -19,8 +19,8 @@ module Jobs
 
           StalledTopicFinder.call(
             stalled_date,
-            categories: categories || nil,
-            tags: tags || nil
+            categories: categories,
+            tags: tags
           ).each do |result|
             topic = Topic.find_by(id: result.id)
             next unless topic
