@@ -49,6 +49,11 @@
       border-left-color: var(--highlight-low);
     }
 
+    &.alert-error {
+      border-left-color: var(--danger);
+      background: var(--danger-low);
+    }
+
     p {
       margin: 0;
     }
