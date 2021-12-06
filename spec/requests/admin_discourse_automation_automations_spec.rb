@@ -35,6 +35,17 @@ describe DiscourseAutomation::AdminDiscourseAutomationAutomationsController do
         expect(response.status).to eq(200)
       end
 
+      context 'script is changed' do
+        it 'nullifies the trigger' do
+          put "/admin/plugins/discourse-automation/automations/#{automation.id}.json", params: {
+            automation: { script: 'another_script' }
+          }
+
+          expect(automation.reload.trigger).to eq(nil)
+          expect(response.status).to eq(200)
+        end
+      end
+
       context 'invalid field’s component' do
         it 'errors' do
           put "/admin/plugins/discourse-automation/automations/#{automation.id}.json", params: {

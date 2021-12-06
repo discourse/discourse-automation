@@ -30,10 +30,9 @@ module DiscourseAutomation
 
     def update
       params.require(:automation)
+      enforce_trigger!(params[:automation])
 
       automation = DiscourseAutomation::Automation.find(params[:id])
-
-      enforce_trigger!(params[:automation])
 
       attributes = request
         .parameters[:automation]
@@ -42,23 +41,22 @@ module DiscourseAutomation
 
       if automation.trigger != params[:automation][:trigger]
         params[:automation][:fields] = []
-        automation.enabled = false
+        attributes['enabled'] = false
         automation.fields.destroy_all
       end
 
       if automation.script != params[:automation][:script]
-        params[:automation][:trigger] = nil
         params[:automation][:fields] = []
-        automation.enabled = false
+        attributes['enabled'] = false
+        attributes['trigger'] = nil
         automation.fields.destroy_all
-        automation.tap { |r| r.assign_attributes(attributes) }.save!(validate: false)
       else
         Array(params[:automation][:fields]).reject(&:empty?).each do |field|
           automation.upsert_field!(field[:name], field[:component], field[:metadata], target: field[:target])
         end
-
-        automation.tap { |r| r.assign_attributes(attributes) }.save!
       end
+
+      automation.tap { |r| r.assign_attributes(attributes) }.save!(validate: false)
 
       render_serialized_automation(automation)
     end
