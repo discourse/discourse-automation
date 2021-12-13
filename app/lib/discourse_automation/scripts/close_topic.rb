@@ -11,11 +11,12 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::CLOSE_TOPIC
 
   triggerables [:point_in_time, :stalled_wiki]
 
-  script do |_context, fields|
+  script do |context, fields|
     message = fields.dig('message', 'value')
     username = fields.dig('user', 'value') || Discourse.system_user.username
 
-    next unless topic_id = fields.dig('topic', 'value')
+    topic_id = fields.dig('topic', 'value') || context.dig('topic', 'id')
+    next unless topic_id
     next unless topic = Topic.find_by(id: topic_id)
 
     user = User.find_by_username(username)
