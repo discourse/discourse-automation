@@ -40,7 +40,7 @@ describe 'Recurring' do
 
   context 'trigger is called' do
     before do
-      freeze_time Time.parse('2021-06-04 10:00')
+      freeze_time Time.zone.parse('2021-06-04 10:00')
       automation.fields.insert!(name: 'start_date', component: 'date_time', metadata: { value: 2.hours.ago }, target: 'trigger', created_at: Time.now, updated_at: Time.now)
       automation.fields.insert!(name: 'recurrence', component: 'choices', metadata: { value: 'every_week' }, target: 'trigger', created_at: Time.now, updated_at: Time.now)
     end
@@ -67,7 +67,7 @@ describe 'Recurring' do
         automation.trigger!
 
         pending_automation = DiscourseAutomation::PendingAutomation.last
-        expect(pending_automation.execute_at).to be_within_one_minute_of(Time.parse('2021-07-02 06:00:00 UTC'))
+        expect(pending_automation.execute_at).to be_within_one_minute_of(Time.parse('2021-07-02 08:00:00 UTC'))
       end
     end
 
