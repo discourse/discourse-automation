@@ -4,7 +4,7 @@ require_relative '../discourse_automation_helper'
 
 describe 'AutoResponder' do
   before do
-    automation.upsert_field!('word_answer_list', 'key-value', {value: [{ key: 'foo', value: 'this is foo' }, { key: 'bar', value: 'this is bar' }].to_json })
+    automation.upsert_field!('word_answer_list', 'key-value', { value: [{ key: 'foo', value: 'this is foo' }, { key: 'bar', value: 'this is bar' }].to_json })
   end
 
   fab!(:automation) do
