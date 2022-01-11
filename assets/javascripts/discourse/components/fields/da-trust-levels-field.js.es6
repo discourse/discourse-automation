@@ -1,6 +1,6 @@
 import BaseField from "./da-base-field";
-import Site from "discourse/models/site";
+import { reads } from "@ember/object/computed";
 
 export default BaseField.extend({
-  allTrustLevel: Site.currentProp("trustLevels"),
+  allTrustLevel: reads("site.trustLevels"),
 });
