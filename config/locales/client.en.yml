@@ -135,7 +135,7 @@ en:
         auto_responder:
           fields:
             word_answer_list:
-              label: List of word/answer
+              label: List of word/answer pairs
               description: Defines a list of key/value groups, where the `key` is the searched term, and `value` the text of the reply. Note that `value` accepts `%%KEY%%` as a placeholder to be replaced by the value of `key` in the reply.
             answering_user:
               label: Answering user
