@@ -12,7 +12,7 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::ZAPIER_WEBH
   script do |context, fields|
     webhook_url = fields.dig('webhook_url', 'value')
 
-    unless /^https:\/\/hooks\.zapier\.com\/hooks\/catch\//.match?(webhook_url)
+    unless webhook_url.start_with?("https://hooks.zapier.com/hooks/catch/")
       Rails.logger.warn "[discourse-automation] #{webhook_url} is not a valid Zapier webhook URL, expecting an URL starting with https://hooks.zapier.com/hooks/catch/"
       next
     end
