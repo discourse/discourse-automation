@@ -32,6 +32,10 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::AUTO_RESPON
       end
     end
 
+    if answers.blank?
+      next
+    end
+
     answering_user = User.find_by(username: answering_username)
     if post.user == answering_user
       next
@@ -41,18 +45,20 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::AUTO_RESPON
       .where(user_id: answering_user.id, deleted_at: nil)
       .secured(Guardian.new(post.user))
 
-    if answers.length > 0 && replies.length == 0
-      answers = answers.to_a.map do |answer|
-        utils.apply_placeholders(answer['value'], placeholders.merge(key: answer['key']))
-      end.join("\n\n")
-
-      PostCreator.create!(
-        answering_user,
-        topic_id: post.topic.id,
-        reply_to_post_number: post.post_number,
-        raw: answers,
-        skip_validations: true
-      )
+    if replies.present?
+      next
     end
+
+    answers = answers.to_a.map do |answer|
+      utils.apply_placeholders(answer['value'], placeholders.merge(key: answer['key']))
+    end.join("\n\n")
+
+    PostCreator.create!(
+      answering_user,
+      topic_id: post.topic.id,
+      reply_to_post_number: post.post_number,
+      raw: answers,
+      skip_validations: true
+    )
   end
 end
