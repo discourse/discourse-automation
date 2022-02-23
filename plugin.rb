@@ -181,7 +181,7 @@ after_initialize do
   on(:user_added_to_group) do |user, group|
     name = DiscourseAutomation::Triggerable::USER_ADDED_TO_GROUP
 
-    DiscourseAutomation::Automation.where(trigger: name).find_each do |automation|
+    DiscourseAutomation::Automation.where(trigger: name, enabled: true).find_each do |automation|
       joined_group = automation.trigger_field('joined_group')
       if joined_group['value'] == group.id
         automation.trigger!(
