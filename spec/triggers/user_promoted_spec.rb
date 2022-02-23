@@ -19,7 +19,8 @@ describe 'UserPromoted' do
   end
 
   it "does not run if the user is being demoted" do
-    user.change_trust_level!(TrustLevel[4])
+    capture_stdout { user.change_trust_level!(TrustLevel[4]) }
+
     output = capture_stdout do
       user.change_trust_level!(TrustLevel[1])
     end
@@ -62,7 +63,8 @@ describe 'UserPromoted' do
     end
 
     it "does run if the trust level transition matches" do
-      user.change_trust_level!(TrustLevel[0])
+      capture_stdout { user.change_trust_level!(TrustLevel[0]) }
+
       output = capture_stdout do
         user.change_trust_level!(TrustLevel[1])
       end
