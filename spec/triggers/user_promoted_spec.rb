@@ -73,7 +73,8 @@ describe 'UserPromoted' do
 
     it "does run if the transition is for all trust levels" do
       automation.upsert_field!("trust_level_transition", "choices", { "value" => "TLALL" }, target: "trigger")
-      user.change_trust_level!(TrustLevel[2])
+      capture_stdout { user.change_trust_level!(TrustLevel[2]) }
+
       output = capture_stdout do
         user.change_trust_level!(TrustLevel[4])
       end
