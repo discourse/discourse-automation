@@ -128,7 +128,7 @@ module DiscourseAutomation
       def self.fetch_report(name, args = {})
         report = Report.find(name, args)
 
-        return nil if !report
+        return if !report
 
         return if !report.modes.include?(:table)
 
