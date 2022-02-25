@@ -150,7 +150,7 @@ module DiscourseAutomation
         map[:site_title] = SiteSetting.title
 
         regex = /%%REPORT=(.*?)%%/
-        input = input.gsub(/%%REPORT=(.*?)%%/) do |pattern|
+        input = input.gsub(regex) do |pattern|
           match = pattern.match(regex)
           if match
             fetch_report(match[1].downcase)
