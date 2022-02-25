@@ -145,13 +145,13 @@ module DiscourseAutomation
         table
       end
 
+      REPORT_REGEX = /%%REPORT=(.*?)%%/
       def self.apply_placeholders(input, map)
         input = input.dup
         map[:site_title] = SiteSetting.title
 
-        regex = /%%REPORT=(.*?)%%/
-        input = input.gsub(regex) do |pattern|
-          match = pattern.match(regex)
+        input = input.gsub(REPORT_REGEX) do |pattern|
+          match = pattern.match(REPORT_REGEX)
           if match
             fetch_report(match[1].downcase)
           end
