@@ -134,14 +134,10 @@ module DiscourseAutomation
 
         ordered_columns = report.labels.map { |l| l[:property] }
 
-        table = "\n"
-        table += '|' + report.labels.map { |l| l[:title] }.join('|') + "|\n"
-        table += '|' + report.labels.count.times.map { '-' }.join('|') + "|\n"
-        report.data.each do |data|
-          table += '|'
-          table += ordered_columns.map { |col| data[col] }.join('|')
-          table += "|\n"
-        end
+        table = +"\n"
+        table << '|' + report.labels.map { |l| l[:title] }.join('|') + "|\n"
+        table << '|' + report.labels.count.times.map { '-' }.join('|') + "|\n"
+        report.data.each { |data| table << "|#{ordered_columns.map { |col| data[col] }.join('|')}|\n" }
         table
       end
 
