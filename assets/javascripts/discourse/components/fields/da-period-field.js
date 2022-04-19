@@ -9,7 +9,7 @@ export default class IntervalField extends BaseField {
     if (!this.field.metadata.value) {
       this.set("field.metadata.value", {
         interval: 1,
-        frequency: null
+        frequency: null,
       });
     }
   }
