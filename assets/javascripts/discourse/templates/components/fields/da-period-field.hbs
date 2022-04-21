@@ -1,4 +1,4 @@
-<div class="field control-group">
+<div class="field period-field control-group">
   {{fields/da-field-label label=label field=field}}
 
   <div class="controls">
@@ -6,7 +6,6 @@
 
     {{input
       type="number"
-      class="input-small"
       defaultValue=1
       value=field.metadata.value.interval
       input=(action (mut field.metadata.value.interval) value="target.value")
@@ -15,7 +14,6 @@
     }}
 
     {{combo-box
-      class="input-medium"
       value=field.metadata.value.frequency
       content=replacedContent
       onChange=(action (mut field.metadata.value.frequency))
