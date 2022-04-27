@@ -58,7 +58,7 @@ describe 'CloseTopic' do
       automation.upsert_field!('message', 'text', { value: 'bye' })
     end
 
-    it 'works' do
+    it 'closes the topic' do
       expect(topic.closed).to be_falsey
 
       automation.trigger!
@@ -78,7 +78,7 @@ describe 'CloseTopic' do
       automation.upsert_field!('user', 'user', { value: specific_user.username })
     end
 
-    it 'works' do
+    it 'closes the topic' do
       expect(topic.closed).to be_falsey
 
       automation.trigger!
