@@ -119,7 +119,7 @@ describe 'Recurring' do
         automation.pending_automations.destroy_all
         automation.upsert_field!('start_date', 'date_time', { value: start_date }, target: 'trigger')
         upsert_period_field!(3, 'weekday')
-        
+
         automation.trigger!
 
         pending_automation = automation.pending_automations.last
