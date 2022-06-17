@@ -9,13 +9,16 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::APPEND_LAST
 
   script do |context|
     post = context['post']
+    post_revision = post.revisions.where("user_id > 0").last
+    username = post_revision&.user&.username || post.username
+    updated_at = post_revision&.updated_at || post.updated_at
+
     cooked = context['cooked']
     doc = Loofah.fragment(cooked)
-    node = doc.document.create_element("p")
-    doc.add_child(node)
-    node = doc.document.create_element("p")
-    date_time = "<span data-date=\"2022-06-24\" data-time=\"14:01:00\" class=\"discourse-local-date\" data-timezone=\"Asia/Calcutta\" data-email-preview=\"2022-06-24T08:31:00Z UTC\">2022-06-24T08:31:00Z</span>"
-    node.content = I18n.t("discourse_automation.scriptables.append_last_edited_by.text", username: "", date_time: ""),
+    node = doc.document.create_element("div")
+    date_time = "[date=#{updated_at.to_date.to_s} time=#{updated_at.strftime("%H:%M:%S")} timezone=UTC]"
+    node.inner_html = PrettyText.cook(I18n.t("discourse_automation.scriptables.append_last_edited_by.text", username: username, date_time: date_time)).html_safe
+    node.inner_html = "<p></p>" + node.inner_html
     doc.add_child(node)
     doc.try(:to_html)
   end
