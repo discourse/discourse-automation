@@ -5,6 +5,15 @@ import { withPluginApi } from "discourse/lib/plugin-api";
 
 function _initializeDiscourseAutomation(api) {
   _initializeGLobalUserNotices(api);
+  api.decorateCookedElement(
+    (element) => {
+      decorateCreateServicenowButton(element, container);
+    },
+    {
+      id: "discourse-automation",
+    }
+  );
+
 }
 
 function _initializeGLobalUserNotices(api) {

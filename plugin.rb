@@ -139,6 +139,7 @@ after_initialize do
     '../app/jobs/scheduled/stalled_topic_tracker',
     '../app/lib/discourse_automation/triggers/recurring',
     '../app/lib/discourse_automation/triggers/user_promoted',
+    '../app/lib/discourse_automation/scripts/append_last_checked_by',
     '../app/lib/discourse_automation/scripts/append_last_edited_by',
     '../app/lib/discourse_automation/scripts/auto_responder',
     '../app/lib/discourse_automation/scripts/banner_topic',
