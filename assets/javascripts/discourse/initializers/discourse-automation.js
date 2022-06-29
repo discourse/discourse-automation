@@ -3,17 +3,30 @@ import { ajax } from "discourse/lib/ajax";
 import { makeArray } from "discourse-common/lib/helpers";
 import { withPluginApi } from "discourse/lib/plugin-api";
 
-function _initializeDiscourseAutomation(api) {
+function _initializeDiscourseAutomation(api, container) {
   _initializeGLobalUserNotices(api);
-  api.decorateCookedElement(
-    (element) => {
-      decorateCreateServicenowButton(element, container);
-    },
-    {
-      id: "discourse-automation",
-    }
-  );
+  api.decorateCookedElement((element, postDecorator) => {
+    _decorateCheckedButton(element, postDecorator, container);
+  },
+  {
+    id: "discourse-automation",
+  });
+  api.attachWidgetAction('post', 'onChecked', () => {
+    onChecked(container, this);
+  });
+}
 
+function _decorateCheckedButton(element, postDecorator, container) {
+  const elems = element.querySelectorAll(".btn-checked");
+  const postModel = postDecorator.getModel();
+
+  Array.from(elems).forEach((elem) => {
+    elem.addEventListener("click", onChecked, false);
+  });
+}
+
+function onChecked(container, postNumber) {
+  alert('hi');
 }
 
 function _initializeGLobalUserNotices(api) {
@@ -37,7 +50,9 @@ function _initializeGLobalUserNotices(api) {
 export default {
   name: "discourse-automation",
 
-  initialize() {
-    withPluginApi("0.8.24", _initializeDiscourseAutomation);
+  initialize(container) {
+    withPluginApi("0.8.24", (api) => {
+      _initializeDiscourseAutomation(api, container);
+    });
   },
 };
