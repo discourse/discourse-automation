@@ -290,6 +290,7 @@
   }
 }
 
-details[open]>summary:first-of-type ~ .btn-checked, details.open>summary:first-of-type ~  .btn-checked {
+details[open] > summary:first-of-type ~ .btn-checked,
+details.open > summary:first-of-type ~ .btn-checked {
   display: inline-flex;
 }
