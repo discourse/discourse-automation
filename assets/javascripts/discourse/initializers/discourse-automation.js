@@ -3,30 +3,27 @@ import { ajax } from "discourse/lib/ajax";
 import { makeArray } from "discourse-common/lib/helpers";
 import { withPluginApi } from "discourse/lib/plugin-api";
 
-function _initializeDiscourseAutomation(api, container) {
+function _initializeDiscourseAutomation(api) {
   _initializeGLobalUserNotices(api);
-  api.decorateCookedElement((element, postDecorator) => {
-    _decorateCheckedButton(element, postDecorator, container);
-  },
-  {
-    id: "discourse-automation",
-  });
-  api.attachWidgetAction('post', 'onChecked', () => {
-    onChecked(container, this);
-  });
+
+  if (api.getCurrentUser()) {
+    api.decorateCookedElement(_decorateCheckedButton, { id: "discourse-automation" });
+  }
 }
 
-function _decorateCheckedButton(element, postDecorator, container) {
+function _decorateCheckedButton(element, postDecorator) {
+  if (!postDecorator) {
+    return;
+  }
+
   const elems = element.querySelectorAll(".btn-checked");
   const postModel = postDecorator.getModel();
 
   Array.from(elems).forEach((elem) => {
-    elem.addEventListener("click", onChecked, false);
+    elem.addEventListener("click", () => {
+      ajax(`/automations/${postModel.id}/checked`, { type: "PUT" }).catch(popupAjaxError);
+    }, false);
   });
-}
-
-function onChecked(container, postNumber) {
-  alert('hi');
 }
 
 function _initializeGLobalUserNotices(api) {

@@ -39,7 +39,7 @@ def handle_post_created_edited(post, action)
 end
 
 def handle_after_post_cook(post, cooked)
-  return cooked if post.post_type != Post.types[:regular] || post.user_id < 0 || post.post_number > 1
+  return cooked if post.post_type != Post.types[:regular] || post.post_number > 1
 
   name = DiscourseAutomation::Triggerable::AFTER_POST_COOK
 
@@ -156,6 +156,8 @@ after_initialize do
 
   module ::DiscourseAutomation
     CUSTOM_FIELD ||= 'discourse_automation_ids'
+    TOPIC_LAST_CHECKED_BY ||= 'discourse_automation_last_checked_by'
+    TOPIC_LAST_CHECKED_AT ||= 'discourse_automation_last_checked_at'
 
     class Engine < ::Rails::Engine
       engine_name PLUGIN_NAME
@@ -178,6 +180,7 @@ after_initialize do
   DiscourseAutomation::Engine.routes.draw do
     scope format: :json, constraints: AdminConstraint.new do
       post '/automations/:id/trigger' => 'automations#trigger'
+      put '/automations/:post_id/checked' => 'automations#post_checked'
     end
 
     scope format: :json do

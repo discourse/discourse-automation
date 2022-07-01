@@ -23,17 +23,19 @@ describe 'AppendLastEditedBy' do
   context "#trigger!" do
     it 'works for newly created post' do
       cooked, updated_at, date_time = trigger_automation(post)
-      expect(cooked.ends_with?("<blockquote>\n<p>Last edited by #{post.username} <span data-date=\"#{updated_at.to_date.to_s}\" data-time=\"#{updated_at.strftime("%H:%M:%S")}\" class=\"discourse-local-date\" data-timezone=\"UTC\" data-email-preview=\"#{date_time} UTC\">#{date_time}</span></p>\n</blockquote>\n</div>")).to be_truthy
+      expect(cooked.include?("<blockquote class=\"discourse-automation\">")).to be_truthy
+      expect(cooked.include?("Last edited by <a class=\"mention\" href=\"/u/#{post.username}\">@#{post.username}</a>")).to be_truthy
+      expect(cooked.include?("<span data-date=\"#{updated_at.to_date.to_s}\" data-time=\"#{updated_at.strftime("%H:%M:%S")}\" class=\"discourse-local-date\" data-timezone=\"UTC\" data-email-preview=\"#{date_time} UTC\">#{date_time}</span>")).to be_truthy
     end
 
     it 'works for existing post with last edited by detail' do
       cooked, updated_at, date_time = trigger_automation(post)
-      expect(cooked.include?("<p>Last edited by #{post.username} <span data-date=\"#{updated_at.to_date.to_s}\" data-time=\"#{updated_at.strftime("%H:%M:%S")}\" class=\"discourse-local-date\" data-timezone=\"UTC\" data-email-preview=\"#{date_time} UTC\">#{date_time}</span></p>")).to be_truthy
+      expect(cooked.include?("Last edited by <a class=\"mention\" href=\"/u/#{post.username}\">@#{post.username}</a>")).to be_truthy
 
       PostRevisor.new(post).revise!(moderator, raw: 'this is a post with edit')
 
       cooked, updated_at, date_time = trigger_automation(post.reload)
-      expect(cooked.include?("<p>Last edited by #{moderator.username} <span data-date=\"#{updated_at.to_date.to_s}\" data-time=\"#{updated_at.strftime("%H:%M:%S")}\" class=\"discourse-local-date\" data-timezone=\"UTC\" data-email-preview=\"#{date_time} UTC\">#{date_time}</span></p>")).to be_truthy
+      expect(cooked.include?("Last edited by <a class=\"mention\" href=\"/u/#{moderator.username}\">@#{moderator.username}</a>")).to be_truthy
     end
   end
 end
