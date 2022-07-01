@@ -7,7 +7,9 @@ function _initializeDiscourseAutomation(api) {
   _initializeGLobalUserNotices(api);
 
   if (api.getCurrentUser()) {
-    api.decorateCookedElement(_decorateCheckedButton, { id: "discourse-automation" });
+    api.decorateCookedElement(_decorateCheckedButton, {
+      id: "discourse-automation",
+    });
   }
 }
 
@@ -20,9 +22,15 @@ function _decorateCheckedButton(element, postDecorator) {
   const postModel = postDecorator.getModel();
 
   Array.from(elems).forEach((elem) => {
-    elem.addEventListener("click", () => {
-      ajax(`/automations/${postModel.id}/checked`, { type: "PUT" }).catch(popupAjaxError);
-    }, false);
+    elem.addEventListener(
+      "click",
+      () => {
+        ajax(`/automations/${postModel.id}/checked`, { type: "PUT" }).catch(
+          popupAjaxError
+        );
+      },
+      false
+    );
   });
 }
 
