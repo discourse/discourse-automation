@@ -94,7 +94,7 @@ en:
         text: "Last edited by @%{username} %{date_time}"
       append_last_checked_by:
         title: Append last checked by
-        description: Adds the checked by details of the post cooked content's bottom.
+        description: Adds the 'last checked by' details of the post cooked content's bottom.
         text: "Last checked by @%{username} %{date_time}"
         summary: Check document
         details: "Perform check on document: "
