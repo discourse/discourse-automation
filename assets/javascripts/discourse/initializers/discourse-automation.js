@@ -55,9 +55,7 @@ function _initializeGLobalUserNotices(api) {
 export default {
   name: "discourse-automation",
 
-  initialize(container) {
-    withPluginApi("0.8.24", (api) => {
-      _initializeDiscourseAutomation(api, container);
-    });
+  initialize() {
+    withPluginApi("0.8.24", _initializeDiscourseAutomation);
   },
 };
