@@ -2,8 +2,7 @@
 
 module DiscourseAutomation
   class AutomationsController < ApplicationController
-    before_action :ensure_admin, except: [:post_checked]
-    before_action :ensure_logged_in, only: [:post_checked]
+    before_action :ensure_admin
 
     def trigger
       automation = DiscourseAutomation::Automation.find(params[:id])
