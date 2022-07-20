@@ -117,6 +117,7 @@ after_initialize do
     '../app/lib/discourse_automation/triggers/post_created_edited',
     '../app/lib/discourse_automation/triggers/topic',
     '../app/lib/discourse_automation/triggers/api_call',
+    '../app/controllers/discourse_automation/append_last_checked_by_controller',
     '../app/controllers/discourse_automation/automations_controller',
     '../app/controllers/discourse_automation/user_global_notices_controller',
     '../app/controllers/admin/discourse_automation/admin_discourse_automation_controller',
@@ -180,11 +181,11 @@ after_initialize do
   DiscourseAutomation::Engine.routes.draw do
     scope format: :json, constraints: AdminConstraint.new do
       post '/automations/:id/trigger' => 'automations#trigger'
-      put '/automations/:post_id/checked' => 'automations#post_checked'
     end
 
     scope format: :json do
       delete '/user-global-notices/:id' => 'user_global_notices#destroy'
+      put '/append-last-checked-by/:post_id' => 'append_last_checked_by#post_checked'
     end
 
     scope '/admin/plugins/discourse-automation', as: 'admin_discourse_automation', constraints: AdminConstraint.new do

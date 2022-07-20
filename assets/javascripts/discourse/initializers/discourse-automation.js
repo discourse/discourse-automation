@@ -25,7 +25,7 @@ function _decorateCheckedButton(element, postDecorator) {
     elem.addEventListener(
       "click",
       () => {
-        ajax(`/automations/${postModel.id}/checked`, { type: "PUT" }).catch(
+        ajax(`/append-last-checked-by/${postModel.id}`, { type: "PUT" }).catch(
           popupAjaxError
         );
       },

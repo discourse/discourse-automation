@@ -88,21 +88,4 @@ describe DiscourseAutomation::AdminDiscourseAutomationAutomationsController do
       end
     end
   end
-
-  describe '#post_checked' do
-    fab!(:admin) { Fabricate(:admin) }
-    fab!(:post) { Fabricate(:post) }
-    fab!(:topic) { post.topic }
-
-    before do
-      sign_in(admin)
-    end
-
-    it 'updates the topic custom fields' do
-      put "/automations/#{post.id}/checked.json"
-      expect(response.status).to eq(200)
-      expect(topic.custom_fields[DiscourseAutomation::TOPIC_LAST_CHECKED_BY]).to eq(admin.username)
-      expect(topic.custom_fields[DiscourseAutomation::TOPIC_LAST_CHECKED_AT]).to eq(Time.zone.now.to_s)
-    end
-  end
 end
