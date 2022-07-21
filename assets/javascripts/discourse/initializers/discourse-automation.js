@@ -3,13 +3,31 @@ import { ajax } from "discourse/lib/ajax";
 import { makeArray } from "discourse-common/lib/helpers";
 import { withPluginApi } from "discourse/lib/plugin-api";
 
+let _btnClickHandlers = {};
+
+function _handleEvent(event) {
+  ajax(`/append-last-checked-by/${event.currentTarget.postId}`, { type: "PUT" }).catch(
+    popupAjaxError
+  );
+}
+
 function _initializeDiscourseAutomation(api) {
+  function _cleanUp() {
+    Object.values(_btnClickHandlers || {}).forEach((handler) => {
+      handler.removeEventListener("click", _handleEvent);
+    });
+
+    _btnClickHandlers = {};
+  }
+
   _initializeGLobalUserNotices(api);
 
   if (api.getCurrentUser()) {
     api.decorateCookedElement(_decorateCheckedButton, {
       id: "discourse-automation",
     });
+
+    api.cleanupStream(_cleanUp);
   }
 }
 
@@ -22,15 +40,16 @@ function _decorateCheckedButton(element, postDecorator) {
   const postModel = postDecorator.getModel();
 
   Array.from(elems).forEach((elem) => {
-    elem.addEventListener(
-      "click",
-      () => {
-        ajax(`/append-last-checked-by/${postModel.id}`, { type: "PUT" }).catch(
-          popupAjaxError
-        );
-      },
-      false
-    );
+    const postId = postModel.id;
+    elem.postId = postId;
+
+    if (_btnClickHandlers[postId]) {
+      _btnClickHandlers[postId].removeEventListener("click", _handleEvent, false);
+      delete _btnClickHandlers[postId];
+    }
+
+    _btnClickHandlers[postId] = elem;
+    elem.addEventListener("click", _handleEvent, false);
   });
 }
 
