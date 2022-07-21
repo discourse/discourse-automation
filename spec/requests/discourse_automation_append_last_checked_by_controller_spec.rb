@@ -14,7 +14,8 @@ describe DiscourseAutomation::AppendLastCheckedByController do
       put "/append-last-checked-by/#{post.id}.json"
       expect(response.status).to eq(200)
       expect(topic.custom_fields[DiscourseAutomation::TOPIC_LAST_CHECKED_BY]).to eq(admin.username)
-      expect(topic.custom_fields[DiscourseAutomation::TOPIC_LAST_CHECKED_AT]).to eq(Time.zone.now.to_s)
+      topic_last_checked_at = Time.parse(topic.custom_fields[DiscourseAutomation::TOPIC_LAST_CHECKED_AT])
+      expect(topic_last_checked_at).to be_within_one_second_of(Time.zone.now)
     end
 
     it 'returns error if user can not edit the post' do

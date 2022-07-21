@@ -6,7 +6,6 @@ module DiscourseAutomation
 
     def post_checked
       post = Post.find(params[:post_id])
-      guardian = Guardian.new(current_user)
       guardian.ensure_can_edit!(post)
 
       topic = post.topic

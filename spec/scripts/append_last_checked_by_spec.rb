@@ -20,12 +20,16 @@ describe 'AppendLastCheckedBy' do
     [cooked, checked_at, date_time]
   end
 
+  def text(key)
+    I18n.t("discourse_automation.scriptables.append_last_checked_by.#{key}")
+  end
+
   context "#trigger!" do
     it 'works for newly created post' do
       cooked, checked_at, date_time = trigger_automation(post)
 
       expect(cooked.include?("<blockquote class=\"discourse-automation\">")).to be_truthy
-      expect(cooked.include?("<details><summary>Check document</summary>Perform check on document: <input type=\"button\" value=\"Done\" class=\"btn btn-checked\"></details>")).to be_truthy
+      expect(cooked.include?("<details><summary>#{text("summary")}</summary>#{text("details")}<input type=\"button\" value=\"#{text("button_text")}\" class=\"btn btn-checked\"></details>")).to be_truthy
     end
 
     it 'works for checked post' do
@@ -34,10 +38,9 @@ describe 'AppendLastCheckedBy' do
       topic.custom_fields[DiscourseAutomation::TOPIC_LAST_CHECKED_AT] = post.updated_at + 1.hour
       topic.save_custom_fields
 
-      cooked, checked_at, date_time = trigger_automation(post)
+      cooked, checked_at = trigger_automation(post)
 
-      expect(cooked.include?("Last checked by <a class=\"mention\" href=\"/u/#{moderator.username}\">@#{moderator.username}</a>")).to be_truthy
-      expect(cooked.include?("<span data-date=\"#{checked_at.to_date.to_s}\" data-time=\"#{checked_at.strftime("%H:%M:%S")}\" class=\"discourse-local-date\" data-timezone=\"UTC\" data-email-preview=\"#{date_time} UTC\">#{date_time}</span>")).to be_truthy
+      expect(cooked.include?(PrettyText.cook(I18n.t("discourse_automation.scriptables.append_last_checked_by.text", username: moderator.username, date_time: "[date=#{checked_at.to_date.to_s} time=#{checked_at.strftime("%H:%M:%S")} timezone=UTC]")))).to be_truthy
     end
   end
 end
