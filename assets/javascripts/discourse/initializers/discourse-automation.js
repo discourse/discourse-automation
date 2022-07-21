@@ -6,9 +6,9 @@ import { withPluginApi } from "discourse/lib/plugin-api";
 let _btnClickHandlers = {};
 
 function _handleEvent(event) {
-  ajax(`/append-last-checked-by/${event.currentTarget.postId}`, { type: "PUT" }).catch(
-    popupAjaxError
-  );
+  ajax(`/append-last-checked-by/${event.currentTarget.postId}`, {
+    type: "PUT",
+  }).catch(popupAjaxError);
 }
 
 function _initializeDiscourseAutomation(api) {
@@ -44,7 +44,11 @@ function _decorateCheckedButton(element, postDecorator) {
     elem.postId = postId;
 
     if (_btnClickHandlers[postId]) {
-      _btnClickHandlers[postId].removeEventListener("click", _handleEvent, false);
+      _btnClickHandlers[postId].removeEventListener(
+        "click",
+        _handleEvent,
+        false
+      );
       delete _btnClickHandlers[postId];
     }
 
