@@ -7,7 +7,7 @@ module DiscourseAutomation
     def post_checked
       post = Post.find(params[:post_id])
       guardian = Guardian.new(current_user)
-      raise Discourse::InvalidAccess.new if !guardian.can_edit?(post)
+      guardian.ensure_can_edit!(post)
 
       topic = post.topic
       raise Discourse::NotFound if topic.blank?
