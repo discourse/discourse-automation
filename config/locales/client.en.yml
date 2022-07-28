@@ -142,6 +142,9 @@ en:
             restricted_user:
               label: User
               description: Allows to limit trigger execution to this user
+            ignore_staff:
+              label: Ignore staff
+              description: Skip the trigger if sender is a staff user
             valid_trust_levels:
               label: Valid trust levels
               description: Will trigger only if post is created by user in these trust levels, defaults to any trust level

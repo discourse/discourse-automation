@@ -51,14 +51,15 @@ def handle_pm_created(topic)
     .where(trigger: name, enabled: true)
     .find_each do |automation|
 
-      restricted_user = automation.trigger_field('restricted_user')
-      if restricted_user['value']
-        next if restricted_user['value'] != target_usernames.first
-      end
+      restricted_username = automation.trigger_field('restricted_user')['value']
+      next if restricted_username != target_usernames.first
+
+      ignore_staff = automation.trigger_field('ignore_staff')
+      next if ignore_staff['value'] && user.staff?
 
       valid_trust_levels = automation.trigger_field('valid_trust_levels')
       if valid_trust_levels['value']
-        next unless valid_trust_levels['value'].include?(topic.user.trust_level)
+        next unless valid_trust_levels['value'].include?(user.trust_level)
       end
 
       automation.trigger!('kind' => name, 'post' => topic.first_post)

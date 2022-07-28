@@ -18,6 +18,18 @@ describe 'PMCreated' do
       automation.upsert_field!('restricted_user', 'user', { value: target_user.username }, target: 'trigger')
     end
 
+    context 'user is not targeted' do
+      fab!(:user2) { Fabricate(:user) }
+
+      it "doesn't fire the trigger" do
+        output = capture_stdout do
+          PostCreator.create(user, basic_topic_params.merge({ target_usernames: [user2.username] }))
+        end
+
+        expect(output).to be_blank
+      end
+    end
+
     it 'fires the trigger' do
       output = JSON.parse(capture_stdout do
         PostCreator.create(user, basic_topic_params)
@@ -56,17 +68,19 @@ describe 'PMCreated' do
       end
     end
 
-    context 'user is restricted' do
-      context 'user is not allowed' do
-        fab!(:user2) { Fabricate(:user) }
+    context 'staff users ignored' do
+      before do
+        automation.upsert_field!('ignore_staff', 'boolean', { value: true }, target: 'trigger')
+      end
 
-        it 'doesn’t fire the trigger' do
-          output = capture_stdout do
-            PostCreator.create(user, basic_topic_params.merge({ target_usernames: [user2.username] }))
-          end
-
-          expect(output).to be_blank
+      it 'doesn’t fire the trigger' do
+        output = capture_stdout do
+          user.moderator = true
+          user.save!
+          PostCreator.create(user, basic_topic_params)
         end
+
+        expect(output).to be_blank
       end
     end
   end
