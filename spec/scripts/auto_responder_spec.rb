@@ -3,7 +3,6 @@
 require_relative '../discourse_automation_helper'
 
 describe 'AutoResponder' do
-  fab!(:post) {  }
   fab!(:topic) { Fabricate(:topic) }
 
   fab!(:automation) do
