@@ -3,6 +3,7 @@
 require_relative '../discourse_automation_helper'
 
 describe 'AutoResponder' do
+  fab!(:post) {  }
   fab!(:topic) { Fabricate(:topic) }
 
   fab!(:automation) do
@@ -10,6 +11,19 @@ describe 'AutoResponder' do
       :automation,
       script: DiscourseAutomation::Scriptable::AUTO_RESPONDER
     )
+  end
+
+  context 'without word filter' do
+    before do
+      automation.upsert_field!('word_answer_list', 'key-value', { value: [{ key: '', value: 'this is the reply' }].to_json })
+    end
+
+    it 'creates an answer' do
+      post = create_post(topic: topic, raw: 'this is a post')
+      automation.trigger!('post' => post)
+
+      expect(topic.reload.posts.last.raw).to eq('this is the reply')
+    end
   end
 
   context 'present word_answer list' do

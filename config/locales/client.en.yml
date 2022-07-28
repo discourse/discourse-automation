@@ -137,6 +137,14 @@ en:
             restricted_category:
               label: Category
               description: Optional, allows to limit trigger execution to this category
+        pm_created:
+          fields:
+            restricted_user:
+              label: User
+              description: Allows to limit trigger execution to this user
+            valid_trust_levels:
+              label: Valid trust levels
+              description: Will trigger only if post is created by user in these trust levels, defaults to any trust level
         after_post_cook:
           fields:
             valid_trust_levels:
