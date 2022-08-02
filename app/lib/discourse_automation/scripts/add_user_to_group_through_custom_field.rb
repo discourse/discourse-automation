@@ -28,7 +28,7 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::ADD_USER_TO
         on g.name = ucf.value
       FULL OUTER JOIN group_users gu
         ON gu.user_id = u.id
-        AND gu.group_id = (select id from groups where name = ucf.value)
+        AND gu.group_id = g.id
       WHERE gu.id is null
         AND u.active = true
       ORDER BY 1, 2
