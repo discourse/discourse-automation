@@ -92,6 +92,7 @@ def handle_after_post_cook(post, cooked)
 
         post.topic.tags.each do |tag|
           found ||= tag_names.include?(tag.name)
+          break if found
         end
 
         next if !found

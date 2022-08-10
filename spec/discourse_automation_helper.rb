@@ -8,7 +8,6 @@ end
 
 module DiscourseAutomation::CapturedContext
   def self.add(context)
-    @contexts ||= []
     @contexts << context
   end
 
