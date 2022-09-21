@@ -145,6 +145,8 @@ require File.expand_path('../app/lib/discourse_automation/triggerable', __FILE__
 require File.expand_path('../app/lib/discourse_automation/scriptable', __FILE__)
 require File.expand_path('../app/core_ext/plugin_instance', __FILE__)
 
+DiscoursePluginRegistry.serialized_current_user_fields << "add_to_mailing_list"
+
 after_initialize do
   [
     '../app/queries/stalled_topic_finder',
@@ -160,6 +162,7 @@ after_initialize do
     '../app/lib/discourse_automation/triggers/post_created_edited',
     '../app/lib/discourse_automation/triggers/topic',
     '../app/lib/discourse_automation/triggers/api_call',
+    '../app/lib/discourse_automation/triggers/one_time_trigger',
     '../app/controllers/discourse_automation/append_last_checked_by_controller',
     '../app/controllers/discourse_automation/automations_controller',
     '../app/controllers/discourse_automation/user_global_notices_controller',
@@ -198,6 +201,7 @@ after_initialize do
     '../app/lib/discourse_automation/scripts/post',
     '../app/lib/discourse_automation/scripts/zapier_webhook',
     '../app/lib/discourse_automation/scripts/add_user_to_group_through_custom_field',
+    '../app/lib/discourse_automation/scripts/add_to_mailing_list',
   ].each { |path| require File.expand_path(path, __FILE__) }
 
   module ::DiscourseAutomation
@@ -348,6 +352,8 @@ after_initialize do
   register_user_custom_field_type(DiscourseAutomation::CUSTOM_FIELD, [:integer])
   register_post_custom_field_type(DiscourseAutomation::CUSTOM_FIELD, [:integer])
   register_post_custom_field_type('stalled_wiki_triggered_at', :string)
+  register_user_custom_field_type("add_to_mailing_list", :boolean)
+  register_editable_user_custom_field("add_to_mailing_list")
 
   reloadable_patch do
     require 'post'

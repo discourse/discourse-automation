@@ -1,0 +1,11 @@
+<div class="control-group">
+  <div class="user-field confirm add-to-mailing-list">
+    <label class="control-label">Add to mailing list</label>
+    <div class="controls">
+      <label class="control-label checkbox-label">
+        <Input @type="checkbox" @checked={{this.model.custom_fields.add_to_mailing_list}} {{on "click" (action "onChangeMailingSetting" value="target.checked")}}/>
+        <span> testtt </span>
+      </label>
+    </div>
+  </div>
+</div>
