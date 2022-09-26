@@ -145,12 +145,11 @@ require File.expand_path('../app/lib/discourse_automation/triggerable', __FILE__
 require File.expand_path('../app/lib/discourse_automation/scriptable', __FILE__)
 require File.expand_path('../app/core_ext/plugin_instance', __FILE__)
 
-DiscoursePluginRegistry.serialized_current_user_fields << "add_to_mailing_list"
-
 after_initialize do
   [
     '../app/queries/stalled_topic_finder',
     '../app/services/discourse_automation/user_badge_granted_handler',
+    '../app/services/discourse_automation/mailchimp',
     '../app/lib/discourse_automation/triggers/after_post_cook',
     '../app/lib/discourse_automation/triggers/stalled_wiki',
     '../app/lib/discourse_automation/triggers/stalled_topic',
@@ -162,10 +161,11 @@ after_initialize do
     '../app/lib/discourse_automation/triggers/post_created_edited',
     '../app/lib/discourse_automation/triggers/topic',
     '../app/lib/discourse_automation/triggers/api_call',
-    '../app/lib/discourse_automation/triggers/one_time_trigger',
+    '../app/lib/discourse_automation/triggers/mailing_list',
     '../app/controllers/discourse_automation/append_last_checked_by_controller',
     '../app/controllers/discourse_automation/automations_controller',
     '../app/controllers/discourse_automation/user_global_notices_controller',
+    '../app/controllers/discourse_automation/mailchimp_hooks_controller',
     '../app/controllers/admin/discourse_automation/admin_discourse_automation_controller',
     '../app/controllers/admin/discourse_automation/admin_discourse_automation_automations_controller',
     '../app/controllers/admin/discourse_automation/admin_discourse_automation_scriptables_controller',
@@ -227,6 +227,18 @@ after_initialize do
     ).as_json
   end
 
+  add_to_serializer(:site, :mailing_list_automations) do
+    DiscourseAutomation::Automation.where(script: 'add_to_mailing_list', enabled: true).map do |automation|
+      {
+        list_id: automation.script_field('list_id').dig("value"),
+        title: automation.script_field('title').dig("value"),
+        description: automation.script_field('description').dig("value"),
+        terms_and_condition_url: automation.script_field('terms_and_condition_url').dig("value"),
+        terms_and_condition_url_text: automation.script_field('terms_and_condition_url_text').dig("value")
+      }
+    end
+  end
+
   DiscourseAutomation::Engine.routes.draw do
     scope format: :json, constraints: AdminConstraint.new do
       post '/automations/:id/trigger' => 'automations#trigger'
@@ -235,6 +247,8 @@ after_initialize do
     scope format: :json do
       delete '/user-global-notices/:id' => 'user_global_notices#destroy'
       put '/append-last-checked-by/:post_id' => 'append_last_checked_by#post_checked'
+      post '/subscribe-user-to-mailing-list' => 'mailchimp_hooks#added_to_list'
+      post '/unsubscribe-user-from-mailing-list' => 'mailchimp_hooks#removed_from_list'
     end
 
     scope '/admin/plugins/discourse-automation', as: 'admin_discourse_automation', constraints: AdminConstraint.new do
@@ -322,6 +336,20 @@ after_initialize do
     handle_post_created_edited(post, :edit)
   end
 
+  on(:user_created) do |user|
+    name = DiscourseAutomation::Triggerable::MAILING_LIST
+    DiscourseAutomation::Automation.where(trigger: name, enabled: true).find_each do |automation|
+      automation.trigger!('kind' => 'mailing_list', 'action' => :create, 'user' => user)
+    end
+  end
+
+  on(:user_updated) do |user|
+    name = DiscourseAutomation::Triggerable::MAILING_LIST
+    DiscourseAutomation::Automation.where(trigger: name, enabled: true).find_each do |automation|
+      automation.trigger!('kind' => 'mailing_list', 'action' => :update, 'user' => user)
+    end
+  end
+
   Plugin::Filter.register(:after_post_cook) do |post, cooked|
     handle_after_post_cook(post, cooked)
   end
@@ -352,8 +380,16 @@ after_initialize do
   register_user_custom_field_type(DiscourseAutomation::CUSTOM_FIELD, [:integer])
   register_post_custom_field_type(DiscourseAutomation::CUSTOM_FIELD, [:integer])
   register_post_custom_field_type('stalled_wiki_triggered_at', :string)
-  register_user_custom_field_type("add_to_mailing_list", :boolean)
-  register_editable_user_custom_field("add_to_mailing_list")
+
+  DiscourseAutomation::Automation.where(trigger: "mailing_list").find_each do |automation|
+    list_id = automation.script_field('list_id').dig("value")
+
+    next unless list_id
+
+    register_user_custom_field_type("add_to_mailing_list_#{list_id}", :boolean)
+    register_editable_user_custom_field("add_to_mailing_list_#{list_id}")
+    allow_public_user_custom_field("add_to_mailing_list_#{list_id}")
+  end
 
   reloadable_patch do
     require 'post'

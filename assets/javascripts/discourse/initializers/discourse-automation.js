@@ -2,6 +2,10 @@ import { popupAjaxError } from "discourse/lib/ajax-error";
 import { ajax } from "discourse/lib/ajax";
 import { makeArray } from "discourse-common/lib/helpers";
 import { withPluginApi } from "discourse/lib/plugin-api";
+import { isEmpty } from "@ember/utils";
+import { removeCookie } from "discourse/lib/cookie";
+import User from "discourse/models/user";
+import { userPath } from "discourse/lib/url";
 
 let _lastCheckedByHandlers = {};
 
@@ -32,7 +36,7 @@ function _initializeDiscourseAutomation(api) {
 
   api.modifyClass("controller:create-account", {
     pluginId: "discourse-automation",
-    addToMailingList: false,
+    customFields: {},
     performAccountCreation() {
       if (
         !this._challengeDate ||
@@ -69,9 +73,7 @@ function _initializeDiscourseAutomation(api) {
         );
       }
 
-      attrs["customFields"] = {
-        add_to_mailing_list: this.addToMailingList,
-      };
+      attrs["customFields"] = this.customFields;
 
       this.set("formSubmitted", true);
       return User.createAccount(attrs).then(
@@ -134,8 +136,7 @@ function _initializeDiscourseAutomation(api) {
     },
   });
 
-  api.modifyClass("model:user", {
-    pluginId: "discourse-automation",
+  User.reopenClass({
     createAccount(attrs) {
       let data = {
         name: attrs.accountName,

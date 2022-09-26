@@ -8,6 +8,8 @@ en:
         invalid_field: Field’s component `%{component}` is not usable on `%{target}:%{target_name}.`
         invalid_metadata: Data for `%{field}` is invalid or component `%{component}` is unknown.
     triggerables:
+      mailing_list:
+        title: "Namecheap Mailing List"
       user_badge_granted:
         title: User badge granted
         doc: Triggers an automation when a user is granted a badge.
@@ -49,6 +51,8 @@ en:
         title: After post cook
         description: When a post content is cooked the automation will be triggered
     scriptables:
+      add_to_mailing_list:
+        title: "Add to Namecheap Mailing List"
       post:
         title: Create a post
         description: Create a post on a specified topic

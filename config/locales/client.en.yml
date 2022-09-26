@@ -165,6 +165,29 @@ en:
               description: Optional, allows to limit trigger execution to any of these tags
       scriptables:
         not_found: Couldn’t find script `%{script}` for automation `%{automation}`, ensure the associated plugin is installed
+        add_to_mailing_list:
+          fields:
+            terms_and_condition_url:
+              label: Terms and Condition URL
+              description: Expects a Terms and condition URL if you want conditions to be accepted.
+            terms_and_condition_url_text:
+              label: Terms and Condition URL text
+              description: Expects a Terms and condition URL text.
+            title:
+              label: Title
+              description: Expects title of the checkbox field
+            description:
+              label: Description
+              description: Expects description of the checkbox field
+            server_name:
+              label: Server Name
+              description: Expects Server Name of the namecheap account.
+            list_id:
+              label: Audience ID
+              description: Expects Audience ID.
+            api_key:
+              label: API KEY
+              description: Expects API KEY of the namecheap account.
         zapier_webhook:
           fields:
             webhook_url:

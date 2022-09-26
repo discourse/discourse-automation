@@ -1,13 +1,5 @@
 <div class="user-fields">
-  <div class="input-group">
-    <div class="user-field confirm add-to-mailing-list">
-      <label class="control-label">Add to mailing list</label>
-      <div class="controls">
-        <label class="control-label checkbox-label">
-          <Input @type="checkbox" @checked={{this.addToMailingList}} {{on "click" (action "onChangeMailingSetting" value="target.checked")}}/>
-          <span> testtt </span>
-        </label>
-      </div>
-    </div>
-  </div>
+  {{#each site.mailing_list_automations as |automation|}}
+    {{create-account-mailing-list-field automation=automation}}
+  {{/each}}
 </div>
