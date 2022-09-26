@@ -6,7 +6,7 @@ module DiscourseAutomation
                       :preload_json,
                       :verify_authenticity_token,
                       :redirect_to_login_if_required,
-                      only: [:added_to_list]
+                      only: [:webhook]
 
     def webhook
       params.require(:data)
