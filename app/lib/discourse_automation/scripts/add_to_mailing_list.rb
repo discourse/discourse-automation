@@ -33,9 +33,9 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::ADD_TO_MAIL
     is_subscribed = subscription['status'] == "subscribed"
 
     if is_subscribed != custom_field
-      response = mailchimp.add_user_to_mailing_list(user, automation) if custom_field && subscription['status'] == 404
+      response = mailchimp.add_user_to_mailing_list if custom_field && subscription['status'] == 404
 
-      response = mailchimp.update_subscription_from_mailing_list(user, automation, custom_field) if subscription['status'] != 404
+      response = mailchimp.update_subscription_from_mailing_list(custom_field) if subscription['status'] != 404
 
       expected_status = custom_field ? "subscribed" : "unsubscribed"
 

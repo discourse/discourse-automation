@@ -247,8 +247,7 @@ after_initialize do
     scope format: :json do
       delete '/user-global-notices/:id' => 'user_global_notices#destroy'
       put '/append-last-checked-by/:post_id' => 'append_last_checked_by#post_checked'
-      post '/subscribe-user-to-mailing-list' => 'mailchimp_hooks#added_to_list'
-      post '/unsubscribe-user-from-mailing-list' => 'mailchimp_hooks#removed_from_list'
+      post '/update-user-to-mailing-list' => 'mailchimp_hooks#added_to_list'
     end
 
     scope '/admin/plugins/discourse-automation', as: 'admin_discourse_automation', constraints: AdminConstraint.new do
