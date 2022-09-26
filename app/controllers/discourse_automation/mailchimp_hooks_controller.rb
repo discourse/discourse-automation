@@ -7,14 +7,12 @@ module DiscourseAutomation
       data = JSON.parse(params[:data])
       email = data["email"]
 
-      raise Discourse::NotFound unless email
+      user = User.find_by_email(email) if email
 
-      user = User.find_by_email(email)
-
-      raise Discourse::NotFound unless user
-
-      update_user_custom_field(user, data["list_id"], true) if params[:type] == "subscribe"
-      update_user_custom_field(user, data["list_id"], false) if params[:type] == "unsubscribe"
+      if user
+        update_user_custom_field(user, data["list_id"], true) if params[:type] == "subscribe"
+        update_user_custom_field(user, data["list_id"], false) if params[:type] == "unsubscribe"
+      end
 
       render json: success_json
     end
