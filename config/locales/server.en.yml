@@ -9,7 +9,7 @@ en:
         invalid_metadata: Data for `%{field}` is invalid or component `%{component}` is unknown.
     triggerables:
       mailing_list:
-        title: "Namecheap Mailing List"
+        title: "Mailchimp Mailing List"
       user_badge_granted:
         title: User badge granted
         doc: Triggers an automation when a user is granted a badge.
@@ -52,7 +52,7 @@ en:
         description: When a post content is cooked the automation will be triggered
     scriptables:
       add_to_mailing_list:
-        title: "Add to Namecheap Mailing List"
+        title: "Add to Mailchimp Mailing List"
       post:
         title: Create a post
         description: Create a post on a specified topic

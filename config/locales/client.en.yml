@@ -181,13 +181,13 @@ en:
               description: Expects description of the checkbox field
             server_name:
               label: Server Name
-              description: Expects Server Name of the namecheap account.
+              description: Expects Server Name of the Mailchimp account.
             list_id:
               label: Audience ID
               description: Expects Audience ID.
             api_key:
               label: API KEY
-              description: Expects API KEY of the namecheap account.
+              description: Expects API KEY of the Mailchimp account.
         zapier_webhook:
           fields:
             webhook_url:
