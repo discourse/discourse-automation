@@ -2,7 +2,13 @@
 
 module DiscourseAutomation
   class MailchimpHooksController < ApplicationController
-    def added_to_list
+    skip_before_action :check_xhr,
+                      :preload_json,
+                      :verify_authenticity_token,
+                      :redirect_to_login_if_required,
+                      only: [:added_to_list]
+
+    def webhook
       params.require(:data)
       data = JSON.parse(params[:data])
       email = data["email"]
