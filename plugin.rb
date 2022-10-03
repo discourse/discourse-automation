@@ -161,7 +161,7 @@ after_initialize do
     '../app/lib/discourse_automation/triggers/post_created_edited',
     '../app/lib/discourse_automation/triggers/topic',
     '../app/lib/discourse_automation/triggers/api_call',
-    '../app/lib/discourse_automation/triggers/mailing_list',
+    '../app/lib/discourse_automation/triggers/user',
     '../app/controllers/discourse_automation/append_last_checked_by_controller',
     '../app/controllers/discourse_automation/automations_controller',
     '../app/controllers/discourse_automation/user_global_notices_controller',
@@ -336,16 +336,16 @@ after_initialize do
   end
 
   on(:user_created) do |user|
-    name = DiscourseAutomation::Triggerable::MAILING_LIST
+    name = DiscourseAutomation::Triggerable::USER
     DiscourseAutomation::Automation.where(trigger: name, enabled: true).find_each do |automation|
-      automation.trigger!('kind' => 'mailing_list', 'action' => :create, 'user' => user)
+      automation.trigger!('kind' => name, 'action' => :create, 'user' => user)
     end
   end
 
   on(:user_updated) do |user|
-    name = DiscourseAutomation::Triggerable::MAILING_LIST
+    name = DiscourseAutomation::Triggerable::USER
     DiscourseAutomation::Automation.where(trigger: name, enabled: true).find_each do |automation|
-      automation.trigger!('kind' => 'mailing_list', 'action' => :update, 'user' => user)
+      automation.trigger!('kind' => name, 'action' => :update, 'user' => user)
     end
   end
 
@@ -380,7 +380,7 @@ after_initialize do
   register_post_custom_field_type(DiscourseAutomation::CUSTOM_FIELD, [:integer])
   register_post_custom_field_type('stalled_wiki_triggered_at', :string)
 
-  DiscourseAutomation::Automation.where(trigger: "mailing_list").find_each do |automation|
+  DiscourseAutomation::Automation.where(trigger: DiscourseAutomation::Triggerable::USER).find_each do |automation|
     list_id = automation.script_field('list_id').dig("value")
 
     next unless list_id

@@ -13,7 +13,7 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::ADD_TO_MAIL
 
   version 1
 
-  triggerables [:mailing_list]
+  triggerables [:user]
 
   script do |context, fields, automation|
     list_id = fields["list_id"].dig("value")

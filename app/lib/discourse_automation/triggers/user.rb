@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-DiscourseAutomation::Triggerable::MAILING_LIST = 'mailing_list'
+DiscourseAutomation::Triggerable::USER = 'user'
 
-DiscourseAutomation::Triggerable.add(DiscourseAutomation::Triggerable::MAILING_LIST) do
+DiscourseAutomation::Triggerable.add(DiscourseAutomation::Triggerable::USER) do
   on_update do |automation, metadata, previous_metadata|
     list_id = metadata.dig('list_id', 'value')
 
