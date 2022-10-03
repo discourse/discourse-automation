@@ -37,7 +37,7 @@ describe 'ZapierWebhook' do
     it 'logs an error and do nothing' do
       expect {
         automation.trigger!
-      }.to change { Jobs::DiscourseAutomationCallZapierWebhook.jobs.length }.by(0)
+      }.not_to change { Jobs::DiscourseAutomationCallZapierWebhook.jobs.length }
 
       expect(Rails.logger.warnings.first).to match(/is not a valid Zapier/)
     end

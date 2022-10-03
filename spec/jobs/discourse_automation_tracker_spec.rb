@@ -45,9 +45,9 @@ describe Jobs::DiscourseAutomationTracker do
       it 'doesn’t consume the pending automation' do
         expect {
           Jobs::DiscourseAutomationTracker.new.execute
-        }.to change {
+        }.not_to change {
           automation.pending_automations.count
-        }.by(0)
+        }
       end
     end
   end
@@ -96,9 +96,9 @@ describe Jobs::DiscourseAutomationTracker do
       it 'doesn’t consume the pending pm' do
         expect {
           Jobs::DiscourseAutomationTracker.new.execute
-        }.to change {
+        }.not_to change {
           automation.pending_pms.count
-        }.by(0)
+        }
       end
     end
   end

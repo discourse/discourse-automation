@@ -41,9 +41,9 @@ describe 'Recurring' do
       it 'doesn’t create a pending trigger' do
         expect {
           automation.upsert_field!('start_date', 'date_time', { value: 2.hours.ago }, target: 'trigger')
-        }.to change {
+        }.not_to change {
           DiscourseAutomation::PendingAutomation.count
-        }.by(0)
+        }
       end
     end
   end

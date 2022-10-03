@@ -73,9 +73,9 @@ describe 'AutoResponder' do
 
           expect {
             automation.trigger!('post' => post_1)
-          }.to change {
+          }.not_to change {
             Post.count
-          }.by(0)
+          }
         end
       end
 
@@ -92,9 +92,9 @@ describe 'AutoResponder' do
 
           expect {
             automation.trigger!('post' => post_2)
-          }.to change {
+          }.not_to change {
             Post.count
-          }.by(0)
+          }
         end
       end
     end
@@ -114,9 +114,9 @@ describe 'AutoResponder' do
 
         expect {
           automation.trigger!('post' => post)
-        }.to change {
+        }.not_to change {
           Post.count
-        }.by(0)
+        }
       end
     end
 
@@ -135,9 +135,9 @@ describe 'AutoResponder' do
 
         expect {
           automation.trigger!('post' => post)
-        }.to change {
+        }.not_to change {
           Post.count
-        }.by(0)
+        }
       end
     end
   end
