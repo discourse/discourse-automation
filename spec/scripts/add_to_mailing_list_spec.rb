@@ -14,7 +14,6 @@ describe 'AddToMailingList' do
     let(:list_id) { 'list_id1232' }
     let(:md5) { Digest::MD5.hexdigest(user.email) }
     let(:api_key) { '12121231' }
-    let(:connection) { Excon::Connection.new("https://#{server_name}.api.mailchimp.com") }
     fab!(:automation) { Fabricate(:automation, script: DiscourseAutomation::Scriptable::ADD_TO_MAILING_LIST, trigger: DiscourseAutomation::Triggerable::USER) }
 
     before do
