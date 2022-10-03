@@ -12,7 +12,7 @@ describe 'ZapierWebhook' do
     )
   end
 
-  context 'has valid webhook url' do
+  context 'with valid webhook url' do
     before do
       automation.upsert_field!('webhook_url', 'text', { value: "https://hooks.zapier.com/hooks/catch/foo/bar" })
     end
@@ -24,7 +24,7 @@ describe 'ZapierWebhook' do
     end
   end
 
-  context 'has not valid webhook url' do
+  context 'with invalid webhook url' do
     before do
       @orig_logger = Rails.logger
       Rails.logger = @fake_logger = FakeLogger.new
