@@ -3,9 +3,10 @@ import { ajax } from "discourse/lib/ajax";
 import { makeArray } from "discourse-common/lib/helpers";
 import { withPluginApi } from "discourse/lib/plugin-api";
 import { isEmpty } from "@ember/utils";
-import { removeCookie } from "discourse/lib/cookie";
+import cookie, { removeCookie } from "discourse/lib/cookie";
 import User from "discourse/models/user";
 import { userPath } from "discourse/lib/url";
+import I18n from "I18n";
 
 let _lastCheckedByHandlers = {};
 

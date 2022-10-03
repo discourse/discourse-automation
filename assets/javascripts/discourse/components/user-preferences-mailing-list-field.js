@@ -1,6 +1,5 @@
 import Component from "@ember/component";
 import { action } from "@ember/object";
-import { get } from "jquery";
 
 export default Component.extend({
   @action
@@ -11,7 +10,7 @@ export default Component.extend({
     );
   },
 
-  get value() {
+  value() {
     return this.get(
       `model.custom_fields.add_to_mailing_list_${this.automation.list_id}`
     );

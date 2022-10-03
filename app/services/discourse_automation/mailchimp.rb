@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module DiscourseAutomation
   class Mailchimp
     def initialize(user, automation)
@@ -6,13 +7,13 @@ module DiscourseAutomation
     end
 
     def is_subscribed?
-      response = connection.get(:path=> "3.0/lists/#{list_id}/members/#{md5}", :query => { :apikey => api_key })
+      response = connection.get(path: "3.0/lists/#{list_id}/members/#{md5}", query: { apikey: api_key })
 
       JSON.parse(response.body)
     end
 
     def add_user_to_mailing_list
-      response = connection.post(:path => "3.0/lists/#{list_id}/members", :headers => header, :body => contact_details.to_json)
+      response = connection.post(path: "3.0/lists/#{list_id}/members", headers: header, body: contact_details.to_json)
 
       JSON.parse(response.body)
     end
@@ -20,17 +21,17 @@ module DiscourseAutomation
     def update_subscription_from_mailing_list(status)
       data = { status: status ? "subscribed" : "unsubscribed" }
 
-      response = connection.put(:path => "3.0/lists/#{list_id}/members/#{md5}", :headers => header, :body => data.to_json)
+      response = connection.put(path: "3.0/lists/#{list_id}/members/#{md5}", headers: header, body: data.to_json)
 
       JSON.parse(response.body)
     end
 
     def contact_details
       {
-        :email_address => @user.email,
-        :status=> "subscribed",
-        :merge_fields=> {
-          :FNAME=> @user.name || @user.username
+        email_address: @user.email,
+        status: "subscribed",
+        merge_fields: {
+          FNAME: @user.name || @user.username
         }
       }
     end
@@ -54,8 +55,8 @@ module DiscourseAutomation
 
     def header
       {
-        :Authorization=>"Basic #{api_key}",
-        "content-type"=>"application/json"
+        :Authorization => "Basic #{api_key}",
+        "content-type" => "application/json"
       }
     end
   end

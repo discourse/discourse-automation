@@ -14,7 +14,7 @@ describe DiscourseAutomation::Mailchimp do
   end
 
   context "checking user subscription with mailchimp" do
-    let!(:url) { "#{basic_url}3.0/lists/#{list_id}/members/#{md5}?apikey=#{api_key}"}
+    let!(:url) { "#{basic_url}3.0/lists/#{list_id}/members/#{md5}?apikey=#{api_key}" }
     fab!(:automation) { Fabricate(:automation, script: DiscourseAutomation::Scriptable::ADD_TO_MAILING_LIST, trigger: DiscourseAutomation::Triggerable::USER) }
     let!(:mailchimp_stub) do
       stub_request(:get, url).to_return(status: 200, body: { status: "subscribed" }.to_json, headers: {})
@@ -34,18 +34,18 @@ describe DiscourseAutomation::Mailchimp do
   end
 
   context "add user to mailchimp mailing list" do
-    let!(:url) { "#{basic_url}3.0/lists/#{list_id}/members"}
+    let!(:url) { "#{basic_url}3.0/lists/#{list_id}/members" }
     fab!(:automation) { Fabricate(:automation, script: DiscourseAutomation::Scriptable::ADD_TO_MAILING_LIST, trigger: DiscourseAutomation::Triggerable::USER) }
     let!(:mailchimp_stub) do
       stub_request(:post, url).to_return(status: 200, body: {
-        :email_address => user.email,
-        :status=> "subscribed",
-        :merge_fields=> {
-          :FNAME=> user.name || user.username
+        email_address: user.email,
+        status: "subscribed",
+        merge_fields: {
+          FNAME: user.name || user.username
         }
       }.to_json, headers: {
-        :Authorization=>"Basic #{api_key}",
-        "content-type"=>"application/json"
+        :Authorization => "Basic #{api_key}",
+        "content-type" => "application/json"
       })
     end
 
@@ -63,12 +63,12 @@ describe DiscourseAutomation::Mailchimp do
   end
 
   context "updates user subscription from mailchimp mailing list" do
-    let!(:url) { "#{basic_url}3.0/lists/#{list_id}/members/#{md5}"}
+    let!(:url) { "#{basic_url}3.0/lists/#{list_id}/members/#{md5}" }
     fab!(:automation) { Fabricate(:automation, script: DiscourseAutomation::Scriptable::ADD_TO_MAILING_LIST, trigger: DiscourseAutomation::Triggerable::USER) }
     let!(:mailchimp_stub) do
       stub_request(:put, url).to_return(status: 200, body: { status: "subscribed" }.to_json, headers: {
-        :Authorization=>"Basic #{api_key}",
-        "content-type"=>"application/json"
+        :Authorization => "Basic #{api_key}",
+        "content-type" => "application/json"
       })
     end
 
@@ -84,36 +84,4 @@ describe DiscourseAutomation::Mailchimp do
       expect(mailchimp_stub).to have_been_requested.once
     end
   end
-
-  # describe "creating video without mp4 support" do
-  #   before do
-  #     SiteSetting.discourse_video_enable_mp4_download = false
-  #   end
-
-  #   body = {
-  #     new_asset_settings: {
-  #       playback_policy: ["public"],
-  #       mp4_support: "none"
-  #     },
-  #     cors_origin: "*",
-  #   }
-
-  #   let!(:creation_stub) do
-  #     stub_request(:post, url).
-  #       with(
-  #          body: body.to_json,
-  #          headers: {
-  #            'Authorization' => 'Basic OTg3NjU0MzIxOmFiYw==',
-  #            'Content-Type' => 'application/json',
-  #            'Host' => 'api.mux.com'
-  #          }).
-  #       to_return(status: 200, body: {}.to_json, headers: {})
-  #   end
-
-  #   it "creates without mp4 support" do
-  #     api = described_class.create_direct_upload
-  #     expect(creation_stub).to have_been_requested.once
-  #   end
-  # end
-
 end
