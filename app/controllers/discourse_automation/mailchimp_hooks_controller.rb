@@ -9,9 +9,11 @@ module DiscourseAutomation
                       only: [:webhook]
 
     def webhook
-      data = JSON.parse(params[:data])
+      json_data = params[:data]
 
-      if data
+      if json_data
+        data = JSON.parse(json_data)
+
         email = data["email"]
 
         user = User.find_by_email(email) if email
