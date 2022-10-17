@@ -10,7 +10,7 @@ export default Component.extend({
     );
   },
 
-  value() {
+  get value() {
     return this.get(
       `model.custom_fields.add_to_mailing_list_${this.automation.list_id}`
     );
