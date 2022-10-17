@@ -3,10 +3,12 @@
 module DiscourseAutomation
   class MailchimpHooksController < ApplicationController
     skip_before_action :check_xhr,
-                      :preload_json,
                       :verify_authenticity_token,
-                      :redirect_to_login_if_required,
-                      only: [:webhook]
+                      only: [:webhook, :webhook_tester]
+
+    def webhook_tester
+      render json: success_json
+    end
 
     def webhook
       json_data = params[:data]
