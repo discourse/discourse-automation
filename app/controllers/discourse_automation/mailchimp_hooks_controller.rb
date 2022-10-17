@@ -9,15 +9,17 @@ module DiscourseAutomation
                       only: [:webhook]
 
     def webhook
-      params.require(:data)
       data = JSON.parse(params[:data])
-      email = data["email"]
 
-      user = User.find_by_email(email) if email
+      if data
+        email = data["email"]
 
-      if user
-        update_user_custom_field(user, data["list_id"], true) if params[:type] == "subscribe"
-        update_user_custom_field(user, data["list_id"], false) if params[:type] == "unsubscribe"
+        user = User.find_by_email(email) if email
+
+        if user
+          update_user_custom_field(user, data["list_id"], true) if params[:type] == "subscribe"
+          update_user_custom_field(user, data["list_id"], false) if params[:type] == "unsubscribe"
+        end
       end
 
       render json: success_json
