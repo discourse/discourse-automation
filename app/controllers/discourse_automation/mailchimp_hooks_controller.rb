@@ -12,27 +12,32 @@ module DiscourseAutomation
 
     def webhook
       data = params[:data]
-
+      data = JSON.parse(data).with_indifferent_access
       if data
         email = data[:email]
 
         user = User.find_by_email(email) if email
 
-        if user
-          update_user_custom_field(user, data[:list_id], true) if params[:type] == "subscribe"
-          update_user_custom_field(user, data[:list_id], false) if params[:type] == "unsubscribe"
-        end
+        update_user_custom_field(user, data[:list_id], params[:type]) if user
       end
 
       render json: success_json
     end
 
-    def update_user_custom_field(user, list_id, value)
+    def update_user_custom_field(user, list_id, type)
       return unless list_id
 
-      fields = user.custom_fields.merge("add_to_mailing_list_#{list_id}" => value)
+      fields = user.custom_fields
+      if type == "subscribe"
+        fields = fields.merge("add_to_mailing_list_#{list_id}" => true)
+      elsif type == "unsubscribe"
+        fields = fields.merge("add_to_mailing_list_#{list_id}" => false)
+      end
+
       user.custom_fields = fields
       user.save
+
+      Rails.logger.info "#{Time.now.to_formatted_s(:db)}: [Webhook Mailchimp Subscription] #{user.username} #{type}d to/from list_id: #{list_id}"
     end
   end
 end

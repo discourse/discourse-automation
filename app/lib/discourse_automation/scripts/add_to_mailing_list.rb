@@ -37,11 +37,16 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::ADD_TO_MAIL
 
       response = mailchimp.update_subscription_from_mailing_list(custom_field) if subscription['status'] != 404
 
+      Rails.logger.info "#{Time.now.to_formatted_s(:db)}: [Manual Mailchimp Subscription] #{user.username} #{response['status']}  to/from list_id: #{list_id}"
+
       expected_status = custom_field ? "subscribed" : "unsubscribed"
 
       if response["status"] != expected_status
         user.custom_fields["add_to_mailing_list_#{list_id}"] = !custom_field
         user.save!
+        current_status = custom_field ? "unsubscribed" : "subscribed"
+
+        Rails.logger.info "#{Time.now.to_formatted_s(:db)}: [Manual Mailchimp Subscription] list_id: #{list_id} #{current_status} #{user.username}"
       end
     end
   end
