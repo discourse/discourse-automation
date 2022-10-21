@@ -12,7 +12,7 @@ module DiscourseAutomation
 
     def webhook
       data = params[:data]
-      data = JSON.parse(data).with_indifferent_access
+
       if data
         email = data[:email]
 
