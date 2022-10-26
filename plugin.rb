@@ -208,12 +208,23 @@ after_initialize do
     CUSTOM_FIELD ||= 'discourse_automation_ids'
     TOPIC_LAST_CHECKED_BY ||= 'discourse_automation_last_checked_by'
     TOPIC_LAST_CHECKED_AT ||= 'discourse_automation_last_checked_at'
+    MODIFY_MAILCHIMP_MAILING_LIST_SUBSCRIPTION ||= 1001
 
     class Engine < ::Rails::Engine
       engine_name PLUGIN_NAME
       isolate_namespace DiscourseAutomation
     end
   end
+
+  module ModifyUserHistory
+    def actions
+      super
+
+      @actions.merge(modify_mailchimp_mailing_list_subscription: DiscourseAutomation::MODIFY_MAILCHIMP_MAILING_LIST_SUBSCRIPTION)
+    end
+  end
+
+  UserHistory.singleton_class.prepend ModifyUserHistory
 
   add_admin_route 'discourse_automation.title', 'discourse-automation'
 

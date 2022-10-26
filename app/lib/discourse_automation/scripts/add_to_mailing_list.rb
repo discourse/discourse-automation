@@ -37,7 +37,13 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::ADD_TO_MAIL
 
       response = mailchimp.update_subscription_from_mailing_list(custom_field) if subscription['status'] != 404
 
-      Rails.logger.info "#{Time.now.to_formatted_s(:db)}: [Manual Mailchimp Subscription] #{user.username} #{response['status']}  to/from list_id: #{list_id}"
+      log_params = {
+        details: "[Manual Mailchimp Subscription] #{user.username} #{response['status']}  to/from list_id: #{list_id}",
+        previous_value: subscription['status'],
+        new_value: response['status']
+      }
+
+      UserHistory.create!(log_params.merge(target_user_id: user.id, action: UserHistory.actions[:modify_mailchimp_mailing_list_subscription]))
 
       expected_status = custom_field ? "subscribed" : "unsubscribed"
 
@@ -46,7 +52,13 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::ADD_TO_MAIL
         user.save!
         current_status = custom_field ? "unsubscribed" : "subscribed"
 
-        Rails.logger.info "#{Time.now.to_formatted_s(:db)}: [Manual Mailchimp Subscription] list_id: #{list_id} #{current_status} #{user.username}"
+        log_params = {
+          details:"[Manual Mailchimp Subscription] list_id: #{list_id} #{current_status} #{user.username}",
+          previous_value: subscription['status'],
+          new_value: current_status
+        }
+
+        UserHistory.create!(log_params.merge(target_user_id: user.id, action: UserHistory.actions[:modify_mailchimp_mailing_list_subscription]))
       end
     end
   end
