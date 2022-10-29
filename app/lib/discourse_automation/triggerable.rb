@@ -10,7 +10,7 @@ module DiscourseAutomation
       @name = name
       @placeholders = []
       @fields = []
-      @settings = { MANUAL_TRIGGER_KEY => false}
+      @settings = { MANUAL_TRIGGER_KEY => false }
       @on_update_block = proc {}
       @on_call_block = proc {}
       @not_found = false
