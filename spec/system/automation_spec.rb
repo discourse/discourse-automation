@@ -8,7 +8,7 @@ describe "Automation screen", type: :system, js: true do
     SiteSetting.discourse_automation_enabled = true
   end
 
-  context "when the trigger can be triggered manually" do
+  context "the trigger can be triggered manually" do
     before do
       DiscourseAutomation::Triggerable.add("foo") do
         enable_manual_trigger
@@ -23,7 +23,7 @@ describe "Automation screen", type: :system, js: true do
     end
   end
 
-  context "when the trigger can’t be triggered manually" do
+  context "the trigger can’t be triggered manually" do
     before do
       DiscourseAutomation::Triggerable.add("foo")
     end
