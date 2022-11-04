@@ -43,7 +43,7 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::ADD_TO_MAIL
         new_value: response['status']
       }
 
-      UserHistory.create!(log_params.merge(target_user_id: user.id, action: UserHistory.actions[:modify_mailchimp_mailing_list_subscription]))
+      UserHistory.create!(log_params.merge(target_user_id: user.id, action: UserHistory.actions[:modify_mailing_list]))
 
       expected_status = custom_field ? "subscribed" : "unsubscribed"
 
@@ -58,7 +58,7 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::ADD_TO_MAIL
           new_value: current_status
         }
 
-        UserHistory.create!(log_params.merge(target_user_id: user.id, action: UserHistory.actions[:modify_mailchimp_mailing_list_subscription]))
+        UserHistory.create!(log_params.merge(target_user_id: user.id, action: UserHistory.actions[:modify_mailing_list]))
       end
     end
   end

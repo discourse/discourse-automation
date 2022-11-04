@@ -208,7 +208,7 @@ after_initialize do
     CUSTOM_FIELD ||= 'discourse_automation_ids'
     TOPIC_LAST_CHECKED_BY ||= 'discourse_automation_last_checked_by'
     TOPIC_LAST_CHECKED_AT ||= 'discourse_automation_last_checked_at'
-    MODIFY_MAILCHIMP_MAILING_LIST_SUBSCRIPTION ||= 1001
+    MODIFY_MAILING_LIST ||= 1001
 
     class Engine < ::Rails::Engine
       engine_name PLUGIN_NAME
@@ -220,7 +220,7 @@ after_initialize do
     def actions
       super
 
-      @actions.merge(modify_mailchimp_mailing_list_subscription: DiscourseAutomation::MODIFY_MAILCHIMP_MAILING_LIST_SUBSCRIPTION)
+      @actions.merge(modify_mailing_list: DiscourseAutomation::MODIFY_MAILING_LIST)
     end
   end
 

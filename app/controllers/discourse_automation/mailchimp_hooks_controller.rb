@@ -40,13 +40,15 @@ module DiscourseAutomation
       user.custom_fields = fields
       user.save
 
-      log_params = {
-        details: "[Webhook Mailchimp Subscription] #{user.username} #{type}d to/from list_id: #{list_id}",
-        previous_value: old_value ? "subscribed" : "unsubscribed",
-        new_value: "#{type}d"
-      }
+      if old_value != fields["add_to_mailing_list_#{list_id}"]
+        log_params = {
+          details: "[Webhook Mailchimp Subscription] #{user.username} #{type}d to/from list_id: #{list_id}",
+          previous_value: old_value ? "subscribed" : "unsubscribed",
+          new_value: "#{type}d"
+        }
 
-      UserHistory.create!(log_params.merge(target_user_id: user.id, action: UserHistory.actions[:modify_mailchimp_mailing_list_subscription]))
+        UserHistory.create!(log_params.merge(target_user_id: user.id, action: UserHistory.actions[:modify_mailing_list]))
+      end
     end
   end
 end
