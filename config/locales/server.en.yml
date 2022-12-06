@@ -110,3 +110,6 @@ en:
         button_text: Done
       add_user_to_group_through_custom_field:
         title: "Add user to group through User Custom Field"
+      scheduled_explorer_query:
+        title: Schedule a PM with Data Explorer results
+        description: Get scheduled reports sent to your messages each month
