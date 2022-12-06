@@ -56,6 +56,7 @@ after_initialize do
     app/lib/discourse_automation/scripts/gift_exchange
     app/lib/discourse_automation/scripts/pin_topic
     app/lib/discourse_automation/scripts/post
+    app/lib/discourse_automation/scripts/scheduled_explorer_query
     app/lib/discourse_automation/scripts/send_pms
     app/lib/discourse_automation/scripts/suspend_user_by_email
     app/lib/discourse_automation/scripts/topic_required_words
@@ -85,6 +86,7 @@ after_initialize do
     app/serializers/discourse_automation/template_serializer
     app/serializers/discourse_automation/trigger_serializer
     app/serializers/discourse_automation/user_global_notice_serializer
+    app/services/discourse_automation/data_explorer_report_generator
     app/services/discourse_automation/user_badge_granted_handler
   ].each { |path| require_relative path }
 
