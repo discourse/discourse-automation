@@ -153,9 +153,15 @@ module DiscourseAutomation
           "type" => "integer",
         },
       },
+      "email_group_user" => {
+        "value" => {
+          "type" => "array",
+          "items" => [{ "type": "string" }]
+        }
+      },
       "pms" => {
-        type: "array",
-        items: [
+        "type": "array",
+        "items": [
           {
             type: "object",
             properties: {
