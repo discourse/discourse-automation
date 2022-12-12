@@ -267,10 +267,8 @@ en:
               label: "User Custom Field name"
         scheduled_explorer_query:
           fields:
-            receiver:
-              label: Send to User
-            group_id:
-              label: Send to Group
+            recipients:
+              label: Send to User, Group or Email
             query_id:
               label: Data Explorer Query
             query_params:
