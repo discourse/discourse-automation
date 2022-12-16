@@ -66,6 +66,11 @@ module DiscourseAutomation
     def destroy
       automation = DiscourseAutomation::Automation.find(params[:id])
       automation.destroy!
+
+      if automation.script == "add_to_mailing_list"
+        Site.clear_anon_cache!
+      end
+
       render json: success_json
     end
 

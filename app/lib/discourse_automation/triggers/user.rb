@@ -6,7 +6,7 @@ DiscourseAutomation::Triggerable.add(DiscourseAutomation::Triggerable::USER) do
   on_update do |automation, metadata, previous_metadata|
     list_id = metadata.dig('list_id', 'value')
 
-    unless list_id
+    if list_id
 
       custom_field = "add_to_mailing_list_#{list_id}"
 
@@ -20,6 +20,8 @@ DiscourseAutomation::Triggerable.add(DiscourseAutomation::Triggerable::USER) do
         User.register_custom_field_type(custom_field, :boolean)
         DiscoursePluginRegistry.register_public_user_custom_field(custom_field, plugin_instance)
       end
+
+      Site.clear_anon_cache!
     end
   end
 end
