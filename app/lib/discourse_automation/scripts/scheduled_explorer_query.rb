@@ -4,14 +4,14 @@ include HasSanitizableFields
 DiscourseAutomation::Scriptable::SCHEDULED_EXPLORER_QUERY = 'scheduled_explorer_query'
 
 DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::SCHEDULED_EXPLORER_QUERY) do
-  queries = SiteSetting.data_explorer_enabled ? DataExplorer::Query.where(hidden: false).map{|q| { id: q.id, translated_name: q.name } } : []
+  queries = SiteSetting.data_explorer_enabled ? DataExplorer::Query.where(hidden: false).map { |q| { id: q.id, translated_name: q.name } } : []
   field :recipients, component: :email_group_user, required: true
   field :query_id, component: :choices, required: true, extra: { content: queries }
   field :query_params, component: :'key-value', accepts_placeholders: true
 
   version 1
   triggerables [:recurring]
-  
+
   script do |context, fields, automation|
     recipients = Array(fields.dig('recipients', 'value'))
     query_id = fields.dig('query_id', 'value')
@@ -23,7 +23,7 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::SCHEDULED_E
       Rails.logger.warn '[discourse-automation] Report requires Data Explorer plugin to be enabled'
       next
     end
-  
+
     unless recipients.present?
       Rails.logger.warn "[discourse-automation] Couldn't find any recipients"
       next
@@ -38,7 +38,7 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::SCHEDULED_E
         usernames << recipient if Guardian.new(creator).can_send_private_messages_to_email?
       elsif group = Group.find_by(name: recipient)
         group.users.each do |user|
-          usernames << user.username if Guardian.new(user).group_and_user_can_access_query?(group,query)
+          usernames << user.username if Guardian.new(user).group_and_user_can_access_query?(group, query)
         end
       elsif user = User.find_by(username: recipient)
         usernames << user.username if Guardian.new(user).user_can_access_query?(query)
@@ -50,7 +50,7 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::SCHEDULED_E
     pg_result = result[:pg_result]
     relations, colrender = DataExplorer.add_extra_data(pg_result)
     result_data = []
-    
+
     # column names to search in place of id columns (topic_id, user_id etc)
     cols = ["name", "title", "username"]
 
@@ -64,14 +64,14 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::SCHEDULED_E
 
         if related.is_a?(ActiveModel::ArraySerializer)
           related_row = related.object.find_by(id: col)
-          column = !col_name.include?("_id") ? related_row.try(col_name) : cols.find {|c| related_row.try c }
+          column = !col_name.include?("_id") ? related_row.try(col_name) : cols.find { |c| related_row.try c }
           row_data[col_index] = column.nil? ? col : related_row[column]
         else
           row_data[col_index] = col
         end
       end
 
-      result_data << row_data.map{ |c| "<td>#{ sanitize_field(c.to_s) }</td>" }.join
+      result_data << row_data.map { |c| "<td>#{ sanitize_field(c.to_s) }</td>" }.join
     end
 
     # present query results in table format
