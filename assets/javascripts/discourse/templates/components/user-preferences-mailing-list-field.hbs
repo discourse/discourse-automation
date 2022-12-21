@@ -1,0 +1,24 @@
+<div class="control-group">
+  <div class="user-field confirm add-to-mailing-list">
+    {{#if automation.title}}
+      <label class="control-label">{{automation.title}}</label>
+    {{/if}}
+    <div class="controls">
+      <label class="control-label checkbox-label">
+        <Input @type="checkbox" @checked={{value}} {{on "click" (action "onChangeMailingSetting" value="target.checked")}}/>
+        <span>
+          {{automation.description}}
+          {{#if automation.terms_and_condition_url}}
+            <a href={{automation.terms_and_condition_url}}>
+              {{#if automation.terms_and_condition_url_text}}
+                {{automation.terms_and_condition_url_text}}
+              {{else}}
+                {{automation.terms_and_condition_url}}
+              {{/if}}
+            </a>
+          {{/if}}
+        </span>
+      </label>
+    </div>
+  </div>
+</div>

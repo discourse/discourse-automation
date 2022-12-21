@@ -1,0 +1,5 @@
+<div class="user-fields">
+  {{#each site.mailing_list_automations as |automation|}}
+    {{create-account-mailing-list-field automation=automation}}
+  {{/each}}
+</div>
