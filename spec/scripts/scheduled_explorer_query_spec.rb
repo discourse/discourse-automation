@@ -23,10 +23,6 @@ describe 'ScheduledExplorerQuery' do
   end
 
   context 'when using recurring trigger' do
-    # before do
-    #   group.add(user_2)
-    # end
-
     it 'sends the pm at recurring date_date' do
       freeze_time 1.month.from_now do
         expect {

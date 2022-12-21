@@ -1,5 +1,4 @@
 import BaseField from "./da-base-field";
-// import Group from "discourse/models/group";
 import { action, computed } from "@ember/object";
 import discourseComputed from "discourse-common/utils/decorators";
 
