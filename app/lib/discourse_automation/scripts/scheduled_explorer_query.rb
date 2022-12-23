@@ -45,7 +45,13 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::SCHEDULED_E
       end
     end
 
-    params = query_params.blank? ? {} : query_params.first
+    params = {}
+    unless query_params.blank?
+      k, v = [], []
+      query_params.flatten.each.with_index { |p, i| i % 2 == 0 ? k << p : v << p }
+      params = Hash[ k.zip(v) ]
+    end
+
     result = DataExplorer.run_query(query, params)
     pg_result = result[:pg_result]
     relations, colrender = DataExplorer.add_extra_data(pg_result)
