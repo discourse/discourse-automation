@@ -3,9 +3,6 @@
 require_relative '../discourse_automation_helper'
 
 describe 'ScheduledExplorerQuery' do
-  SiteSetting.data_explorer_enabled = true
-  SiteSetting.discourse_automation_enabled = true
-
   fab!(:automation) { Fabricate(:automation, script: DiscourseAutomation::Scriptable::SCHEDULED_EXPLORER_QUERY, trigger: 'recurring') }
   fab!(:admin_1) { Fabricate(:user, username: "johndoe", admin: true) }
   fab!(:user_1) { Fabricate(:user, username: "testuser1", admin: false) }
@@ -13,6 +10,9 @@ describe 'ScheduledExplorerQuery' do
   let!(:recipients) { ["johndoe", "john@doe.com"] }
 
   before do
+    SiteSetting.data_explorer_enabled = true
+    SiteSetting.discourse_automation_enabled = true
+
     @query = DataExplorer::Query.find_or_create_by!(Queries.default["-8"].to_h)
     @query.query_groups.find_or_create_by!(group_id: group.id)
 
