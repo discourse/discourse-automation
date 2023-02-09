@@ -11,7 +11,6 @@ gem "iso8601", "0.13.0"
 gem "rrule", "0.4.4"
 
 enabled_site_setting :discourse_automation_enabled
-enabled_site_setting :data_explorer_enabled
 
 register_asset "stylesheets/common/discourse-automation.scss"
 

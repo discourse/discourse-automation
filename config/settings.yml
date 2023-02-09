@@ -2,3 +2,6 @@ plugins:
   discourse_automation_enabled:
     default: false
     client: true
+  data_explorer_enabled:
+    default: false
+    client: true
