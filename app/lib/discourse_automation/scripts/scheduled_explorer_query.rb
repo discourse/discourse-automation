@@ -88,7 +88,10 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::SCHEDULED_E
     # send private message with data explorer results to each user in group
     usernames.flatten.compact.uniq.each do |username|
       title = "Scheduled Report for #{query.name}"
-      message = "Hi #{username}, your data explorer report is ready.\n\nQuery Name:\n#{query.name}\n\nHere are the results:\n#{table.html_safe}\n\n<a href='/admin/plugins/explorer?id=#{query_id}'>View this query in Data Explorer</a>\n\nReport created at #{Time.zone.now.strftime("%Y-%m-%d at %H:%M:%S")} (#{Time.zone.name})"
+      message = "Hi #{username}, your data explorer report is ready.\n\n" +
+      "Query Name:\n#{query.name}\n\nHere are the results:\n#{table.html_safe}\n\n" +
+      "<a href='/admin/plugins/explorer?id=#{query_id}'>View this query in Data Explorer</a>\n\n" +
+      "Report created at #{Time.zone.now.strftime("%Y-%m-%d at %H:%M:%S")} (#{Time.zone.name})"
 
       utils.send_pm({ title: title, raw: message, target_usernames: Array(username) }, automation_id: automation.id)
     end
