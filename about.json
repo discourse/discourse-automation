@@ -1,5 +1,7 @@
 {
   "tests": {
-    "requiredPlugins": "discourse-data-explorer"
+    "requiredPlugins": [
+      "https://github.com/discourse/discourse-data-explorer"
+    ]
   }
 }
