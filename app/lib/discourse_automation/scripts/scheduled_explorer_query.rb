@@ -37,6 +37,8 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::SCHEDULED_E
     query = DataExplorer::Query.find(query_id)
     query.update!(last_run_at: Time.now)
 
+    puts "Query: #{query.name}"
+
     # ensure groups and users have access to query
     recipients.each do |recipient|
       if recipient.include?("@") && creator.present?
@@ -100,13 +102,13 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::SCHEDULED_E
         end
       end
 
-      result_data << row_data.map { |c| "<td>#{sanitize_field(c.to_s)}</td>" }.join
+      result_data << row_data.map { |c| "| #{sanitize_field(c.to_s)} " }.join + "|\n"
     end
 
     # present query results in table format
-    cols = pg_result.fields.map { |c| "<th>#{c.gsub("_id", "")}</th>" }.join
-    rows = result_data.map { |row| "<tr>#{row}</tr>" }.join
-    table = "<table><thead><tr>#{cols}</tr></thead><tbody>#{rows}</tbody></table>"
+    table_headers = "|" + pg_result.fields.map { |c| " #{c.gsub("_id", "")} |" }.join
+    table_body = "|" + pg_result.fields.size.times.map { " :-----: |" }.join
+    table = table_headers + "\n" + table_body + "\n" + result_data.join
 
     # send private message with data explorer results to each user in group
     usernames.flatten.compact.uniq.each do |username|
@@ -114,7 +116,7 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::SCHEDULED_E
       pm["title"] = "Scheduled Report for #{query.name}"
       pm["target_usernames"] = Array(username)
       pm["raw"] = "Hi #{username}, your data explorer report is ready.\n\n" +
-        "Query Name:\n#{query.name}\n\nHere are the results:\n#{table.html_safe}\n\n" +
+        "Query Name:\n#{query.name}\n\nHere are the results:\n#{table}\n\n" +
         "<a href='/admin/plugins/explorer?id=#{query_id}'>View query in Data Explorer</a>\n\n" +
         "Report created at #{Time.zone.now.strftime("%Y-%m-%d at %H:%M:%S")} (#{Time.zone.name})"
 
