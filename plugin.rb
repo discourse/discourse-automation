@@ -29,42 +29,42 @@ require_relative "lib/discourse_automation/triggerable"
 
 after_initialize do
   %w[
-    app/queries/stalled_topic_finder
     app/jobs/regular/call_zapier_webhook
-    app/jobs/scheduled/stalled_wiki_tracker
-    app/jobs/scheduled/stalled_topic_tracker
     app/jobs/scheduled/discourse_automation_tracker
+    app/jobs/scheduled/stalled_topic_tracker
+    app/jobs/scheduled/stalled_wiki_tracker
+    app/queries/stalled_topic_finder
     app/services/discourse_automation/user_badge_granted_handler
+    lib/discourse_automation/event_handlers
     lib/discourse_automation/post_extension
-    lib/discourse_automation/triggers/user_promoted
-    lib/discourse_automation/triggers/user_added_to_group
-    lib/discourse_automation/triggers/point_in_time
-    lib/discourse_automation/triggers/topic
-    lib/discourse_automation/triggers/after_post_cook
-    lib/discourse_automation/triggers/post_created_edited
-    lib/discourse_automation/triggers/api_call
-    lib/discourse_automation/triggers/user_removed_from_group
-    lib/discourse_automation/triggers/stalled_topic
-    lib/discourse_automation/triggers/stalled_wiki
-    lib/discourse_automation/triggers/user_badge_granted
-    lib/discourse_automation/triggers/recurring
-    lib/discourse_automation/triggers/pm_created
-    lib/discourse_automation/scripts/banner_topic
-    lib/discourse_automation/scripts/append_last_checked_by
-    lib/discourse_automation/scripts/topic_required_words
-    lib/discourse_automation/scripts/pin_topic
     lib/discourse_automation/scripts/add_user_to_group_through_custom_field
-    lib/discourse_automation/scripts/user_global_notice
-    lib/discourse_automation/scripts/zapier_webhook
-    lib/discourse_automation/scripts/send_pms
+    lib/discourse_automation/scripts/append_last_checked_by
     lib/discourse_automation/scripts/append_last_edited_by
+    lib/discourse_automation/scripts/auto_responder
+    lib/discourse_automation/scripts/banner_topic
     lib/discourse_automation/scripts/close_topic
     lib/discourse_automation/scripts/flag_post_on_words
     lib/discourse_automation/scripts/gift_exchange
+    lib/discourse_automation/scripts/pin_topic
     lib/discourse_automation/scripts/post
+    lib/discourse_automation/scripts/send_pms
     lib/discourse_automation/scripts/suspend_user_by_email
-    lib/discourse_automation/scripts/auto_responder
-    lib/discourse_automation/event_handlers
+    lib/discourse_automation/scripts/topic_required_words
+    lib/discourse_automation/scripts/user_global_notice
+    lib/discourse_automation/scripts/zapier_webhook
+    lib/discourse_automation/triggers/after_post_cook
+    lib/discourse_automation/triggers/api_call
+    lib/discourse_automation/triggers/pm_created
+    lib/discourse_automation/triggers/point_in_time
+    lib/discourse_automation/triggers/post_created_edited
+    lib/discourse_automation/triggers/recurring
+    lib/discourse_automation/triggers/stalled_topic
+    lib/discourse_automation/triggers/stalled_wiki
+    lib/discourse_automation/triggers/topic
+    lib/discourse_automation/triggers/user_added_to_group
+    lib/discourse_automation/triggers/user_badge_granted
+    lib/discourse_automation/triggers/user_promoted
+    lib/discourse_automation/triggers/user_removed_from_group
   ].each { |path| require_relative path }
 
   reloadable_patch { Post.class_eval { prepend DiscourseAutomation::PostExtension } }
