@@ -197,7 +197,7 @@ module DiscourseAutomation
         prefers_encrypt: true
       )
         pm = pm.symbolize_keys
-        prefers_encrypt = prefers_encrypt && defined?(EncryptedPostCreator)
+        prefers_encrypt = prefers_encrypt && !!defined?(EncryptedPostCreator)
 
         if delay && delay.to_i > 0 && automation_id
           pm[:execute_at] = delay.to_i.minutes.from_now
