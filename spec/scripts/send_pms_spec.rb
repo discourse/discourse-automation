@@ -87,4 +87,35 @@ describe "SendPms" do
       }.to change { Post.count }.by(1)
     end
   end
+
+  context "when delayed" do
+    fab!(:user_1) { Fabricate(:user) }
+
+    before do
+      automation.update!(trigger: DiscourseAutomation::Triggerable::RECURRING)
+    end
+
+    it "correctly stores encrypt preference" do
+      automation.upsert_field!(
+        "sendable_pms",
+        "pms",
+        {
+          value: [
+            {
+              title: "A message from %%SENDER_USERNAME%%",
+              raw: "This is a message sent to @%%RECEIVER_USERNAME%%",
+              delay: 1,
+              prefers_encrypt: false,
+            },
+          ],
+        },
+        target: "script"
+      )
+      automation.upsert_field!("receiver", "user", { value: Discourse.system_user.username })
+
+      automation.trigger!
+
+      expec(DiscourseAutomation::PendingPm.last.prefers_encrypt).to eq(false)
+    end
+  end
 end

@@ -24,8 +24,9 @@ module Jobs
 
     def send_pending_pm(pending_pm)
       DiscourseAutomation::Scriptable::Utils.send_pm(
-        pending_pm.attributes.slice("target_usernames", "title", "raw"),
+        pending_pm.attributes.slice("target_usernames", "title", "raw",),
         sender: pending_pm.sender,
+        prefers_encrypt: pending_pm.prefers_encrypt,
       )
 
       pending_pm.destroy!
