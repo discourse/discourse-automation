@@ -91,9 +91,7 @@ describe "SendPms" do
   context "when delayed" do
     fab!(:user_1) { Fabricate(:user) }
 
-    before do
-      automation.update!(trigger: DiscourseAutomation::Triggerable::RECURRING)
-    end
+    before { automation.update!(trigger: DiscourseAutomation::Triggerable::RECURRING) }
 
     it "correctly stores encrypt preference" do
       automation.upsert_field!(
@@ -109,7 +107,7 @@ describe "SendPms" do
             },
           ],
         },
-        target: "script"
+        target: "script",
       )
       automation.upsert_field!("receiver", "user", { value: Discourse.system_user.username })
 
