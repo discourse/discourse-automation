@@ -113,7 +113,7 @@ describe "SendPms" do
 
       automation.trigger!
 
-      expec(DiscourseAutomation::PendingPm.last.prefers_encrypt).to eq(false)
+      expect(DiscourseAutomation::PendingPm.last.prefers_encrypt).to eq(false)
     end
   end
 end
