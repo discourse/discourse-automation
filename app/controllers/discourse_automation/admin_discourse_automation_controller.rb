@@ -3,7 +3,6 @@
 module DiscourseAutomation
   class AdminDiscourseAutomationController < ::Admin::AdminController
     requires_plugin DiscourseAutomation::PLUGIN_NAME
-    before_action :ensure_logged_in
 
     def index
     end
