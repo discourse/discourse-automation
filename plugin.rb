@@ -67,7 +67,7 @@ after_initialize do
     lib/discourse_automation/triggers/user_removed_from_group
   ].each { |path| require_relative path }
 
-  reloadable_patch { Post.class_eval { prepend DiscourseAutomation::PostExtension } }
+  reloadable_patch { Post.prepend DiscourseAutomation::PostExtension }
 
   add_admin_route "discourse_automation.title", "discourse-automation"
 
