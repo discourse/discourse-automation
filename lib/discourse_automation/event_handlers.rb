@@ -27,7 +27,7 @@ module DiscourseAutomation
 
     def self.handle_category_created_edited(category, action)
       name = DiscourseAutomation::Triggerable::CATEGORY_CREATED_EDITED
-    
+
       DiscourseAutomation::Automation
         .where(trigger: name, enabled: true)
         .find_each do |automation|
@@ -35,7 +35,7 @@ module DiscourseAutomation
           if restricted_category["value"].present?
             next if restricted_category["value"] != category.parent_category_id
           end
-    
+
           automation.trigger!("kind" => name, "action" => action, "category" => category)
         end
     end

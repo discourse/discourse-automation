@@ -25,7 +25,12 @@ describe "GroupCategoryNotificationDefault" do
         target: "trigger",
       )
       automation.upsert_field!("group", "group", { value: group.id }, target: "script")
-      automation.upsert_field!("notification_level", "category_notification_level", { value: 4 }, target: "script")
+      automation.upsert_field!(
+        "notification_level",
+        "category_notification_level",
+        { value: 4 },
+        target: "script",
+      )
     end
 
     context "when category is allowed" do
@@ -42,7 +47,12 @@ describe "GroupCategoryNotificationDefault" do
       end
 
       it "updates category notification level for existing members" do
-        automation.upsert_field!("update_existing_members", "boolean", { value: true }, target: "script")
+        automation.upsert_field!(
+          "update_existing_members",
+          "boolean",
+          { value: true },
+          target: "script",
+        )
         user = Fabricate(:user)
         group.add(user)
         subcategory = nil

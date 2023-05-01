@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-DiscourseAutomation::Scriptable::GROUP_CATEGORY_NOTIFICATION_DEFAULT = "group_category_notification_default"
+DiscourseAutomation::Scriptable::GROUP_CATEGORY_NOTIFICATION_DEFAULT =
+  "group_category_notification_default"
 
 DiscourseAutomation::Scriptable.add(
   DiscourseAutomation::Scriptable::GROUP_CATEGORY_NOTIFICATION_DEFAULT,
@@ -23,37 +24,40 @@ DiscourseAutomation::Scriptable.add(
       next
     end
 
-    GroupCategoryNotificationDefault.find_or_initialize_by(group_id: group_id, category_id: category_id).tap do |gc|
-      gc.notification_level = notification_level
-      gc.save!
-    end
+    GroupCategoryNotificationDefault
+      .find_or_initialize_by(group_id: group_id, category_id: category_id)
+      .tap do |gc|
+        gc.notification_level = notification_level
+        gc.save!
+      end
 
     if fields.dig("update_existing_members", "value")
-      group.users
-          .select(:id, :user_id)
-          .find_in_batches do |batch|
-            user_ids = batch.pluck(:user_id)
+      group
+        .users
+        .select(:id, :user_id)
+        .find_in_batches do |batch|
+          user_ids = batch.pluck(:user_id)
 
-            category_users = []
-            existing_users =
-              CategoryUser.where(category_id: category_id, user_id: user_ids).where(
-                "notification_level IS NOT NULL",
-              )
-            skip_user_ids = existing_users.pluck(:user_id)
+          category_users = []
+          existing_users =
+            CategoryUser.where(category_id: category_id, user_id: user_ids).where(
+              "notification_level IS NOT NULL",
+            )
+          skip_user_ids = existing_users.pluck(:user_id)
 
-            batch.each do |group_user|
-              next if skip_user_ids.include?(group_user.user_id)
-              category_users << {
-                category_id: category_id,
-                user_id: group_user.user_id,
-                notification_level: notification_level,
-              }
-            end
-
-            next if category_users.blank?
-
-            CategoryUser.insert_all!(category_users)
+          batch.each do |group_user|
+            next if skip_user_ids.include?(group_user.user_id)
+            category_users << {
+              category_id: category_id,
+              user_id: group_user.user_id,
+              notification_level: notification_level,
+            }
           end
+
+          next if category_users.blank?
+
+          CategoryUser.insert_all!(category_users)
+        end
     end
   end
 end
