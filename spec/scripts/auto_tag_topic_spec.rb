@@ -21,19 +21,13 @@ describe "AutoTagTopic" do
   end
 
   context "when there are tags" do
-    before do
-      automation.upsert_field!(
-        "tags",
-        "tags",
-        { value: ["tag1", "tag2"] },
-      )
-    end
+    before { automation.upsert_field!("tags", "tags", { value: %w[tag1 tag2] }) }
 
     it "works" do
       post = create_post(topic: topic)
       automation.trigger!("post" => post)
 
-      expect(topic.reload.tags.pluck(:name)).to eq(["tag1", "tag2"])
+      expect(topic.reload.tags.pluck(:name)).to eq(%w[tag1 tag2])
     end
   end
 end
