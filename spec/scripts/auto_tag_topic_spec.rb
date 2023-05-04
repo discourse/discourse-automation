@@ -6,6 +6,8 @@ describe "AutoTagTopic" do
   fab!(:topic) { Fabricate(:topic) }
   fab!(:tag1) { Fabricate(:tag, name: "tag1") }
   fab!(:tag2) { Fabricate(:tag, name: "tag2") }
+  fab!(:tag3) { Fabricate(:tag, name: "tag3") }
+  fab!(:admin) { Fabricate(:admin) }
 
   fab!(:automation) do
     Fabricate(:automation, script: DiscourseAutomation::Scriptable::AUTO_TAG_TOPIC)
@@ -28,6 +30,14 @@ describe "AutoTagTopic" do
       automation.trigger!("post" => post)
 
       expect(topic.reload.tags.pluck(:name)).to eq(%w[tag1 tag2])
+    end
+
+    it "does not remove existing tags" do
+      post = create_post(topic: topic, tags: %w[totally])
+      DiscourseTagging.tag_topic_by_names(topic, Guardian.new(admin), ["tag3"])
+      automation.trigger!("post" => post)
+
+      expect(topic.reload.tags.pluck(:name).sort).to eq(%w[tag1 tag2 tag3])
     end
   end
 end
