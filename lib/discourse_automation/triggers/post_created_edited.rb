@@ -8,9 +8,7 @@ ACTION_TYPE_CHOICES = [
 ]
 
 DiscourseAutomation::Triggerable.add(DiscourseAutomation::Triggerable::POST_CREATED_EDITED) do
-  field :action_type,
-        component: :choices,
-        extra: { content: ACTION_TYPE_CHOICES }
+  field :action_type, component: :choices, extra: { content: ACTION_TYPE_CHOICES }
   field :restricted_category, component: :category
   field :valid_trust_levels, component: :"trust-levels"
 end
