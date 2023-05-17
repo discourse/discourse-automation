@@ -103,7 +103,7 @@ describe "AddUserTogroupThroughCustomField" do
             "kind" => DiscourseAutomation::Triggerable::USER_ADDED_TO_GROUP,
             "user" => user_1,
           )
-        }.to change { user_1.reload.belonging_to_group_ids.length }.by(0)
+        }.not_to change { user_1.reload.belonging_to_group_ids.length }
       end
     end
 
@@ -116,7 +116,7 @@ describe "AddUserTogroupThroughCustomField" do
             "kind" => DiscourseAutomation::Triggerable::USER_ADDED_TO_GROUP,
             "user" => user_1,
           )
-        }.to change { user_1.reload.belonging_to_group_ids.length }.by(0)
+        }.not_to change { user_1.reload.belonging_to_group_ids.length }
       end
     end
   end
