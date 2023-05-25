@@ -17,7 +17,7 @@ module DiscourseAutomation
 
           restricted_category = automation.trigger_field("restricted_category")
           if restricted_category["value"]
-            category_id = post.topic&.category&.parent_category&.id || post.topic&.category&.id
+            category_id = post.topic&.category&.id
             next if restricted_category["value"] != category_id
           end
 
@@ -89,7 +89,7 @@ module DiscourseAutomation
 
           restricted_category = automation.trigger_field("restricted_category")
           if restricted_category["value"]
-            category_id = post.topic&.category&.parent_category&.id || post.topic&.category&.id
+            category_id = post.topic&.category&.id
             next if restricted_category["value"] != category_id
           end
 
