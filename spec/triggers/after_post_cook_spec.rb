@@ -65,7 +65,7 @@ describe DiscourseAutomation::Triggerable::AFTER_POST_COOK do
       end
     end
 
-    context "when restricted to a different category" do
+    context "when restricted to a parent category" do
       before do
         automation.upsert_field!(
           "restricted_category",
@@ -77,10 +77,10 @@ describe DiscourseAutomation::Triggerable::AFTER_POST_COOK do
         topic.save!
       end
 
-      it "does not fire the trigger" do
+      it "fires the trigger for a subcategory" do
         list = capture_contexts { post.rebake! }
 
-        expect(list.length).to eq(0)
+        expect(list.length).to eq(1)
       end
     end
   end
