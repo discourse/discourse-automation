@@ -5,7 +5,7 @@
       <DButton
         @icon="plus"
         @action={{action "insertPM"}}
-        @class="btn-primary insert-pm"
+        class="btn-primary insert-pm"
       />
     </section>
   {{/if}}
@@ -89,7 +89,7 @@
         <DButton
           @icon="trash-alt"
           @action={{action "removePM" pm}}
-          @class="btn-danger"
+          class="btn-danger"
           @disabled={{field.isDisabled}}
         />
       </section>
@@ -101,7 +101,7 @@
         @icon="plus"
         @label="discourse_automation.fields.pms.add_pm"
         @action={{action "insertPM"}}
-        @class="btn-primary insert-pm"
+        class="btn-primary insert-pm"
         @disabled={{field.isDisabled}}
       />
     </div>

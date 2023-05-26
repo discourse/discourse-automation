@@ -11,7 +11,7 @@
         <TextField
           @value={{form.name}}
           @type="text"
-          @classNames="input-large"
+          @class="input-large"
           @autofocus="autofocus"
         />
       </div>
@@ -42,7 +42,7 @@
       <div class="controls">
         <DButton
           @icon="plus"
-          @class="btn-primary"
+          class="btn-primary"
           @label="discourse_automation.create"
           @action={{action "saveAutomation" model.automation}}
         />

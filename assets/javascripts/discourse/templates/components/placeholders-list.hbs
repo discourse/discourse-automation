@@ -2,7 +2,7 @@
   {{#each placeholders as |placeholder|}}
     <DButton
       @translatedLabel={{placeholder}}
-      @class="placeholder-item"
+      class="placeholder-item"
       @action={{action "copyPlaceholder" placeholder}}
     />
   {{/each}}

@@ -94,7 +94,7 @@
 
             <DButton
               @label="discourse_automation.edit_automation.trigger_section.trigger_now"
-              @class="btn-primary trigger-now-btn"
+              class="btn-primary trigger-now-btn"
               @isLoading={{isTriggeringAutomation}}
               @action={{action "onManualAutomationTrigger" model.automation.id}}
             />
@@ -154,7 +154,7 @@
       <div class="control-group">
         <DButton
           @isLoading={{isUpdatingAutomation}}
-          @class="btn-primary"
+          class="btn-primary"
           @label="discourse_automation.update"
           @type="submit"
           @action={{action "saveAutomation" automation}}
