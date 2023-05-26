@@ -1,22 +1,22 @@
 <section class="field text-field">
   <div class="control-group">
-    {{fields/da-field-label label=label field=field}}
+    <Fields::DaFieldLabel @label={{label}} @field={{field}} />
 
     <div class="controls">
       <div class="field-wrapper">
-        {{input
-          value=field.metadata.value
-          input=(action (mut field.metadata.value) value="target.value")
-          disabled=field.isDisabled
-        }}
+        <Input
+          @value={{field.metadata.value}}
+          @input={{action (mut field.metadata.value) value="target.value"}}
+          @disabled={{field.isDisabled}}
+        />
 
-        {{fields/da-field-description description=description}}
+        <Fields::DaFieldDescription @description={{description}} />
 
         {{#if displayPlaceholders}}
-          {{placeholders-list
-            currentValue=field.metadata.value
-            placeholders=placeholders
-          }}
+          <PlaceholdersList
+            @currentValue={{field.metadata.value}}
+            @placeholders={{placeholders}}
+          />
         {{/if}}
       </div>
     </div>

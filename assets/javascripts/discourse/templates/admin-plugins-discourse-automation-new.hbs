@@ -1,6 +1,6 @@
 <section class="discourse-automation-form new">
   <form class="form-horizontal">
-    {{form-error error=error}}
+    <FormError @error={{error}} />
 
     <div class="control-group">
       <label class="control-label">
@@ -23,17 +23,17 @@
       </label>
 
       <div class="controls">
-        {{dropdown-select-box
-          class="scriptables"
-          value=form.script
-          content=model.scriptables.content
-          onChange=(action (mut form.script))
-          options=(hash
+        <DropdownSelectBox
+          @class="scriptables"
+          @value={{form.script}}
+          @content={{model.scriptables.content}}
+          @onChange={{action (mut form.script)}}
+          @options={{hash
             showCaret=true
             filterable=true
             none="discourse_automation.select_script"
-          )
-        }}
+          }}
+        />
       </div>
     </div>
 

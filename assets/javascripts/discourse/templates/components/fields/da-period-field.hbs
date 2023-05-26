@@ -1,17 +1,17 @@
 <div class="field period-field control-group">
-  {{fields/da-field-label label=label field=field}}
+  <Fields::DaFieldLabel @label={{label}} @field={{field}} />
 
   <div class="controls">
     {{i18n "discourse_automation.triggerables.recurring.every"}}
 
-    {{input
-      type="number"
-      defaultValue=1
-      value=field.metadata.value.interval
-      input=(action (mut field.metadata.value.interval) value="target.value")
-      disabled=field.isDisabled
-      required=field.isRequired
-    }}
+    <Input
+      @type="number"
+      @defaultValue={{1}}
+      @value={{field.metadata.value.interval}}
+      @input={{action (mut field.metadata.value.interval) value="target.value"}}
+      @disabled={{field.isDisabled}}
+      required={{field.isRequired}}
+    />
 
     <ComboBox
       @value={{field.metadata.value.frequency}}
@@ -21,6 +21,6 @@
       @required={{field.isRequired}}
     />
 
-    {{fields/da-field-description description=description}}
+    <Fields::DaFieldDescription @description={{description}} />
   </div>
 </div>

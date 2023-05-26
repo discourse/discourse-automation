@@ -1,6 +1,6 @@
 <section class="field group-field">
   <div class="control-group">
-    {{fields/da-field-label label=label field=field}}
+    <Fields::DaFieldLabel @label={{label}} @field={{field}} />
 
     <div class="controls">
       <GroupChooser
@@ -11,7 +11,7 @@
         @options={{hash maximum=1 disabled=field.isDisabled}}
       />
 
-      {{fields/da-field-description description=description}}
+      <Fields::DaFieldDescription @description={{description}} />
     </div>
   </div>
 </section>

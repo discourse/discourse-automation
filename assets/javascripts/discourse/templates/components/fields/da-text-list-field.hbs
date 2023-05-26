@@ -1,6 +1,6 @@
 <section class="field text-list-field">
   <div class="control-group">
-    {{fields/da-field-label label=label field=field}}
+    <Fields::DaFieldLabel @label={{label}} @field={{field}} />
 
     <div class="controls">
       <MultiSelect
@@ -12,7 +12,7 @@
         @options={{hash allowAny=true disabled=field.isDisabled}}
       />
 
-      {{fields/da-field-description description=description}}
+      <Fields::DaFieldDescription @description={{description}} />
     </div>
   </div>
 </section>

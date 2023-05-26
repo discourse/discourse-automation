@@ -1,7 +1,7 @@
 <section class="field pms-field">
   {{#if field.metadata.value.length}}
     <section class="actions header">
-      {{fields/da-field-label label=label field=field}}
+      <Fields::DaFieldLabel @label={{label}} @field={{field}} />
       <DButton
         @icon="plus"
         @action={{action "insertPM"}}
@@ -13,44 +13,44 @@
   {{#each field.metadata.value as |pm|}}
     <div class="pm-field">
       <div class="control-group">
-        {{fields/da-field-label
-          label=(i18n "discourse_automation.fields.pms.title.label")
-          field=field
-        }}
+        <Fields::DaFieldLabel
+          @label={{i18n "discourse_automation.fields.pms.title.label"}}
+          @field={{field}}
+        />
         <div class="controls">
           <div class="field-wrapper">
-            {{input
-              id=(concat field.target field.name "title")
-              value=pm.title
+            <Input
+              @id={{concat field.target field.name "title"}}
+              @value={{pm.title}}
               class="pm-input pm-title"
-              input=(action (mut pm.title) value="target.value")
-              disabled=field.isDisabled
-            }}
+              @input={{action (mut pm.title) value="target.value"}}
+              @disabled={{field.isDisabled}}
+            />
 
             {{#if displayPlaceholders}}
-              {{placeholders-list
-                currentValue=pm.title
-                placeholders=placeholders
-              }}
+              <PlaceholdersList
+                @currentValue={{pm.title}}
+                @placeholders={{placeholders}}
+              />
             {{/if}}
           </div>
         </div>
       </div>
 
       <div class="control-group">
-        {{fields/da-field-label
-          label=(i18n "discourse_automation.fields.pms.raw.label")
-          field=field
-        }}
+        <Fields::DaFieldLabel
+          @label={{i18n "discourse_automation.fields.pms.raw.label"}}
+          @field={{field}}
+        />
         <div class="controls">
           <div class="field-wrapper">
-            {{d-editor value=pm.raw}}
+            <DEditor @value={{pm.raw}} />
 
             {{#if displayPlaceholders}}
-              {{placeholders-list
-                currentValue=pm.raw
-                placeholders=placeholders
-              }}
+              <PlaceholdersList
+                @currentValue={{pm.raw}}
+                @placeholders={{placeholders}}
+              />
             {{/if}}
           </div>
         </div>
@@ -62,12 +62,12 @@
         </label>
 
         <div class="controls">
-          {{input
-            value=pm.delay
+          <Input
+            @value={{pm.delay}}
             class="input-large pm-input"
-            input=(action (mut pm.delay) value="target.value")
-            disabled=field.isDisabled
-          }}
+            @input={{action (mut pm.delay) value="target.value"}}
+            @disabled={{field.isDisabled}}
+          />
         </div>
       </div>
 
@@ -77,12 +77,12 @@
         </label>
 
         <div class="controls">
-          {{input
-            type="checkbox"
-            checked=pm.prefers_encrypt
-            click=(action (mut pm.prefers_encrypt) value="target.checked")
-            disabled=field.isDisabled
-          }}
+          <Input
+            @type="checkbox"
+            @checked={{pm.prefers_encrypt}}
+            @click={{action (mut pm.prefers_encrypt) value="target.checked"}}
+            @disabled={{field.isDisabled}}
+          />
         </div>
       </div>
       <section class="actions">
