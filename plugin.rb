@@ -30,6 +30,7 @@ require_relative "lib/plugin/instance"
 after_initialize do
   %w[
     app/jobs/regular/discourse_automation_call_zapier_webhook
+    app/jobs/regular/discourse_automation_trigger
     app/jobs/scheduled/discourse_automation_tracker
     app/jobs/scheduled/stalled_topic_tracker
     app/jobs/scheduled/stalled_wiki_tracker
@@ -55,6 +56,7 @@ after_initialize do
     lib/discourse_automation/scripts/user_global_notice
     lib/discourse_automation/scripts/user_group_membership_through_badge
     lib/discourse_automation/scripts/zapier_webhook
+    lib/discourse_automation/scripts/llm_triage
     lib/discourse_automation/triggers/after_post_cook
     lib/discourse_automation/triggers/api_call
     lib/discourse_automation/triggers/category_created_edited

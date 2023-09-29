@@ -55,6 +55,9 @@ en:
         title: After post cook
         description: When a post content is cooked the automation will be triggered
     scriptables:
+      llm_triage:
+        title: Triage posts using AI
+        description: "Triage posts using a large language model (requires: Discourse AI)"
       post:
         title: Create a post
         description: Create a post on a specified topic

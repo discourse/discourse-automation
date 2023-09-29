@@ -19,6 +19,12 @@ module DiscourseAutomation
 
     validates :script, presence: true
 
+    attr_accessor :running_in_background
+
+    def running_in_background!
+      @running_in_background = true
+    end
+
     MIN_NAME_LENGTH = 5
     MAX_NAME_LENGTH = 30
     validates :name, length: { in: MIN_NAME_LENGTH..MAX_NAME_LENGTH }
@@ -77,10 +83,15 @@ module DiscourseAutomation
 
     def trigger!(context = {})
       if enabled
-        triggerable&.on_call&.call(self, serialized_fields)
-
+        # we need this unconditionally for testing
         scriptable = DiscourseAutomation::Scriptable.new(script)
-        scriptable.script.call(context, serialized_fields, self)
+
+        if scriptable.background && !running_in_background
+          Jobs.enqueue(:discourse_automation_trigger, automation_id: id, context: context)
+        else
+          triggerable&.on_call&.call(self, serialized_fields)
+          scriptable.script.call(context, serialized_fields, self)
+        end
       end
     end
 

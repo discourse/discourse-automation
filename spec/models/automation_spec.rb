@@ -25,6 +25,35 @@ describe DiscourseAutomation::Automation do
     end
   end
 
+  describe "when a script is meant to be triggered in the background" do
+    fab!(:automation) do
+      Fabricate(:automation, background: true, enabled: true, script: "test-background-scriptable")
+    end
+
+    before do
+      DiscourseAutomation::Scriptable.add("test_background_scriptable") do
+        run_in_background
+
+        script do |context|
+          DiscourseAutomation::CapturedContext.add(context)
+          nil
+        end
+      end
+    end
+
+    it "runs a sidekiq job to trigger it" do
+      expect { automation.trigger!("Howdy!") }.to change {
+        Jobs::DiscourseAutomationTrigger.jobs.size
+      }.by(1)
+    end
+
+    it "also runs the script properly" do
+      Jobs.run_immediately!
+      list = capture_contexts { automation.trigger!("Howdy!") }
+      expect(list).to eq(["Howdy!"])
+    end
+  end
+
   describe "#detach_custom_field" do
     fab!(:automation) { Fabricate(:automation) }
 
