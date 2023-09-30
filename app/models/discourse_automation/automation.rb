@@ -81,13 +81,44 @@ module DiscourseAutomation
       field.update!(metadata: metadata)
     end
 
+    def self.deserialize_context(context)
+      new_context = ActiveSupport::HashWithIndifferentAccess.new
+
+      context.each do |key, value|
+        if key.start_with?("_serialized_")
+          new_key = key[12..-1]
+          found = value["class"].constantize.find_by(id: value["id"])
+          new_context[new_key] = found
+        else
+          new_context[key] = value
+        end
+      end
+      new_context
+    end
+
+    def self.serialize_context(context)
+      new_context = {}
+      context.each do |k, v|
+        if v.is_a?(ActiveRecord::Base)
+          new_context["_serialized_#{k}"] = { "class" => v.class.name, "id" => v.id }
+        else
+          new_context[k] = v
+        end
+      end
+      new_context
+    end
+
     def trigger!(context = {})
       if enabled
         # we need this unconditionally for testing
         scriptable = DiscourseAutomation::Scriptable.new(script)
 
         if scriptable.background && !running_in_background
-          Jobs.enqueue(:discourse_automation_trigger, automation_id: id, context: context)
+          Jobs.enqueue(
+            :discourse_automation_trigger,
+            automation_id: id,
+            context: self.class.serialize_context(context),
+          )
         else
           triggerable&.on_call&.call(self, serialized_fields)
           scriptable.script.call(context, serialized_fields, self)

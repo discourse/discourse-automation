@@ -7,8 +7,10 @@ module Jobs
 
       return if !automation
 
+      context = DiscourseAutomation::Automation.deserialize_context(args[:context])
+
       automation.running_in_background!
-      automation.trigger!(args[:context])
+      automation.trigger!(context)
     end
   end
 end

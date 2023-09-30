@@ -49,8 +49,11 @@ describe DiscourseAutomation::Automation do
 
     it "also runs the script properly" do
       Jobs.run_immediately!
-      list = capture_contexts { automation.trigger!("Howdy!") }
-      expect(list).to eq(["Howdy!"])
+      post = Fabricate(:post)
+      user = post.user
+      list = capture_contexts { automation.trigger!({ post: post, user: user }) }
+      expect(list[0]["post"].id).to eq(post.id)
+      expect(list[0]["user"].id).to eq(user.id)
     end
   end
 
