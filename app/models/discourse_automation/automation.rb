@@ -87,7 +87,12 @@ module DiscourseAutomation
       context.each do |key, value|
         if key.start_with?("_serialized_")
           new_key = key[12..-1]
-          found = value["class"].constantize.find_by(id: value["id"])
+          found = nil
+          if value["class"] == "Symbol"
+            found = value["value"].to_sym
+          else
+            found = value["class"].constantize.find_by(id: value["id"])
+          end
           new_context[new_key] = found
         else
           new_context[key] = value
@@ -99,7 +104,9 @@ module DiscourseAutomation
     def self.serialize_context(context)
       new_context = {}
       context.each do |k, v|
-        if v.is_a?(ActiveRecord::Base)
+        if v.is_a?(Symbol)
+          new_context["_serialized_#{k}"] = { "class" => "Symbol", "value" => v.to_s }
+        elsif v.is_a?(ActiveRecord::Base)
           new_context["_serialized_#{k}"] = { "class" => v.class.name, "id" => v.id }
         else
           new_context[k] = v

@@ -51,9 +51,10 @@ describe DiscourseAutomation::Automation do
       Jobs.run_immediately!
       post = Fabricate(:post)
       user = post.user
-      list = capture_contexts { automation.trigger!({ post: post, user: user }) }
+      list = capture_contexts { automation.trigger!({ post: post, user: user, test: :test }) }
       expect(list[0]["post"].id).to eq(post.id)
       expect(list[0]["user"].id).to eq(user.id)
+      expect(list[0]["test"]).to eq(:test)
     end
   end
 
