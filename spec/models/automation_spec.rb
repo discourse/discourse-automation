@@ -27,7 +27,7 @@ describe DiscourseAutomation::Automation do
 
   describe "when a script is meant to be triggered in the background" do
     fab!(:automation) do
-      Fabricate(:automation, background: true, enabled: true, script: "test-background-scriptable")
+      Fabricate(:automation, enabled: true, script: "test-background-scriptable")
     end
 
     before do
@@ -42,7 +42,7 @@ describe DiscourseAutomation::Automation do
     end
 
     it "runs a sidekiq job to trigger it" do
-      expect { automation.trigger!("Howdy!") }.to change {
+      expect { automation.trigger!({ val: "Howdy!" }) }.to change {
         Jobs::DiscourseAutomationTrigger.jobs.size
       }.by(1)
     end

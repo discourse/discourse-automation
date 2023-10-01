@@ -3,7 +3,7 @@
 module Jobs
   class DiscourseAutomationTrigger < ::Jobs::Base
     def execute(args)
-      automation = DiscourseAutomation::Automation.find_by(id: args[:automation_id])
+      automation = DiscourseAutomation::Automation.find_by(id: args[:automation_id], enabled: true)
 
       return if !automation
 
