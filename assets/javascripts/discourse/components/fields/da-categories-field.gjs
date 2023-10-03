@@ -8,6 +8,7 @@ import { fn, hash } from "@ember/helper";
 
 export default class CategoriesField extends BaseField {
   <template>
+    {{! template-lint-disable no-redundant-fn }}
     <section class="field categories-field">
       <div class="control-group">
         <DAFieldLabel @label={{@label}} @field={{@field}} />
