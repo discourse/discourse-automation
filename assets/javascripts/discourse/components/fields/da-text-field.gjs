@@ -18,6 +18,7 @@ export default class TextField extends BaseField {
               @value={{@field.metadata.value}}
               disabled={{@field.isDisabled}}
               {{on "input" this.mutText}}
+              name={{@field.name}}
             />
 
             <DAFieldDescription @description={{@description}} />

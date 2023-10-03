@@ -38,6 +38,7 @@ export default class PmsField extends BaseField {
                   class="pm-input pm-title"
                   {{on "input" (fn this.mutPmTitle pm)}}
                   disabled={{@field.isDisabled}}
+                  name={{@field.name}}
                 />
 
                 {{#if this.displayPlaceholders}}

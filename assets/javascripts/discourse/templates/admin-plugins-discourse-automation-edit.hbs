@@ -16,6 +16,7 @@
             @type="text"
             @classNames="input-large"
             @autofocus="autofocus"
+            @name="automation-name"
           />
         </div>
       </div>
@@ -155,7 +156,7 @@
       <div class="control-group">
         <DButton
           @isLoading={{isUpdatingAutomation}}
-          class="btn-primary"
+          class="btn-primary update-automation"
           @label="discourse_automation.update"
           @type="submit"
           @action={{action "saveAutomation" automation}}
