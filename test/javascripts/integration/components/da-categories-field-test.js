@@ -22,6 +22,6 @@ module("Integration | Component | da-categories-field", function (hooks) {
     await selectKit().expand();
     await selectKit().selectRowByValue(6);
 
-    assert.strictEqual(this.field.metadata.value, [6]);
+    assert.deepEqual(this.field.metadata.value, [6]);
   });
 });
