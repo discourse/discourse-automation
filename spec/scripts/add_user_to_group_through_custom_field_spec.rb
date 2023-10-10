@@ -37,9 +37,14 @@ describe "AddUserTogroupThroughCustomField" do
 
   context "with one matching user" do
     before do
+      user_field = UserField.create!(
+        name: "groupity_group",
+        description: "What group would you like to be added to?",
+        field_type: "text",
+      )
       UserCustomField.create!(
         user_id: user_1.id,
-        name: "groupity_group",
+        name: "user_field_#{user_field.id}",
         value: target_group.full_name,
       )
     end
