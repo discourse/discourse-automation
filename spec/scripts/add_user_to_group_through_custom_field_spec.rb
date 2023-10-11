@@ -135,4 +135,37 @@ describe "AddUserTogroupThroughCustomField" do
       end
     end
   end
+
+  context "when UserCustomField name is set as custom_field_name" do
+    context "with one matching user" do
+      before do
+        user_field = UserField.create!(
+          name: "groupity_group",
+          description: "What group would you like to be added to?",
+          field_type: "text",
+          )
+        UserCustomField.create!(
+          user_id: user_1.id,
+          name: "user_field_#{user_field.id}",
+          value: target_group.full_name,
+          )
+        automation.upsert_field!(
+          "custom_field_name",
+          "text",
+          { value: "user_field_#{user_field.id}" },
+          target: "script",
+          )
+      end
+
+      it "works" do
+        expect(user_1.in_any_groups?([target_group.id])).to eq(false)
+        expect(user_2.in_any_groups?([target_group.id])).to eq(false)
+
+        automation.trigger!("kind" => DiscourseAutomation::Triggerable::RECURRING)
+
+        expect(user_1.reload.in_any_groups?([target_group.id])).to eq(true)
+        expect(user_2.reload.in_any_groups?([target_group.id])).to eq(false)
+      end
+    end
+  end
 end

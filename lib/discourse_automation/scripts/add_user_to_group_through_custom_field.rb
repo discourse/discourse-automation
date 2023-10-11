@@ -23,14 +23,14 @@ DiscourseAutomation::Scriptable.add(
 
     case trigger["kind"]
     when DiscourseAutomation::Triggerable::API_CALL, DiscourseAutomation::Triggerable::RECURRING
-      query = DB.query(<<-SQL, custom_field_name: custom_field_name)
+      query = DB.query(<<-SQL, custom_field_name: custom_field_name, prefix: ::User::USER_FIELD_PREFIX)
         SELECT u.id as user_id, g.id as group_id
         FROM users u
         JOIN user_custom_fields ucf
           ON u.id = ucf.user_id
           AND ucf.name = CASE
                              WHEN (SELECT id FROM user_fields WHERE name = :custom_field_name) > 0
-                                 THEN CONCAT('user_field_', (SELECT id FROM user_fields WHERE name = :custom_field_name))
+                                 THEN CONCAT(:prefix, (SELECT id FROM user_fields WHERE name = :custom_field_name))
                              ELSE :custom_field_name
                          END
         JOIN groups g
