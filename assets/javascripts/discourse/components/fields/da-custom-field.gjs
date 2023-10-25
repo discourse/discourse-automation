@@ -11,7 +11,6 @@ import { inject as service } from "@ember/service";
 
 export default class GroupField extends BaseField {
   <template>
-    {{! template-lint-disable modifier-name-case }}
     <section class="field group-field" {{didInsert this.loadUserFields}}>
       <div class="control-group">
         <DAFieldLabel @label={{@label}} @field={{@field}} />
