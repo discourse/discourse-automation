@@ -21,6 +21,7 @@ module ::DiscourseAutomation
   CUSTOM_FIELD = "discourse_automation_ids"
   TOPIC_LAST_CHECKED_BY = "discourse_automation_last_checked_by"
   TOPIC_LAST_CHECKED_AT = "discourse_automation_last_checked_at"
+  STALLED_WIKI_CUSTOM_FIELD = "stalled_wiki_triggered_at"
 end
 
 require_relative "lib/discourse_automation/engine"
@@ -193,12 +194,12 @@ after_initialize do
 
   on(:post_created) { |post| DiscourseAutomation::EventHandlers.handle_stalled_topic(post) }
 
-  register_topic_custom_field_type(DiscourseAutomation::CUSTOM_FIELD, [:integer])
+  register_topic_custom_field_type(DiscourseAutomation::CUSTOM_FIELD, :json)
   register_topic_custom_field_type(
     DiscourseAutomation::Scriptable::AUTO_RESPONDER_TRIGGERED_IDS,
-    [:integer],
+    :json,
   )
-  register_user_custom_field_type(DiscourseAutomation::CUSTOM_FIELD, [:integer])
-  register_post_custom_field_type(DiscourseAutomation::CUSTOM_FIELD, [:integer])
-  register_post_custom_field_type("stalled_wiki_triggered_at", :string)
+  register_user_custom_field_type(DiscourseAutomation::CUSTOM_FIELD, :json)
+  register_post_custom_field_type(DiscourseAutomation::CUSTOM_FIELD, :json)
+  register_post_custom_field_type(DiscourseAutomation::STALLED_WIKI_CUSTOM_FIELD, :string)
 end
