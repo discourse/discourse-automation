@@ -249,7 +249,7 @@ describe DiscourseAutomation::Scriptable do
               {
                 title: "Tell me and I forget.",
                 raw: "0123456789" * 25 + "a",
-                target_usernames: Array(user.username),
+                target_usernames: [user.username],
               },
             )
           }.to raise_error(ActiveRecord::RecordNotSaved)
