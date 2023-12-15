@@ -16,7 +16,7 @@ export default class DiscourseAutomationField {
         template.default_value || template.value || json?.metadata?.value;
     } else {
       field.metadata.value =
-        json?.metadata?.value || template.default_value || template.value;
+        template.value || json?.metadata?.value || template.default_value;
     }
 
     field.isRequired = template.is_required;
