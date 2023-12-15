@@ -10,25 +10,31 @@ describe "DiscourseAutomation | smoke test", type: :system, js: true do
     sign_in(admin)
   end
 
-  it "allows default_value on fields" do
-    DiscourseAutomation::Scriptable.add("test") do
-      triggerables %i[post_created_edited]
-      field :test, component: :text, default_value: "test-default-value"
+  context "when default_value fields are set" do
+    before do
+      DiscourseAutomation::Scriptable.add("test") do
+        triggerables %i[post_created_edited]
+        field :test, component: :text, default_value: "test-default-value"
+      end
     end
 
-    visit("/admin/plugins/discourse-automation")
-    find(".new-automation").click
-    fill_in("automation-name", with: "aaaaa")
-    select_kit = PageObjects::Components::SelectKit.new(".scriptables")
-    select_kit.expand
-    select_kit.select_row_by_value("test")
-    find(".create-automation").click
+    after { DiscourseAutomation::Scriptable.remove("test") }
 
-    select_kit = PageObjects::Components::SelectKit.new(".triggerables")
-    select_kit.expand
-    select_kit.select_row_by_value("post_created_edited")
+    it "populate correctly" do
+      visit("/admin/plugins/discourse-automation")
+      find(".new-automation").click
+      fill_in("automation-name", with: "aaaaa")
+      select_kit = PageObjects::Components::SelectKit.new(".scriptables")
+      select_kit.expand
+      select_kit.select_row_by_value("test")
+      find(".create-automation").click
 
-    expect(find(".field input[name=test]").value).to eq("test-default-value")
+      select_kit = PageObjects::Components::SelectKit.new(".triggerables")
+      select_kit.expand
+      select_kit.select_row_by_value("post_created_edited")
+
+      expect(find(".field input[name=test]").value).to eq("test-default-value")
+    end
   end
 
   it "works" do
