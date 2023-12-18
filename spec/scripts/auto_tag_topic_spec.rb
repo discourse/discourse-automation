@@ -49,7 +49,7 @@ describe "AutoTagTopic" do
       old_bumped_at = topic.reload.bumped_at
       automation.trigger!("post" => post)
 
-      expect(topic.reload.bumped_at).not_to eq(old_bumped_at)
+      expect(topic.reload.bumped_at).not_to eq_time(old_bumped_at)
     end
   end
 
