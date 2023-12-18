@@ -150,6 +150,9 @@ en:
             restricted_group:
               label: Group
               description: Optional, will trigger only if the post's topic is a private message in this group's inbox
+            restricted_tags:
+              label: Tags
+              description: Optional, will trigger only if the post's topic has any of these tags
             ignore_group_members:
               label: Ignore group members
               description: Skip the trigger if sender is a member of the Group specified above
@@ -162,6 +165,9 @@ en:
             first_topic_only:
               label: First topic only
               description: Will trigger only if the topic is the first topic a user created
+            first_post_in_topic:
+              label: First post in topic
+              description: Will trigger only if the post is the first post in the topic
           created: Created
           edited: Edited
         category_created_edited:
@@ -223,6 +229,9 @@ en:
             tags:
               label: Tags
               description: List of tags to add to the topic.
+            bump_topic:
+              label: Bump topic
+              description: Bump topic to the top of the latest list
         post:
           fields:
             creator:

@@ -4,6 +4,7 @@ DiscourseAutomation::Scriptable::AUTO_TAG_TOPIC = "auto_tag_topic"
 
 DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::AUTO_TAG_TOPIC) do
   field :tags, component: :tags, required: true
+  field :bump_topic, component: :boolean
 
   version 1
 
@@ -19,5 +20,8 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::AUTO_TAG_TO
     tags = fields.dig("tags", "value")
 
     DiscourseTagging.tag_topic_by_names(topic, Guardian.new(post.user), tags, append: true)
+
+    bump_topic = fields.dig("bump_topic", "value") || false
+    topic.update(bumped_at: Time.now) if bump_topic
   end
 end

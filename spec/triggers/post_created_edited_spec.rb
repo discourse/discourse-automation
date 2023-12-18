@@ -408,4 +408,48 @@ describe "PostCreatedEdited" do
       end
     end
   end
+
+  context "when first_post_in_topic is true" do
+    before do
+      automation.upsert_field!("first_post_in_topic", "boolean", { value: true }, target: "trigger")
+    end
+
+    it "fires the trigger only for first post" do
+      topic = nil
+      list = capture_contexts { topic = PostCreator.create(user, basic_topic_params).topic }
+
+      expect(list.length).to eq(1)
+      expect(list[0]["kind"]).to eq("post_created_edited")
+      expect(list[0]["action"].to_s).to eq("create")
+
+      list =
+        capture_contexts { PostCreator.create(user, basic_topic_params.merge(topic_id: topic.id)) }
+
+      expect(topic.posts.length).to eq(2)
+      expect(list.length).to eq(0)
+    end
+  end
+
+  context "when tag is restricted" do
+    fab!(:tag1) { Fabricate(:tag, name: "tag1") }
+
+    before do
+      automation.upsert_field!("restricted_tags", "tags", { value: ["tag1"] }, target: "trigger")
+    end
+
+    it "fires the trigger if tag is present" do
+      list =
+        capture_contexts { PostCreator.create(user, basic_topic_params.merge({ tags: ["tag1"] })) }
+
+      expect(list.length).to eq(1)
+      expect(list[0]["kind"]).to eq("post_created_edited")
+    end
+
+    it "doesn’t fire the trigger if tag is absent" do
+      list =
+        capture_contexts { PostCreator.create(user, basic_topic_params.merge({ tags: ["tag2"] })) }
+
+      expect(list.length).to eq(0)
+    end
+  end
 end

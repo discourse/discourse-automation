@@ -40,4 +40,32 @@ describe "AutoTagTopic" do
       expect(topic.reload.tags.pluck(:name).sort).to match_array(%w[tag1 tag2 tag3])
     end
   end
+
+  context "when bump_topic is true" do
+    before do
+      automation.upsert_field!("bump_topic", "boolean", { value: true })
+    end
+
+    it "bumps the topic" do
+      post = create_post(topic: topic)
+      old_bumped_at = topic.reload.bumped_at
+      automation.trigger!("post" => post)
+
+      expect(topic.reload.bumped_at).not_to eq(old_bumped_at)
+    end
+  end
+
+  context "when bump_topic is false" do
+    before do
+      automation.upsert_field!("bump_topic", "boolean", { value: false })
+    end
+
+    it "doesn't bump the topic" do
+      post = create_post(topic: topic)
+      old_bumped_at = topic.reload.bumped_at
+      automation.trigger!("post" => post)
+
+      expect(topic.reload.bumped_at).to eq(old_bumped_at)
+    end
+  end
 end

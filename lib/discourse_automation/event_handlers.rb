@@ -12,6 +12,11 @@ module DiscourseAutomation
       DiscourseAutomation::Automation
         .where(trigger: name, enabled: true)
         .find_each do |automation|
+          first_post_in_topic = automation.trigger_field("first_post_in_topic")
+          if first_post_in_topic["value"]
+            next unless post.is_first_post?
+          end
+
           first_post_only = automation.trigger_field("first_post_only")
           if first_post_only["value"]
             next if post.user.user_stat.post_count != 1
@@ -52,6 +57,15 @@ module DiscourseAutomation
 
           ignore_automated = automation.trigger_field("ignore_automated")
           next if ignore_automated["value"] && post.incoming_email&.is_auto_generated?
+
+          restricted_tags = automation.trigger_field("restricted_tags")["value"]
+          if restricted_tags.present?
+            next unless post.topic
+
+            has_tag = post.topic.tags.any? { |tag| restricted_tags.include?(tag.name) }
+
+            next unless has_tag
+          end
 
           action_type = automation.trigger_field("action_type")
           selected_action = action_type["value"]&.to_sym
