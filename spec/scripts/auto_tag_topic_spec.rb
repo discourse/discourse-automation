@@ -42,9 +42,7 @@ describe "AutoTagTopic" do
   end
 
   context "when bump_topic is true" do
-    before do
-      automation.upsert_field!("bump_topic", "boolean", { value: true })
-    end
+    before { automation.upsert_field!("bump_topic", "boolean", { value: true }) }
 
     it "bumps the topic" do
       post = create_post(topic: topic)
@@ -56,16 +54,14 @@ describe "AutoTagTopic" do
   end
 
   context "when bump_topic is false" do
-    before do
-      automation.upsert_field!("bump_topic", "boolean", { value: false })
-    end
+    before { automation.upsert_field!("bump_topic", "boolean", { value: false }) }
 
     it "doesn't bump the topic" do
       post = create_post(topic: topic)
       old_bumped_at = topic.reload.bumped_at
       automation.trigger!("post" => post)
 
-      expect(topic.reload.bumped_at).to eq(old_bumped_at)
+      expect(topic.reload.bumped_at).to eq_time(old_bumped_at)
     end
   end
 end
