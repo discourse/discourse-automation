@@ -222,10 +222,10 @@ module DiscourseAutomation
             return
           end
 
-          no_user = pm[:target_usernames].filter { |u| !User.find_by(username: u) }
-          if no_user.present?
-            Rails.logger.warn "[discourse-automation] Did not send PM #{pm[:title]} - target users do not exist: `#{no_user.join(",")}`"
-            pm[:target_usernames] = pm[:target_usernames] - no_user
+          existing_target_usernames = User.where(username: pm[:target_usernames]).pluck(:username)
+          if existing_target_usernames.length != pm[:target_usernames].length
+            Rails.logger.warn "[discourse-automation] Did not send PM #{pm[:title]} - target users do not exist: `#{(pm[:target_usernames] - existing_target_usernames).join(",")}`"
+            pm[:target_usernames] = existing_target_usernames
             return if pm[:target_usernames].empty?
           end
 
