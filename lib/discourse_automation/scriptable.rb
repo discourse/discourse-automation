@@ -211,19 +211,32 @@ module DiscourseAutomation
           pm[:prefers_encrypt] = prefers_encrypt
           DiscourseAutomation::PendingPm.create!(pm)
         else
-          if sender = User.find_by(username: sender)
-            post_created = false
-            pm = pm.merge(archetype: Archetype.private_message)
-
-            if prefers_encrypt
-              pm[:target_usernames] = (pm[:target_usernames] || []).join(",")
-              post_created = EncryptedPostCreator.new(sender, pm).create
-            end
-
-            PostCreator.new(sender, pm).create! if !post_created
-          else
-            Rails.logger.warn "[discourse-automation] Couldn’t send PM to user with username: `#{sender}`."
+          sender = User.find_by(username: sender)
+          if !sender
+            Rails.logger.warn "[discourse-automation] Did not send PM #{pm[:title]} - sender does not exist: `#{sender}`"
+            return
           end
+
+          if (pm[:target_usernames] || []).empty?
+            Rails.logger.warn "[discourse-automation] Did not send PM - no target usernames"
+            return
+          end
+
+          no_user = pm[:target_usernames].filter { |u| !User.find_by(username: u) }
+          if no_user.present?
+            Rails.logger.warn "[discourse-automation] Did not send PM #{pm[:title]} - target users do not exist: `#{no_user.join(",")}`"
+            pm[:target_usernames] = pm[:target_usernames] - no_user
+            return if pm[:target_usernames].empty?
+          end
+
+          post_created = false
+          pm = pm.merge(archetype: Archetype.private_message)
+          pm[:target_usernames] = (pm[:target_usernames] || []).join(",")
+          pm[:target_usernames]
+
+          post_created = EncryptedPostCreator.new(sender, pm).create if prefers_encrypt
+
+          PostCreator.new(sender, pm).create! if !post_created
         end
       end
     end
