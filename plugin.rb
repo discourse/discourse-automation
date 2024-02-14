@@ -199,9 +199,7 @@ after_initialize do
     [:integer],
   )
 
-  on(:user_updated) do |user|
-    DiscourseAutomation::EventHandlers.handle_user_updated(user)
-  end
+  on(:user_updated) { |user| DiscourseAutomation::EventHandlers.handle_user_updated(user) }
 
   register_user_custom_field_type(DiscourseAutomation::CUSTOM_FIELD, [:integer])
   register_post_custom_field_type(DiscourseAutomation::CUSTOM_FIELD, [:integer])

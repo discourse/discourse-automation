@@ -6,6 +6,7 @@ import DaCategoryField from "./fields/da-category-field";
 import DaCategoryNotificationlevelField from "./fields/da-category-notification-level-field";
 import DaChoicesField from "./fields/da-choices-field";
 import DaCustomField from "./fields/da-custom-field";
+import DaCustomFields from "./fields/da-custom-fields";
 import DaDateTimeField from "./fields/da-date-time-field";
 import DaEmailGroupUserField from "./fields/da-email-group-user-field";
 import DaGroupField from "./fields/da-group-field";
@@ -19,9 +20,8 @@ import DaTextField from "./fields/da-text-field";
 import DaTextListField from "./fields/da-text-list-field";
 import DaTrustLevelsField from "./fields/da-trust-levels-field";
 import DaUserField from "./fields/da-user-field";
-import DaUsersField from "./fields/da-users-field";
 import DaUserProfileField from "./fields/da-user-profile-field";
-import DaCustomFields from "./fields/da-custom-fields";
+import DaUsersField from "./fields/da-users-field";
 
 const FIELD_COMPONENTS = {
   period: DaPeriodField,

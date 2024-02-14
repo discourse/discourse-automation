@@ -132,7 +132,7 @@ module DiscourseAutomation
       },
       "custom_fields" => {
         "value" => {
-          "type" =>  [{ type: "string" }],
+          "type" => [{ type: "string" }],
         },
       },
       "user" => {
