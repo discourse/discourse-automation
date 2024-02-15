@@ -73,10 +73,9 @@ module DiscourseAutomation
       DiscourseAutomation::Automation
         .where(trigger: name, enabled: true)
         .find_each do |automation|
-          has_created_post = UserCustomField.find_by(name: automation.trigger_field("automation_name")["value"])
-          if automation.trigger_field("first_post_only")["value"] && has_created_post
-            next
-          end
+          has_created_post =
+            UserCustomField.find_by(name: automation.trigger_field("automation_name")["value"])
+          next if automation.trigger_field("first_post_only")["value"] && has_created_post
 
           required_custom_fields = automation.trigger_field("custom_fields")
           user_data = {}
