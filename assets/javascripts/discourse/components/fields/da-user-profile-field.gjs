@@ -1,14 +1,11 @@
 import { tracked } from "@glimmer/tracking";
 import { hash } from "@ember/helper";
-import { inject as service } from "@ember/service";
 import MultiSelect from "select-kit/components/multi-select";
 import BaseField from "./da-base-field";
 import DAFieldDescription from "./da-field-description";
 import DAFieldLabel from "./da-field-label";
 
-export default class GroupField extends BaseField {
-  @service store;
-  @service currentUser;
+export default class UserProfileField extends BaseField {
   @tracked allProfileFields = [];
 
   userProfileFields = [
@@ -18,12 +15,12 @@ export default class GroupField extends BaseField {
     "date_of_birth",
     "timezone",
   ];
+
   <template>
     <section class="field group-field">
       <div class="control-group">
         <DAFieldLabel @label={{@label}} @field={{@field}} />
         <div class="controls">
-
           <MultiSelect
             @value={{@field.metadata.value}}
             @content={{this.userProfileFields}}
