@@ -23,6 +23,7 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::POST) do
     topic = Topic.find_by(id: topic_id)
 
     if context["kind"] == DiscourseAutomation::Triggerable::USER_UPDATED
+      user = context["user"]
       user_data = context["user_data"]
       user_profile_data = user_data[:profile_data]
       user_custom_fields = {}
@@ -30,6 +31,8 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::POST) do
         user_custom_fields[k.gsub(/\s+/, "_").underscore] = v
       end
       user = User.find(context["user"].id)
+      placeholders["username"] = user.username
+      placeholders["name"] = user.name
       placeholders = placeholders.merge(user_profile_data, user_custom_fields)
 
       post_raw = utils.apply_placeholders(post_raw, placeholders)
