@@ -25,10 +25,10 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::POST) do
     if context["kind"] == DiscourseAutomation::Triggerable::USER_UPDATED
       user_data = context["user_data"]
       user_profile_data = user_data[:profile_data]
-      user_custom_fields =
-        user_data[:custom_fields].each_with_object({}) do |(k, v), hash|
-          hash[k.gsub(/\s+/, "_").underscore] = v
-        end
+      user_custom_fields = {}
+      user_data[:custom_fields]&.each do |k, v|
+        user_custom_fields[k.gsub(/\s+/, "_").underscore] = v
+      end
       user = User.find(context["user"].id)
       placeholders = placeholders.merge(user_profile_data, user_custom_fields)
 
