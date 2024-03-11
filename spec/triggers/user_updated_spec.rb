@@ -29,7 +29,6 @@ describe "UserUpdated" do
       { value: %w[location bio_raw] },
       target: "trigger",
     )
-    automation.upsert_field!("first_post_only", "boolean", { value: true }, target: "trigger")
     automation
   end
 
@@ -67,11 +66,34 @@ describe "UserUpdated" do
     expect(output["user_data"][:profile_data]["location"]).to eq("Japan")
   end
 
-  context "when not all fields are set" do
-    it "doesn’t trigger" do
-      output = capture_contexts { UserUpdater.new(user, user).update(location: "Japan") }
+  context "when never_posted is set" do
+    before do
+      automation.upsert_field!("never_posted", "boolean", { value: true }, target: "trigger")
+    end
+
+    it "doesnt trigger if user has a post" do
+      user.user_stat.update!(post_count: 1)
+
+      output =
+        capture_contexts { UserUpdater.new(user, user).update(location: "Japan", bio_raw: "fine") }
 
       expect(output).to eq([])
+    end
+
+    it "triggers when user has no post" do
+      output =
+        capture_contexts { UserUpdater.new(user, user).update(location: "Japan", bio_raw: "fine") }
+
+      expect(output.first["kind"]).to eq("user_updated")
+    end
+  end
+
+  context "when not all fields are set" do
+    it "doesn’t trigger" do
+      output =
+        capture_contexts { UserUpdater.new(user, user).update(location: "Japan", bio_raw: "fine") }
+
+      expect(output.first["kind"]).to eq("user_updated")
     end
   end
 

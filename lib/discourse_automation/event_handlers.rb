@@ -73,9 +73,10 @@ module DiscourseAutomation
       DiscourseAutomation::Automation
         .where(trigger: name, enabled: true)
         .find_each do |automation|
-          # if automation.trigger_field("first_post_only")["value"]
-          #   next if user.user_stat.post_count != 1
-          # end
+          never_posted = automation.trigger_field("never_posted")["value"]
+          if never_posted
+            next if user.user_stat.post_count > 0
+          end
 
           required_custom_fields = automation.trigger_field("custom_fields")
           user_data = {}

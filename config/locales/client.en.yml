@@ -172,9 +172,9 @@ en:
             custom_fields:
               label: User custom fields
               description: Will trigger only if the user has filled this custom field
-            first_post_only:
-              label: First post only
-              description: Will trigger only if this post is the first post a user created
+            never_posted:
+              label: Never posted
+              description: Will trigger only if the user has never posted
         category_created_edited:
           fields:
             restricted_category:

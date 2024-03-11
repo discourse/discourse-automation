@@ -7,7 +7,7 @@ end
 DiscourseAutomation::Triggerable.add(DiscourseAutomation::Triggerable::USER_UPDATED) do
   field :custom_fields, component: :custom_fields
   field :user_profile, component: :user_profile
-  field :first_post_only, component: :boolean
+  field :never_posted, component: :boolean
 
   validate do
     has_triggers = has_trigger_field?(:custom_fields) && has_trigger_field?(:user_profile)
