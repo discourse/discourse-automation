@@ -4,9 +4,9 @@ require_relative "../discourse_automation_helper"
 
 describe "UserUpdated" do
   before { SiteSetting.discourse_automation_enabled = true }
+
   fab!(:user_field_1) { Fabricate(:user_field, name: "custom field 1") }
   fab!(:user_field_2) { Fabricate(:user_field, name: "custom field 2") }
-
   fab!(:user) do
     user = Fabricate(:user, trust_level: TrustLevel[0])
     user.set_user_field(user_field_1.id, "Answer custom 1")
@@ -18,12 +18,6 @@ describe "UserUpdated" do
   fab!(:automation) do
     automation = Fabricate(:automation, trigger: DiscourseAutomation::Triggerable::USER_UPDATED)
     automation.upsert_field!(
-      "automation_name",
-      "text",
-      { value: "Automation Test" },
-      target: "trigger",
-    )
-    automation.upsert_field!(
       "custom_fields",
       "custom_fields",
       { value: ["custom field 1", "custom field 2"] },
@@ -32,7 +26,7 @@ describe "UserUpdated" do
     automation.upsert_field!(
       "user_profile",
       "user_profile",
-      { value: ["location"] },
+      { value: %w[location bio_raw] },
       target: "trigger",
     )
     automation.upsert_field!("first_post_only", "boolean", { value: true }, target: "trigger")
@@ -66,15 +60,33 @@ describe "UserUpdated" do
   end
 
   it "has the correct data" do
-    script_input = capture_contexts { UserUpdater.new(user, user).update(location: "Japan") }
-    script_input = script_input.first
+    output =
+      capture_contexts { UserUpdater.new(user, user).update(location: "Japan", bio_raw: "fine") }
+    output = output.first
 
-    expect(script_input["kind"]).to eq(DiscourseAutomation::Triggerable::USER_UPDATED)
-    expect(script_input["user"]).to eq(user)
-    expect(script_input["user_data"].count).to eq(2)
-    expect(script_input["user_data"][:custom_fields][user_field_1.name]).to eq(
+    expect(output["kind"]).to eq(DiscourseAutomation::Triggerable::USER_UPDATED)
+    expect(output["user"]).to eq(user)
+    expect(output["user_data"].count).to eq(2)
+    expect(output["user_data"][:custom_fields][user_field_1.name]).to eq(
       user.custom_fields["user_field_#{user_field_1.id}"],
     )
-    expect(script_input["user_data"][:profile_data]["location"]).to eq("Japan")
+    expect(output["user_data"][:profile_data]["location"]).to eq("Japan")
+  end
+
+  context "when not all fields are set" do
+    it "doesn’t trigger" do
+      output = capture_contexts { UserUpdater.new(user, user).update(location: "Japan") }
+
+      expect(output).to eq([])
+    end
+  end
+
+  context "when all fields are set" do
+    it "triggers" do
+      output =
+        capture_contexts { UserUpdater.new(user, user).update(location: "Japan", bio_raw: "fine") }
+
+      expect(output.first["kind"]).to eq("user_updated")
+    end
   end
 end

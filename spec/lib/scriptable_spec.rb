@@ -9,9 +9,11 @@ describe DiscourseAutomation::Scriptable do
 
       placeholder :foo
       placeholder :bar
+      placeholder { |fields, automation| "baz-#{automation.id}" }
+      placeholder { |fields, automation| ["foo-baz-#{automation.id}"] }
 
       field :cat, component: :text
-      field :dog, component: :text, accepts_placeholders: true
+      field :dog, component: :text, accepts_placeholders: true, accepted_contexts: ["user"]
       field :bird, component: :text, triggerable: "recurring"
 
       script { p "script" }
@@ -44,6 +46,7 @@ describe DiscourseAutomation::Scriptable do
             accepts_placeholders: false,
             triggerable: nil,
             required: false,
+            accepted_contexts: [],
           },
           {
             extra: {
@@ -53,6 +56,7 @@ describe DiscourseAutomation::Scriptable do
             accepts_placeholders: true,
             triggerable: nil,
             required: false,
+            accepted_contexts: ["user"],
           },
           {
             extra: {
@@ -62,6 +66,7 @@ describe DiscourseAutomation::Scriptable do
             accepts_placeholders: false,
             triggerable: "recurring",
             required: false,
+            accepted_contexts: [],
           },
         ],
       )
@@ -86,7 +91,9 @@ describe DiscourseAutomation::Scriptable do
 
   describe "#placeholders" do
     it "returns the specified placeholders" do
-      expect(automation.scriptable.placeholders).to eq(%i[foo bar])
+      expect(automation.scriptable.placeholders).to eq(
+        [:foo, :bar, :"baz-#{automation.id}", :"foo-baz-#{automation.id}"],
+      )
     end
   end
 
@@ -154,14 +161,14 @@ describe DiscourseAutomation::Scriptable do
 
     describe ".apply_placeholders" do
       it "replaces the given string by placeholders" do
-        input = "hello %%COOL_CAT%%"
+        input = "hello %%COOL_CAT%% {{cool_cat}}"
         map = { cool_cat: "siberian cat" }
         output = automation.scriptable.utils.apply_placeholders(input, map)
-        expect(output).to eq("hello siberian cat")
+        expect(output).to eq("hello siberian cat siberian cat")
       end
 
       it "replaces site_title by default" do
-        input = "hello %%SITE_TITLE%%"
+        input = "hello {{site_title}}"
         output = automation.scriptable.utils.apply_placeholders(input)
         expect(output).to eq("hello #{SiteSetting.title}")
       end
