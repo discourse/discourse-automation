@@ -35,17 +35,21 @@ describe "UserUpdated" do
 
   context "when custom_fields and user_profile are blank" do
     let(:automation) do
-      Fabricate(:automation, trigger: DiscourseAutomation::Triggerable::USER_UPDATED)
+      Fabricate(
+        :automation,
+        trigger: DiscourseAutomation::Triggerable::USER_UPDATED,
+      ).tap do |automation|
+        automation.upsert_field!("custom_fields", "custom_fields", { value: [] }, target: "trigger")
+        automation.upsert_field!("user_profile", "user_profile", { value: [] }, target: "trigger")
+      end
     end
 
     it "adds an error to the automation" do
-      expect {
-        automation.upsert_field!("custom_fields", "custom_fields", { value: [] }, target: "trigger")
-      }.to raise_error(ActiveRecord::RecordInvalid)
-
-      expect {
-        automation.upsert_field!("user_profile", "user_profile", { value: [] }, target: "trigger")
-      }.to raise_error(ActiveRecord::RecordInvalid)
+      expect(automation.save).to eq(false)
+      errors = automation.errors.full_messages
+      expect(errors).to include(
+        I18n.t("discourse_automation.triggerables.errors.custom_fields_or_user_profile_required"),
+      )
     end
   end
 
