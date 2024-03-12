@@ -14,6 +14,8 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::POST) do
   field :post, component: :post, required: true, accepts_placeholders: true
 
   placeholder :creator_username
+  placeholder :updated_user_username
+  placeholder :updated_user_name
 
   triggerables %i[recurring point_in_time user_updated]
 
@@ -41,6 +43,8 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::POST) do
       user = User.find(context["user"].id)
       placeholders["username"] = user.username
       placeholders["name"] = user.name
+      placeholders["updated_user_username"] = user.username
+      placeholders["updated_user_name"] = user.name
       placeholders = placeholders.merge(user_profile_data, user_custom_fields)
     end
 

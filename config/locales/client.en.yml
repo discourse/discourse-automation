@@ -168,13 +168,13 @@ en:
           fields:
             user_profile:
               label: User profile fields
-              description: Will trigger only if the user has filled this profile data
+              description: Will trigger only if the user has filled all these fields
             custom_fields:
               label: User custom fields
-              description: Will trigger only if the user has filled this custom field
-            never_posted:
-              label: Never posted
-              description: Will trigger only if the user has never posted
+              description: Will trigger only if the user has filled all these fields
+            once_per_user:
+              label: Once per user
+              description: Will trigger only once per user
         category_created_edited:
           fields:
             restricted_category:

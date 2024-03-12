@@ -73,9 +73,10 @@ module DiscourseAutomation
       DiscourseAutomation::Automation
         .where(trigger: name, enabled: true)
         .find_each do |automation|
-          never_posted = automation.trigger_field("never_posted")["value"]
-          if never_posted
-            next if user.user_stat.post_count > 0
+          once_per_user = automation.trigger_field("once_per_user")["value"]
+          if once_per_user &&
+               UserCustomField.exists?(name: DiscourseAutomation::CUSTOM_FIELD, user_id: user.id)
+            next
           end
 
           required_custom_fields = automation.trigger_field("custom_fields")
@@ -112,6 +113,7 @@ module DiscourseAutomation
             user_data[:profile_data] = user_profile_data
           end
 
+          automation.attach_custom_field(user)
           automation.trigger!("kind" => name, "user" => user, "user_data" => user_data)
         end
     end
