@@ -60,8 +60,7 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::POST) do
       next
     end
 
-    new_post = PostCreator.new(creator, topic_id: topic_id, raw: post_raw).create! if creator &&
-      topic
+    new_post = PostCreator.new(creator, topic_id: topic_id, raw: post_raw).create!
 
     if context["kind"] == DiscourseAutomation::Triggerable::USER_UPDATED && new_post.persisted?
       user.user_custom_fields.create(name: automation.name, value: "true")
