@@ -28,7 +28,9 @@ module DiscourseAutomation
     end
 
     def placeholders
-      (scriptable&.placeholders || []) + (triggerable&.placeholders || [])
+      DiscourseAutomation
+        .filter_by_trigger(scriptable&.placeholders || [], object.trigger)
+        .map { |placeholder| placeholder[:name] } + (triggerable&.placeholders || [])
     end
 
     def script

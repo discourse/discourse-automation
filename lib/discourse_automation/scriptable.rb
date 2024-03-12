@@ -2,7 +2,13 @@
 
 module DiscourseAutomation
   class Scriptable
-    attr_reader :fields, :name, :not_found, :forced_triggerable, :background, :automation
+    attr_reader :fields,
+                :name,
+                :not_found,
+                :forced_triggerable,
+                :background,
+                :automation,
+                :placeholders
 
     @@plugin_triggerables ||= {}
 
@@ -67,16 +73,14 @@ module DiscourseAutomation
       end
     end
 
-    def placeholders
-      @placeholders.uniq.compact.map(&:to_sym)
-    end
-
-    def placeholder(*args)
-      if args.present?
-        @placeholders << args[0]
-      elsif block_given?
-        @placeholders =
-          @placeholders.concat(Array(yield(@automation.serialized_fields, @automation)))
+    def placeholder(name = nil, triggerable: nil, &block)
+      if block_given?
+        result = yield(@automation.serialized_fields, @automation)
+        Array(result).each do |name|
+          @placeholders << { name: name.to_sym, triggerable: triggerable&.to_sym }
+        end
+      elsif name
+        @placeholders << { name: name.to_sym, triggerable: triggerable&.to_sym }
       end
     end
 

@@ -8,20 +8,20 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::POST) do
   placeholder :creator_username
 
   field :creator, component: :user
-  field :creator, component: :user, triggerable: :user_updated, accepted_contexts: ["updated_user"]
+  field :creator, component: :user, triggerable: :user_updated, accepted_contexts: [:updated_user]
 
   field :topic, component: :text, required: true
   field :post, component: :post, required: true, accepts_placeholders: true
 
   placeholder :creator_username
-  placeholder :updated_user_username
-  placeholder :updated_user_name
+  placeholder :updated_user_username, triggerable: :user_updated
+  placeholder :updated_user_name, triggerable: :user_updated
 
   triggerables %i[recurring point_in_time user_updated]
 
   script do |context, fields, automation|
     creator_username = fields.dig("creator", "value")
-    creator_username = context["user"]&.username if creator_username == "updated_user"
+    creator_username = context["user"]&.username if creator_username == :updated_user
     creator_username ||= Discourse.system_user.username
 
     topic_id = fields.dig("topic", "value")
