@@ -21,7 +21,7 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::POST) do
 
   script do |context, fields, automation|
     creator_username = fields.dig("creator", "value")
-    creator_username = context["user"]&.username if creator_username == :updated_user
+    creator_username = context["user"]&.username if creator_username == "updated_user"
     creator_username ||= Discourse.system_user.username
 
     topic_id = fields.dig("topic", "value")
@@ -49,6 +49,16 @@ DiscourseAutomation::Scriptable.add(DiscourseAutomation::Scriptable::POST) do
     end
 
     post_raw = utils.apply_placeholders(post_raw, placeholders)
+
+    if !creator
+      Rails.logger.warn "[discourse-automation] creator with username: `#{creator_username}` was not found"
+      next
+    end
+
+    if !topic
+      Rails.logger.warn "[discourse-automation] topic with id: `#{topic_id}` was not found"
+      next
+    end
 
     new_post = PostCreator.new(creator, topic_id: topic_id, raw: post_raw).create! if creator &&
       topic
