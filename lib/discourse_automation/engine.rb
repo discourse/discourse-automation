@@ -7,7 +7,7 @@ module ::DiscourseAutomation
   end
 
   def self.filter_by_trigger(items, trigger)
-    trigger = trigger.to_sym
+    trigger = trigger&.to_sym
 
     indexed_items =
       items.each_with_object({}) do |item, acc|

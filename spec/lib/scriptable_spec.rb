@@ -92,7 +92,12 @@ describe DiscourseAutomation::Scriptable do
   describe "#placeholders" do
     it "returns the specified placeholders" do
       expect(automation.scriptable.placeholders).to eq(
-        [:foo, :bar, :"baz-#{automation.id}", :"foo-baz-#{automation.id}"],
+        [
+          { name: :foo, triggerable: nil },
+          { name: :bar, triggerable: nil },
+          { name: :"baz-#{automation.id}", triggerable: nil },
+          { name: :"foo-baz-#{automation.id}", triggerable: nil },
+        ],
       )
     end
   end
