@@ -228,8 +228,8 @@ module DiscourseAutomation
             return
           end
 
-          if (pm[:target_usernames] || []).empty? && (pm[:target_group_names] || []).empty? &&
-               (pm[:target_emails] || []).empty?
+          if Array.wrap(pm[:target_usernames]).empty? &&
+               Array.wrap(pm[:target_group_names]).empty? && Array.wrap(pm[:target_emails]).empty?
             Rails.logger.warn "[discourse-automation] Did not send PM - no target usernames, groups or emails"
             return
           end
@@ -262,9 +262,9 @@ module DiscourseAutomation
 
           post_created = false
           pm = pm.merge(archetype: Archetype.private_message)
-          pm[:target_usernames] = (pm[:target_usernames] || []).join(",")
-          pm[:target_group_names] = (pm[:target_group_names] || []).join(",")
-          pm[:target_emails] = (pm[:target_emails] || []).join(",")
+          pm[:target_usernames] = Array.wrap(pm[:target_usernames]).join(",")
+          pm[:target_group_names] = Array.wrap(pm[:target_group_names]).join(",")
+          pm[:target_emails] = Array.wrap(pm[:target_emails]).join(",")
 
           if pm[:target_usernames].blank? && pm[:target_group_names].blank? &&
                pm[:target_emails].blank?

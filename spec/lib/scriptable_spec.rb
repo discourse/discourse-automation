@@ -354,7 +354,30 @@ describe DiscourseAutomation::Scriptable do
                 target_emails: ["john@doe.com"],
               },
             )
-          }.to change { Topic.count }
+          }.to change { Topic.private_messages.count }
+        end
+
+        it "sends shared pm when multiple emails" do
+          email_1 = "john@doe.com"
+          email_2 = "jane@doe.com"
+
+          expect {
+            DiscourseAutomation::Scriptable::Utils.send_pm(
+              {
+                title: "Private Message Title",
+                raw: "0123456789" * 25 + "a",
+                target_emails: [email_1, email_2],
+              },
+            )
+          }.to change { Topic.private_messages.count }
+
+          # creates new users if they don't exist
+          user_1 = User.find_by_email(email_1)
+          user_2 = User.find_by_email(email_2)
+
+          expect(
+            Topic.private_messages.first.topic_allowed_users.pluck(:user_id),
+          ).to contain_exactly(Discourse.system_user.id, user_1.id, user_2.id)
         end
       end
 
@@ -368,7 +391,7 @@ describe DiscourseAutomation::Scriptable do
                 target_emails: ["invalid-email"],
               },
             )
-          }.not_to change { Topic.count }
+          }.not_to change { Topic.private_messages.count }
         end
 
         it "sends the pm without the invalid email" do
@@ -380,7 +403,12 @@ describe DiscourseAutomation::Scriptable do
                 target_emails: %w[invalid-email john@doe.com],
               },
             )
-          }.to change { Topic.count }.by(1)
+          }.to change { Topic.private_messages.count }.by(1)
+
+          new_user = User.find_by_email("john@doe.com")
+          expect(
+            Topic.private_messages.first.topic_allowed_users.pluck(:user_id),
+          ).to contain_exactly(Discourse.system_user.id, new_user.id)
         end
       end
     end
