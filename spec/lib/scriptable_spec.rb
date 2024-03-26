@@ -343,6 +343,46 @@ describe DiscourseAutomation::Scriptable do
           expect(Topic.last.allowed_groups).to contain_exactly(group)
         end
       end
+
+      context "when pm target_emails with valid email" do
+        it "sends the pm" do
+          expect {
+            DiscourseAutomation::Scriptable::Utils.send_pm(
+              {
+                title: "Private Message Title",
+                raw: "0123456789" * 25 + "a",
+                target_emails: ["john@doe.com"],
+              },
+            )
+          }.to change { Topic.count }
+        end
+      end
+
+      context "when pm target_emails contain an invalid email" do
+        it "skips sending if there is only one target" do
+          expect {
+            DiscourseAutomation::Scriptable::Utils.send_pm(
+              {
+                title: "Private Message Title",
+                raw: "0123456789" * 25 + "a",
+                target_emails: ["invalid-email"],
+              },
+            )
+          }.not_to change { Topic.count }
+        end
+
+        it "sends the pm without the invalid email" do
+          expect {
+            DiscourseAutomation::Scriptable::Utils.send_pm(
+              {
+                title: "Private Message Title",
+                raw: "0123456789" * 25 + "a",
+                target_emails: %w[invalid-email john@doe.com],
+              },
+            )
+          }.to change { Topic.count }.by(1)
+        end
+      end
     end
   end
 end
