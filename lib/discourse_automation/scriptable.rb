@@ -232,7 +232,8 @@ module DiscourseAutomation
           pm[:target_group_names] = Array.wrap(pm[:target_group_names])
           pm[:target_emails] = Array.wrap(pm[:target_emails])
 
-          if pm[:target_usernames].empty? && pm[:target_group_names].empty? && pm[:target_emails].empty?
+          if pm[:target_usernames].empty? && pm[:target_group_names].empty? &&
+               pm[:target_emails].empty?
             Rails.logger.warn "[discourse-automation] Did not send PM - no target usernames, groups or emails"
             return
           end
